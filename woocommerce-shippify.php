@@ -37,6 +37,7 @@ class WC_Shippify{
 
     public function includes(){
         include_once dirname( __FILE__ ) . '/includes/views/class-wc-shippify-settings.php';
+        include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-checkout.php';
     }
 
 
