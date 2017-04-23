@@ -21,7 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Shippify{
 
     public function __construct() {
+            
             $this->includes();
+
             add_action( 'woocommerce_shipping_init',  array( $this, 'shipping_method_init'),10);
             add_filter( 'woocommerce_shipping_methods', array( $this, 'include_shipping_methods'), 11);
     }
@@ -33,6 +35,7 @@ class WC_Shippify{
 
     public function shipping_method_init(){
         include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-shipping.php';
+
     }
 
     public function includes(){

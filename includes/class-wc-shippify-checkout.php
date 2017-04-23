@@ -19,14 +19,43 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Shippify_Checkout{
 
 	protected $is_selected = true;
+	var $countries;
 
     public function __construct() {
-        add_action( 'woocommerce_checkout_after_customer_details', array( $this,'display_custom_checkout_fields'));
+
+        
         add_filter( 'woocommerce_checkout_fields' , array( $this, 'customize_checkout_fields' ));
-        add_action( 'woocommerce_checkout_update_order_meta', 'save_custom_checkout_fields', 10, 2 );  
-        add_filter('woocommerce_shipping_method_chosen', 'change_selected');
+        add_action( 'woocommerce_after_order_notes', array( $this,'display_custom_checkout_fields'));
+        add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_custom_checkout_fields'), 10, 2 );  
+        add_filter( 'woocommerce_cart_shipping_packages', array( $this,'add_custom_package_fields'));
+        //add_filter('woocommerce_shipping_method_chosen', 'change_selected');
         wp_enqueue_script('wc-shippify-checkout', plugins_url('../assets/js/shippify-checkout.js', __FILE__), array('jquery')); 
+        wp_enqueue_style('wc-shippify-map-css', plugins_url('../assets/css/shippify-map.css', __FILE__)); 
+        wp_enqueue_script('wc-shippify-map', plugins_url('../assets/js/shippify-map.js', __FILE__), array('jquery')); 
+        add_action( 'woocommerce_after_checkout_form', array ( $this,'add_map'));
     }
+
+    public function add_map($after){
+    	echo '<h4>Ubiquese en el mapa: </h4>';
+    	echo '<input id="pac-input" class="controls" type="text" placeholder="Search Box">';
+    	echo '<div id="map"></div>';
+
+    	wp_enqueue_script('wc-shippify-google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDEXSakl9V0EJ_K3qHnnrVy8IEy3Mmo5Hw&libraries=places&callback=initMap', $in_footer = true);
+    }
+
+    public function add_custom_package_fields($package){
+    	//$shippingfields = $this->countries->get_address_fields( $this->countries->get_base_country(),'shipping_');
+    	$fields = WC()->checkout()->checkout_fields;
+    	$hola = WC()->checkout()->get_value("instructions");
+    	//var_dump($hola);
+    	//var_dump($fields);
+    	//$package[0]["destination"]["instructions"] = $fields["shipping"]["instructions"];
+    	//$package[0]["destination"]["hours"] = $fields["shipping"]["hours"];
+    	//$package[0]["destination"]["latitude"] = $fields["shipping"]["latitude"];
+    	//$package[0]["destination"]["longitude"] = $fields["shipping"]["longitude"];
+    	return $package;
+    }
+
 
 	public function change_selected($chosen_method) {
 		
@@ -45,12 +74,11 @@ class WC_Shippify_Checkout{
 
         $checkout = WC()->checkout(); 
 
-		echo '<div id="shippify_checkout" class="col2-set"><h3>' . __('Shippify') . '</h3>';
+		echo '<div id="shippify_checkout" class="col3-set"><h2>' . __('Shippify') . '</h2>';
 
-	    foreach ( $checkout->checkout_fields['shippify_fields'] as $key => $field ) : 
+	    foreach ( $checkout->checkout_fields['shippify'] as $key => $field ) : 
 	 
 	            woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
-	 
 	        endforeach;
 	    echo '</div>';
     }
@@ -65,20 +93,26 @@ class WC_Shippify_Checkout{
 	    if( isset( $posted['hours'] ) && in_array( $posted['hours'], array( 'a', 'b', 'c' ) ) ) {
 	        update_post_meta( $order_id, '_hours', $posted['hours'] );
 	    }
+	   	if( isset( $posted['latitude'] ) && in_array( $posted['latitude'], array( 'a', 'b', 'c' ) ) ) {
+	        update_post_meta( $order_id, '_latitude', $posted['latitude'] );
+	    }
+	   	if( isset( $posted['longitude'] ) && in_array( $posted['longitude'], array( 'a', 'b', 'c' ) ) ) {
+	        update_post_meta( $order_id, '_longitude', $posted['longitude'] );
+	    }
 	}
   
 
    	public function customize_checkout_fields($fields){
    		if  ($this->is_selected){
-	   		$fields["shippify_fields"] = array(
-	   			'instructions' => array(
+	   		$fields["shippify"] = array(
+	   			'shippify_instructions' => array(
 					'type'         => 'text',
 					'class'         => array('form-row form-row-wide'),
 					'label'         => __('Instructions'),
 					'placeholder'   => __('Al lado de una tienda...'),
 					'required'     => false
 				),
-				'hours' => array(
+				'shippify_hours' => array(
 					'type'			=> 'number',
 					'class'			=> array('form-row form-row-wide'),
 					'label'			=> __('Hour of Delivery'),
@@ -88,11 +122,27 @@ class WC_Shippify_Checkout{
 									'max' 	=> '18',
 									'min'	=> '6'
 								) 
-						)
+				),
+	   			'shippify_latitude' => array(
+					'type'         => 'text',
+					'class'         => array('form-row form-row-wide'),
+					'label'         => __('Latitude'),
+					'placeholder'   => __(''),
+					'required'     => false,
+					'class' 	=> array ('address-field', 'update_totals_on_change' )
+				),
+				'shippify_longitude' => array(
+					'type'         => 'text',
+					'class'         => array('form-row form-row-wide'),
+					'label'         => __('Longitude'),
+					'placeholder'   => __(''),
+					'required'     => false,
+					'class' 	=> array ('address-field', 'update_totals_on_change' )
+				)
 			);   
    		}else{
-   			if (isset($fields["shippify_fields"])){
-   				unset($fields["shippify_fields"]);
+   			if (isset($fields["shipping"]["instructions"])){
+   				unset($fields["shipping"]["instructions"]);
    			}
    		}
 

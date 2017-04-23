@@ -21,6 +21,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	if ( ! class_exists( 'WC_Shippify_Shipping' ) ) {
 
 		class WC_Shippify_Shipping extends WC_Shipping_Method {
+
+
+			public $fare_API = 'https://api.shippify.co/task/fare?';
+
 			/*
 			* Initialize Shippify shipping method.
 			*
@@ -55,9 +59,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$this->shipping_class_id  = (int) $this->get_option( 'shipping_class_id', '-1' );
 				$this->show_delivery_time = $this->get_option( 'show_delivery_time' );
 				$this->additional_time    = $this->get_option( 'additional_time' );
-				$this->minimum_height     = $this->get_option( 'minimum_height' );
-				$this->minimum_width      = $this->get_option( 'minimum_width' );
-				$this->minimum_length     = $this->get_option( 'minimum_length' );
+				$this->warehouse_adress     = $this->get_option( 'warehouse_adress' );
+				$this->warehouse_latitude      = $this->get_option( 'warehouse_latitude' );
+				$this->warehouse_longitude     = $this->get_option( 'warehouse_longitude' );
 				$this->debug              = $this->get_option( 'debug' );
 
 				$this->init_settings(); 
@@ -155,45 +159,31 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 						'default'     => '0',
 						'placeholder' => '0',
 					),
-					'optional_services' => array(
-						'title'       => __( 'Optional Services', 'woocommerce-shippify' ),
-						'type'        => 'title',
-						'description' => __( 'Use these options to add the value of each service provided by the Correios.', 'woocommerce-shippify' ),
-						'default'     => '',
-					),
-					'declare_value' => array(
-						'title'       => __( 'Declare Value for Insurance', 'woocommerce-shippify' ),
-						'type'        => 'checkbox',
-						'label'       => __( 'Enable declared value', 'woocommerce-shippify' ),
-						'description' => __( 'This controls if the price of the package must be declared for insurance purposes.', 'woocommerce-shippify' ),
-						'desc_tip'    => true,
-						'default'     => 'yes',
-					),
-					'service_options' => array(
-						'title'   => __( 'Service Options', 'woocommerce-shippify' ),
+					'warehouse_info' => array(
+						'title'   => __( 'Warehouse Information', 'woocommerce-shippify' ),
 						'type'    => 'title',
 						'default' => '',
 					),
-					'minimum_height' => array(
-						'title'       => __( 'Minimum Height', 'woocommerce-shippify' ),
+					'warehouse_adress' => array(
+						'title'       => __( 'Warehouse Adress', 'woocommerce-shippify' ),
 						'type'        => 'text',
-						'description' => __( 'Minimum height of your shipping packages. Correios needs at least 2cm.', 'woocommerce-shippify' ),
+						'description' => __( 'The adress of the warehouse from which the product is going to be dispatched' ),
 						'desc_tip'    => true,
-						'default'     => '2',
+						'default'     => '',
 					),
-					'minimum_width' => array(
-						'title'       => __( 'Minimum Width', 'woocommerce-shippify' ),
+					'warehouse_latitude' => array(
+						'title'       => __( 'Warehouse Latitude', 'woocommerce-shippify' ),
 						'type'        => 'text',
-						'description' => __( 'Minimum width of your shipping packages. Correios needs at least 11cm.', 'woocommerce-shippify' ),
+						'description' => __( 'The latitude coordinate of the warehouse from which the product is going to be dispatched' ),
 						'desc_tip'    => true,
-						'default'     => '11',
+						'default'     => '',
 					),
-					'minimum_length' => array(
-						'title'       => __( 'Minimum Length', 'woocommerce-shippify' ),
+					'warehouse_longitude' => array(
+						'title'       => __( 'Warehouse Longitude', 'woocommerce-shippify' ),
 						'type'        => 'text',
-						'description' => __( 'Minimum length of your shipping packages. Correios needs at least 16cm.', 'woocommerce-shippify' ),
+						'description' => __( 'The longitude coordinate of the warehouse from which the product is going to be dispatched' ),
 						'desc_tip'    => true,
-						'default'     => '16',
+						'default'     => '',
 					),
 					'testing' => array(
 						'title'   => __( 'Testing', 'woocommerce-shippify' ),
@@ -335,6 +325,14 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			* @param array $package Order package.
 			*/
 			public function calculate_shipping( $package = array() ) {
+				//var_dump($package);
+				$hola = WC()->checkout()->checkout_fields;
+
+				var_dump(WC()->checkout->get_value("instructions"));
+				$chao = WC()->checkout->get_value("instructions");
+				var_dump($hola["shippify"]["latitude"]->placeholder);
+				var_dump("holaaaaaaaaaaaa");
+				
 				// Check if valid to be calculeted.
 				/*
 				if ( '' === $package['destination']['postcode'] || 'BR' !== $package['destination']['country'] ) {
@@ -395,14 +393,44 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				// Add rate to WooCommerce.
 				$this->add_rate( $rates[0] );
 				*/
+				$api_id = get_option('shippify_id');
+				$api_secret = get_option('shippify_secret');
+
+				$opts = array(
+					'http' => array(
+						'method' => "GET",
+						'header' => "Authorization: Basic " . base64_encode("$api_id:$api_secret")
+					)
+				);
+
+				$context = stream_context_create($opts);
+
+				$pickup_latitude = "";
+				$pickup_longitude = "";
+
+				$delivery_latitude = "";
+				$delivery_longitude = "";
+
+
+
+				$data_value = '[{"pickup_location":{"lat":'. $pickup_latitude .',"lng":'. $pickup_longitude . '},"delivery_location":{"lat":' . $delivery_latitude . ',"lng":'. $delivery_longitude .'},"items":[{"id":"10234","name":"TV","qty":"2","size":"3","price":"0"}]}]';
+								
+				$request_url = $this->fare_API . "data=" . $data_value;
+
+				$api_response = json_decode(file_get_contents($request_url, false, $context), true);
+
+				//$cost = $api_response["price"];
 				$cost = 20;
+				if (isset($hola)){
+					$cost = $cost + 10;
+				}
 				$rate = array(
 					'id' => $this->id,
 					'label' => $this->title,
 					'cost' => $cost
 				);
 				
-				$this->add_rate( $rate );
+				$this->add_rate($rate);
 			}
 		}
 	}
