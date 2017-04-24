@@ -325,14 +325,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			* @param array $package Order package.
 			*/
 			public function calculate_shipping( $package = array() ) {
+				session_start();
 				//var_dump($package);
-				$hola = WC()->checkout()->checkout_fields;
+				//echo '<script> console.log('. WC()->checkout .'); </script>';
+				//var_dump(WC()->checkout()["shippify"]);
 
-				var_dump(WC()->checkout->get_value("instructions"));
-				$chao = WC()->checkout->get_value("instructions");
-				var_dump($hola["shippify"]["latitude"]->placeholder);
-				var_dump("holaaaaaaaaaaaa");
-				
 				// Check if valid to be calculeted.
 				/*
 				if ( '' === $package['destination']['postcode'] || 'BR' !== $package['destination']['country'] ) {
@@ -393,6 +390,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				// Add rate to WooCommerce.
 				$this->add_rate( $rates[0] );
 				*/
+
 				$api_id = get_option('shippify_id');
 				$api_secret = get_option('shippify_secret');
 
@@ -405,25 +403,29 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 				$context = stream_context_create($opts);
 
-				$pickup_latitude = "";
-				$pickup_longitude = "";
 
-				$delivery_latitude = "";
-				$delivery_longitude = "";
+				$pickup_latitude = "-2.19761";
+				$pickup_longitude = "-79.8917601";
+
+				$delivery_latitude = $_SESSION["shippify_latitude"];
+				$delivery_longitude = $_SESSION["shippify_longitude"];
 
 
 
 				$data_value = '[{"pickup_location":{"lat":'. $pickup_latitude .',"lng":'. $pickup_longitude . '},"delivery_location":{"lat":' . $delivery_latitude . ',"lng":'. $delivery_longitude .'},"items":[{"id":"10234","name":"TV","qty":"2","size":"3","price":"0"}]}]';
+
+
+				
 								
 				$request_url = $this->fare_API . "data=" . $data_value;
 
-				$api_response = json_decode(file_get_contents($request_url, false, $context), true);
 
-				//$cost = $api_response["price"];
-				$cost = 20;
-				if (isset($hola)){
-					$cost = $cost + 10;
-				}
+				//$request_url = 'https://api.shippify.co/task/fare?data=[{"pickup_location":{"lat":-2.19761,"lng":-79.8917601},"delivery_location":{"lat":-2.141976,"lng":-79.86730899999998},"items":[{"id":"10234","name":"TV","qty":"2","size":"3","price":"0"}]}]';
+
+				$api_response = json_decode(file_get_contents($request_url, false, $context), true);
+				$cost = 1;
+				$cost = $api_response["price"];
+				
 				$rate = array(
 					'id' => $this->id,
 					'label' => $this->title,

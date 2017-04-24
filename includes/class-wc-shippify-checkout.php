@@ -23,24 +23,51 @@ class WC_Shippify_Checkout{
 
     public function __construct() {
 
-        
         add_filter( 'woocommerce_checkout_fields' , array( $this, 'customize_checkout_fields' ));
-        add_action( 'woocommerce_after_order_notes', array( $this,'display_custom_checkout_fields'));
-        add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_custom_checkout_fields'), 10, 2 );  
+
+        add_action( 'woocommerce_after_order_notes', array( $this,'display_custom_checkout_fields' ));
+
+        add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_custom_checkout_fields'));  
+
         add_filter( 'woocommerce_cart_shipping_packages', array( $this,'add_custom_package_fields'));
+
+        add_action( 'woocommerce_admin_order_data_after_order_details', array( $this,'display_order_data_in_admin') );
+
+
         //add_filter('woocommerce_shipping_method_chosen', 'change_selected');
+
         wp_enqueue_script('wc-shippify-checkout', plugins_url('../assets/js/shippify-checkout.js', __FILE__), array('jquery')); 
         wp_enqueue_style('wc-shippify-map-css', plugins_url('../assets/css/shippify-map.css', __FILE__)); 
-        wp_enqueue_script('wc-shippify-map', plugins_url('../assets/js/shippify-map.js', __FILE__), array('jquery')); 
+        wp_enqueue_script('wc-shippify-map', plugins_url('../assets/js/shippify-map.js', __FILE__), array('jquery'), '20170423', true);
+
+
         add_action( 'woocommerce_after_checkout_form', array ( $this,'add_map'));
     }
 
+    //HAY QUE MOVER
+    public function display_order_data_in_admin($order){ 
+    	?>
+
+	    <div class="order_data_column">
+	        <h4><?php _e( 'Shippify', 'woocommerce' ); ?></h4>
+	        <?php 
+	            echo '<p><strong>' . __( 'Instructions' ) . ':</strong>' . get_post_meta( $order->id, 'Instructions', true ) . '</p>';
+	            echo '<p><strong>' . __( 'Hours' ) . ':</strong>' . get_post_meta( $order->id, 'Hours', true ) . '</p>'; 
+	            echo '<p><strong>' . __( 'Latitude' ) . ':</strong>' . get_post_meta( $order->id, 'Latitude', true ) . '</p>'; 
+	            echo '<p><strong>' . __( 'Longitude' ) . ':</strong>' . get_post_meta( $order->id, 'Longitude', true ) . '</p>'; ?>
+	    </div>
+		<?php
+
+    }
+
     public function add_map($after){
+    	echo '<div id="shippify_map">';
     	echo '<h4>Ubiquese en el mapa: </h4>';
     	echo '<input id="pac-input" class="controls" type="text" placeholder="Search Box">';
     	echo '<div id="map"></div>';
-
     	wp_enqueue_script('wc-shippify-google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDEXSakl9V0EJ_K3qHnnrVy8IEy3Mmo5Hw&libraries=places&callback=initMap', $in_footer = true);
+    	echo '</div>';
+
     }
 
     public function add_custom_package_fields($package){
@@ -85,24 +112,25 @@ class WC_Shippify_Checkout{
 
 
 	// save the extra field when checkout is processed
-	public function save_custom_checkout_fields( $order_id, $posted ){
+	public function save_custom_checkout_fields( $order_id){
 	    // don't forget appropriate sanitization if you are using a different field type
-	    if( isset( $posted['instructions'] ) ) {
-	        update_post_meta( $order_id, '_instructions', sanitize_text_field( $posted['instructions'] ) );
+	    if( ! empty( $_POST['shippify_instructions'] ) ) {
+	        update_post_meta( $order_id, 'Instructions', sanitize_text_field($_POST['shippify_instructions'] ));
 	    }
-	    if( isset( $posted['hours'] ) && in_array( $posted['hours'], array( 'a', 'b', 'c' ) ) ) {
-	        update_post_meta( $order_id, '_hours', $posted['hours'] );
+	    if( ! empty( $_POST['shippify_hours'] ) ) {
+	        update_post_meta( $order_id, 'Hours', sanitize_text_field($_POST['shippify_hours'] ));
 	    }
-	   	if( isset( $posted['latitude'] ) && in_array( $posted['latitude'], array( 'a', 'b', 'c' ) ) ) {
-	        update_post_meta( $order_id, '_latitude', $posted['latitude'] );
+	   	if( ! empty( $_POST['shippify_latitude'] ) ) {
+	        update_post_meta( $order_id, 'Latitude', sanitize_text_field($_POST['shippify_latitude'] ));
 	    }
-	   	if( isset( $posted['longitude'] ) && in_array( $posted['longitude'], array( 'a', 'b', 'c' ) ) ) {
-	        update_post_meta( $order_id, '_longitude', $posted['longitude'] );
+	   	if( ! empty( $_POST['shippify_longitude'] ) ) {
+	        update_post_meta( $order_id, 'Longitude', sanitize_text_field($_POST['shippify_longitude'] ));
 	    }
 	}
   
 
    	public function customize_checkout_fields($fields){
+   		//echo '<script> alert("aqui"); </script>';
    		if  ($this->is_selected){
 	   		$fields["shippify"] = array(
 	   			'shippify_instructions' => array(

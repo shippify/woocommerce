@@ -70,8 +70,15 @@ function placeMarker(location) {
 }
 
 jQuery(function($) {
+
   $("#map").click(function() {
+    console.log("hola");
     $("#shippify_latitude").val(marker.getPosition().lat());
     $("#shippify_longitude").val(marker.getPosition().lng());
+
+    $.post("../wp-content/plugins/woocommerce-shippify/includes/wc-shippify-ajax-handler.php", {
+      shippify_latitude:marker.getPosition().lat(), 
+      shippify_longitude:marker.getPosition().lng()
+    });
   });
 });
