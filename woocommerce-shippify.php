@@ -1,4 +1,5 @@
 <?php
+
     /**
     * Plugin Name: WooCommerce Shippify
     * Plugin URI: https://docs.logistics.shippify.co/
@@ -40,7 +41,10 @@ class WC_Shippify{
 
     public function includes(){
         include_once dirname( __FILE__ ) . '/includes/views/class-wc-shippify-settings.php';
+        include_once dirname( __FILE__ ) . '/includes/views/class-wc-shippify-admin-back-office.php';
+        include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-order-processing.php';
         include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-checkout.php';
+        //include_once dirname( __FILE__ ) . '/includes/wc-shippify-ajax-handler.php';
     }
 
 

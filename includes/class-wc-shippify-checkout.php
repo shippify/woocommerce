@@ -29,12 +29,9 @@ class WC_Shippify_Checkout{
 
         add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_custom_checkout_fields'));  
 
-        add_filter( 'woocommerce_cart_shipping_packages', array( $this,'add_custom_package_fields'));
-
         add_action( 'woocommerce_admin_order_data_after_order_details', array( $this,'display_order_data_in_admin') );
 
-
-        //add_filter('woocommerce_shipping_method_chosen', 'change_selected');
+        //add_action( 'woocommerce_after_checkout_validation', 'shippify_validate_order' , 10 );
 
         wp_enqueue_script('wc-shippify-checkout', plugins_url('../assets/js/shippify-checkout.js', __FILE__), array('jquery')); 
         wp_enqueue_style('wc-shippify-map-css', plugins_url('../assets/css/shippify-map.css', __FILE__)); 
@@ -42,17 +39,19 @@ class WC_Shippify_Checkout{
 
 
         add_action( 'woocommerce_after_checkout_form', array ( $this,'add_map'));
+
     }
 
     //HAY QUE MOVER
-    public function display_order_data_in_admin($order){ 
+    public function display_order_data_in_admin($order){
+    	var_dump(in_array("shippify", get_post_meta( $order->id, '_shipping_method', true ))); 
     	?>
 
 	    <div class="order_data_column">
 	        <h4><?php _e( 'Shippify', 'woocommerce' ); ?></h4>
 	        <?php 
 	            echo '<p><strong>' . __( 'Instructions' ) . ':</strong>' . get_post_meta( $order->id, 'Instructions', true ) . '</p>';
-	            echo '<p><strong>' . __( 'Hours' ) . ':</strong>' . get_post_meta( $order->id, 'Hours', true ) . '</p>'; 
+	            echo '<p><strong>' . __( 'Shippify ID' ) . ':</strong>' . get_post_meta( $order->id, '_shippify_id', true ) . '</p>'; 
 	            echo '<p><strong>' . __( 'Latitude' ) . ':</strong>' . get_post_meta( $order->id, 'Latitude', true ) . '</p>'; 
 	            echo '<p><strong>' . __( 'Longitude' ) . ':</strong>' . get_post_meta( $order->id, 'Longitude', true ) . '</p>'; ?>
 	    </div>
@@ -69,20 +68,6 @@ class WC_Shippify_Checkout{
     	echo '</div>';
 
     }
-
-    public function add_custom_package_fields($package){
-    	//$shippingfields = $this->countries->get_address_fields( $this->countries->get_base_country(),'shipping_');
-    	$fields = WC()->checkout()->checkout_fields;
-    	$hola = WC()->checkout()->get_value("instructions");
-    	//var_dump($hola);
-    	//var_dump($fields);
-    	//$package[0]["destination"]["instructions"] = $fields["shipping"]["instructions"];
-    	//$package[0]["destination"]["hours"] = $fields["shipping"]["hours"];
-    	//$package[0]["destination"]["latitude"] = $fields["shipping"]["latitude"];
-    	//$package[0]["destination"]["longitude"] = $fields["shipping"]["longitude"];
-    	return $package;
-    }
-
 
 	public function change_selected($chosen_method) {
 		
@@ -117,9 +102,9 @@ class WC_Shippify_Checkout{
 	    if( ! empty( $_POST['shippify_instructions'] ) ) {
 	        update_post_meta( $order_id, 'Instructions', sanitize_text_field($_POST['shippify_instructions'] ));
 	    }
-	    if( ! empty( $_POST['shippify_hours'] ) ) {
-	        update_post_meta( $order_id, 'Hours', sanitize_text_field($_POST['shippify_hours'] ));
-	    }
+	    //if( ! empty( $_POST['shippify_hours'] ) ) {
+	    //    update_post_meta( $order_id, 'Hours', sanitize_text_field($_POST['shippify_hours'] ));
+	    //}
 	   	if( ! empty( $_POST['shippify_latitude'] ) ) {
 	        update_post_meta( $order_id, 'Latitude', sanitize_text_field($_POST['shippify_latitude'] ));
 	    }
@@ -140,7 +125,7 @@ class WC_Shippify_Checkout{
 					'placeholder'   => __('Al lado de una tienda...'),
 					'required'     => false
 				),
-				'shippify_hours' => array(
+				/*'shippify_hours' => array(
 					'type'			=> 'number',
 					'class'			=> array('form-row form-row-wide'),
 					'label'			=> __('Hour of Delivery'),
@@ -150,7 +135,7 @@ class WC_Shippify_Checkout{
 									'max' 	=> '18',
 									'min'	=> '6'
 								) 
-				),
+				),*/
 	   			'shippify_latitude' => array(
 					'type'         => 'text',
 					'class'         => array('form-row form-row-wide'),
@@ -177,6 +162,59 @@ class WC_Shippify_Checkout{
    		return $fields;
 
    	}
+
+	public function shippify_validate_order( $posted )   {
+
+		
+	 
+	    $packages = WC()->shipping->get_packages();
+	     
+	    $chosen_methods = WC()->session->get('chosen_shipping_methods');
+	     
+	    if( is_array( $chosen_methods ) && in_array( 'shippify', $chosen_methods ) ) {
+	         
+	        foreach ( $packages as $i => $package ) {
+	     
+	            if ( $chosen_methods[ $i ] != "shippify" ) {
+	                         
+	                continue;
+	                         
+	            }
+
+	            session_start();
+
+				$context = stream_context_create($opts);
+
+
+				$pickup_latitude = get_option( 'woocommerce_shippify_settings' )["warehouse_latitude"];
+				$pickup_longitude = get_option( 'woocommerce_shippify_settings' )["warehouse_longitude"];
+
+				$delivery_latitude = $_SESSION["shippify_latitude"];
+				$delivery_longitude = $_SESSION["shippify_longitude"];
+
+	            $data_value = '[{"pickup_location":{"lat":'. $pickup_latitude .',"lng":'. $pickup_longitude . '},"delivery_location":{"lat":' . $delivery_latitude . ',"lng":'. $delivery_longitude .'},"items":[{"id":"10234","name":"TV","qty":"2","size":"3","price":"0"}]}]';
+
+				$request_url = $this->fare_API . "data=" . $data_value;
+
+				$api_response = json_decode(file_get_contents($request_url, false, $context), true);
+				$cost = 1;
+				$cost = $api_response["price"];
+
+				if (!isset($cost) || $cost == ""){
+                    $message = 'Sorry, unable to make the route. Verify your checkout fields or the marker in the map.';
+                         
+                    $messageType = "error";
+     
+                    if( ! wc_has_notice( $message, $messageType ) ) {
+                     
+                        wc_add_notice( $message, $messageType );
+                  
+                    }
+				}
+
+	        }       
+	    } 
+	}
 }
 
 $wcshippifyclass = new WC_Shippify_Checkout();

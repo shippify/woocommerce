@@ -1,4 +1,5 @@
 <?php
+session_start();
 /**
  * Shippify shipping method.
  *
@@ -325,7 +326,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			* @param array $package Order package.
 			*/
 			public function calculate_shipping( $package = array() ) {
-				session_start();
+				
 				//var_dump($package);
 				//echo '<script> console.log('. WC()->checkout .'); </script>';
 				//var_dump(WC()->checkout()["shippify"]);
@@ -335,6 +336,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				if ( '' === $package['destination']['postcode'] || 'BR' !== $package['destination']['country'] ) {
 					return;
 				}
+
+
 
 				// Check for shipping classes.
 				if ( ! $this->has_only_selected_shipping_class( $package ) ) {
@@ -404,8 +407,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$context = stream_context_create($opts);
 
 
-				$pickup_latitude = "-2.19761";
-				$pickup_longitude = "-79.8917601";
+				$pickup_latitude = get_option( 'woocommerce_shippify_settings' )["warehouse_latitude"];
+				$pickup_longitude = get_option( 'woocommerce_shippify_settings' )["warehouse_longitude"];
 
 				$delivery_latitude = $_SESSION["shippify_latitude"];
 				$delivery_longitude = $_SESSION["shippify_longitude"];
@@ -414,17 +417,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 				$data_value = '[{"pickup_location":{"lat":'. $pickup_latitude .',"lng":'. $pickup_longitude . '},"delivery_location":{"lat":' . $delivery_latitude . ',"lng":'. $delivery_longitude .'},"items":[{"id":"10234","name":"TV","qty":"2","size":"3","price":"0"}]}]';
 
-
-				
-								
 				$request_url = $this->fare_API . "data=" . $data_value;
-
-
-				//$request_url = 'https://api.shippify.co/task/fare?data=[{"pickup_location":{"lat":-2.19761,"lng":-79.8917601},"delivery_location":{"lat":-2.141976,"lng":-79.86730899999998},"items":[{"id":"10234","name":"TV","qty":"2","size":"3","price":"0"}]}]';
 
 				$api_response = json_decode(file_get_contents($request_url, false, $context), true);
 				$cost = 1;
 				$cost = $api_response["price"];
+
+				//if (!isset($cost) || $cost == ""){
+				//	return;
+				//}
 				
 				$rate = array(
 					'id' => $this->id,

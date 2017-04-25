@@ -4,21 +4,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+/**
+ * Shippify general settings class. 
+ * This class provides a settings section in which the admin will be able
+ * to provide the APP ID and APP SECRET to access the Shippify API.
+ */
+
 class WC_Shippify_Settings{
 
     public function __construct() {
-        add_filter( 'woocommerce_get_sections_products', array( $this, 'add_shippify_to_settings' ));
-        add_filter( 'woocommerce_get_settings_products', array( $this, 'shippify_all_settings' ), 10, 2);       
+        add_filter( 'woocommerce_get_sections_api', array( $this, 'add_shippify_to_settings' ));
+        add_filter( 'woocommerce_get_settings_api', array( $this, 'shippify_all_settings' ), 10, 2);       
     }
 
-
+    /**
+     * Hooked to woocommerce_get_sections_products,
+     * This method creates the Shippify general settings section in the products tab.
+     * 
+     */
     public function add_shippify_to_settings($sections){
-        $sections['shippify'] = __( 'Shippify', 'text-domain' );
+        $sections['shippify'] = __( 'Shippify', 'woocommerce-shippify' );
         return $sections;
     }
 
-    public function shippify_all_settings($settings, $current_section){
-        if ( $current_section == 'shippify' ) {
+    /**
+     * Hooked to woocommerce_get_settings_products,
+     * This method creates the fields of the Shippify general settings section.
+     * 
+     */
+    public function shippify_all_settings($settings, $current_section = ""){
+
+        if ( $_GET['section'] == "shippify" ) {
 
             $settings_slider = array();
 

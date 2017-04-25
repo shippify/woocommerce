@@ -1,5 +1,9 @@
 <?php
 
+//if ( ! defined( 'ABSPATH' ) ) {
+//	exit;
+//}
+
 session_start();
 
 if (isset($_POST["shippify_longitude"])){
