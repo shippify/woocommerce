@@ -397,15 +397,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$api_id = get_option('shippify_id');
 				$api_secret = get_option('shippify_secret');
 
-				$opts = array(
-					'http' => array(
-						'method' => "GET",
-						'header' => "Authorization: Basic " . base64_encode("$api_id:$api_secret")
-					)
-				);
-
-				$context = stream_context_create($opts);
-
+	            $args = array(
+	                'headers' => array(
+	                    'Authorization' => 'Basic ' . base64_encode( $api_id . ':' . $api_secret )
+	                ),
+	                'method'  => 'GET'
+	            );                  
 
 				$pickup_latitude = get_option( 'woocommerce_shippify_settings' )["warehouse_latitude"];
 				$pickup_longitude = get_option( 'woocommerce_shippify_settings' )["warehouse_longitude"];
@@ -419,13 +416,22 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 				$request_url = $this->fare_API . "data=" . $data_value;
 
-				$api_response = json_decode(file_get_contents($request_url, false, $context), true);
-				$cost = 1;
-				$cost = $api_response["price"];
+
+				$response = wp_remote_get( $request_url, $args );
+
+				if (is_wp_error($response)){
+					return 0;
+				}
+
+            	$decoded = json_decode($response['body'], true);
+            	$cost = $decoded['price'];
 
 				//if (!isset($cost) || $cost == ""){
 				//	return;
 				//}
+				if (is_cart()){
+					$cost = 0;
+				}
 				
 				$rate = array(
 					'id' => $this->id,

@@ -38,6 +38,6 @@ class WC_Shippify_Order_Processing{
   
 }
 
-$wcshippifyorderprocessing = new WC_Shippify_Order_Processing();
+new WC_Shippify_Order_Processing();
 
 ?>

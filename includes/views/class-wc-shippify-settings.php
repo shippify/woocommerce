@@ -78,6 +78,6 @@ class WC_Shippify_Settings{
 
 }
 
-$wcshippifyclass = new WC_Shippify_Settings();
+new WC_Shippify_Settings();
 
 ?>
