@@ -41,14 +41,6 @@ function initMap() {
         return;
       }
 
-      // Create a marker for each place.
-      marker.setMap(null);
-      marker = new google.maps.Marker({
-        map: map,
-        title: place.name,
-        position: place.geometry.location
-      });
-
       if (place.geometry.viewport) {
         // Only geocodes have viewport.
         bounds.union(place.geometry.viewport);
@@ -70,11 +62,12 @@ function placeMarker(location) {
 }
 
 jQuery(function($) {
-
   $("#map").click(function() {
-    console.log("hola");
     $("#shippify_latitude").val(marker.getPosition().lat());
+    $("#shippify_latitude").trigger('change');
+
     $("#shippify_longitude").val(marker.getPosition().lng());
+    $("#shippify_longitude").trigger('change'); 
 
     $.post("../wp-content/plugins/woocommerce-shippify/includes/wc-shippify-ajax-handler.php", {
       shippify_latitude:marker.getPosition().lat(), 

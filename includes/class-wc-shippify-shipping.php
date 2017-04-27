@@ -420,7 +420,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$response = wp_remote_get( $request_url, $args );
 
 				if (is_wp_error($response)){
-					return 0;
+					$cost = 0;
 				}
 
             	$decoded = json_decode($response['body'], true);

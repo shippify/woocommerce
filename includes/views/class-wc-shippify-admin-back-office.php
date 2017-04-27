@@ -7,9 +7,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Shippify Admin Back-Office class. 
  * This class provides back-office functionality for the Admin to dispatch and
- * review orders that delivers with Shippify.
+ * review orders that deliver with Shippify.
  */
-
 class WC_Shippify_Admin_Back_Office{
 
 
@@ -44,7 +43,15 @@ class WC_Shippify_Admin_Back_Office{
         add_action( 'admin_notices', array($this,'shippify_admin_notices'));
     }
 
+    /**
+    * Hooked to action: admin_notices.
+    * Shows admin alerts when the user performs a dispatch action or dispatch bulk action Shippify.
+    * @param string $doaction Bulk action applied.
+    * @param string $redirect_to URL to redirect.
+    * @return array $post_ids Contains all the selected orders ids.
+    */   
     public function shippify_admin_notices(){
+
         if ($_GET['error'] == 'singleError' && $_GET['post_type'] == 'shop_order' ){
             echo '<div class="error notice is-dismissible"><p>' . 'The order #'. $_GET['order_dispatched'] . ' was not dispatched correctly. Check your settings or try again later.' . '</p></div>';    
         }
@@ -121,7 +128,7 @@ class WC_Shippify_Admin_Back_Office{
      */
     function add_shippify_order_action_button( $actions, $the_order ) {
 
-        //var_dump(get_post_meta( $the_order->id, '_is_dispatched', true ));
+        // esto me dio error en algunas ordenes... 
         if (in_array("shippify", get_post_meta( $the_order->id, '_shipping_method', true )) && (get_post_meta( $the_order->id, '_is_dispatched', true ) != 'yes') && !isset($_GET['post_status'])){ 
             $actions['shippify_action'] = array(
                 'url'       => wp_nonce_url( admin_url( 'edit.php?post_type=shop_order&myaction=woocommerce_shippify_dispatch&stablishedorder=' . $the_order->id ), 'woocommerce-shippify-dispatch'), 

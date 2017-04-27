@@ -33,7 +33,8 @@ class WC_Shippify_Checkout{
 
         wp_enqueue_script('wc-shippify-checkout', plugins_url('../assets/js/shippify-checkout.js', __FILE__), array('jquery')); 
         wp_enqueue_style('wc-shippify-map-css', plugins_url('../assets/css/shippify-map.css', __FILE__)); 
-        wp_enqueue_script('wc-shippify-map', plugins_url('../assets/js/shippify-map.js', __FILE__), array('jquery'), '20170423', true);
+        wp_enqueue_style('wc-shippify-fields-css', plugins_url('../assets/css/shippify-checkout-fields.css', __FILE__)); 
+        wp_enqueue_script('wc-shippify-map-js', plugins_url('../assets/js/shippify-map.js', __FILE__));
 
         add_action( 'woocommerce_after_checkout_form', array ( $this,'add_map'));
 
@@ -41,8 +42,30 @@ class WC_Shippify_Checkout{
 
 		add_filter( 'woocommerce_cart_shipping_method_full_label', array($this, 'change_shipping_label'), 10, 2 );
 
+		add_action('woocommerce_checkout_update_order_review', array($this, 'action_woocommerce_checkout_update_order_review'), 900, 2);
+		
+		add_filter( 'style_loader_src', array($this, 'remove_cssjs_query_string'), 1, 2 );
+		add_filter( 'script_loader_src', array($this, 'remove_cssjs_query_string'), 1, 2 );
+
     }
 
+
+	function remove_cssjs_query_string( $src ) {
+		if( strpos( $src, '?ver=' ) )
+		$src = remove_query_arg( 'ver', $src );
+		return $src;
+	}
+
+
+	function action_woocommerce_checkout_update_order_review($array, $int)
+	{
+
+		if (in_array("shippify", WC()->session->get('chosen_shipping_methods'))){
+			WC()->cart->calculate_shipping();		
+		}
+					
+	    return;
+	}
 
 
 
@@ -76,7 +99,7 @@ class WC_Shippify_Checkout{
 
     public function add_map($after){
     	echo '<div id="shippify_map">';
-    	echo '<h4>Ubiquese en el mapa: </h4>';
+    	echo '<h4>Delivery Position  </h4> <p> Click on the map to put a marker. </p>';
     	echo '<input id="pac-input" class="controls" type="text" placeholder="Search Box">';
     	echo '<div id="map"></div>';
     	wp_enqueue_script('wc-shippify-google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDEXSakl9V0EJ_K3qHnnrVy8IEy3Mmo5Hw&libraries=places&callback=initMap', $in_footer = true);
@@ -128,7 +151,6 @@ class WC_Shippify_Checkout{
 				'type'         => 'text',
 				'class'         => array('form-row form-row-wide'),
 				'label'         => __('Latitude'),
-				'placeholder'   => __(''),
 				'required'     => false,
 				'class' 	=> array ('address-field', 'update_totals_on_change' )
 			),
@@ -136,7 +158,6 @@ class WC_Shippify_Checkout{
 				'type'         => 'text',
 				'class'         => array('form-row form-row-wide'),
 				'label'         => __('Longitude'),
-				'placeholder'   => __(''),
 				'required'     => false,
 				'class' 	=> array ('address-field', 'update_totals_on_change' )
 			)
