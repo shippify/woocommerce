@@ -249,8 +249,8 @@ class WC_Shippify_Admin_Back_Office{
         $recipient_phone = get_post_meta( $order_id, '_billing_phone', true );
 
 
-        $pickup_latitude = get_option( 'woocommerce_shippify_settings' )["warehouse_latitude"];
-        $pickup_longitude = get_option( 'woocommerce_shippify_settings' )["warehouse_longitude"];
+        $pickup_latitude = get_post_meta( $order_id, 'pickup_latitude', true );
+        $pickup_longitude = get_post_meta( $order_id, 'pickup_longitude', true );
         $pickup_address =  "test"; //poner y coger de settings
 
         $deliver_lat = get_post_meta( $order_id, 'Latitude', true );

@@ -1,5 +1,5 @@
-<?php
-session_start();
+<?php 
+//session_start();
 /**
  * Shippify shipping method.
  *
@@ -69,7 +69,9 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 				add_action( 'woocommerce_update_options', array($this, 'process_admin_options' ) );
 
+
 			}
+
 
 			public function init(){
                 $this->init_form_fields(); 

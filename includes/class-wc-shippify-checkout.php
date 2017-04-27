@@ -90,7 +90,9 @@ class WC_Shippify_Checkout{
 		            echo '<p><strong>' . __( 'Instructions' ) . ':</strong>' . " \n" . get_post_meta( $order->id, 'Instructions', true ) . '</p>';
 		            echo '<p><strong>' . __( 'Shippify ID' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, '_shippify_id', true ) . '</p>'; 
 		            echo '<p><strong>' . __( 'Deliver Latitude' ) . ':</strong>' .  " \n"  .  get_post_meta( $order->id, 'Latitude', true ) . '</p>'; 
-		            echo '<p><strong>' . __( 'Deliver Longitude' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, 'Longitude', true ) . '</p>'; ?>
+		            echo '<p><strong>' . __( 'Deliver Longitude' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, 'Longitude', true ) . '</p>';
+		            echo '<p><strong>' . __( 'Pickup Latitude' ) . ':</strong>' .  " \n"  .  get_post_meta( $order->id, 'pickup_latitude', true ) . '</p>'; 
+		            echo '<p><strong>' . __( 'Pickup Longitude' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, 'pickup_longitude', true ) . '</p>'; ?>
 		    </div>
 			<?php    		
     	}
@@ -132,7 +134,10 @@ class WC_Shippify_Checkout{
 	   	if( ! empty( $_POST['shippify_longitude'] ) ) {
 	        update_post_meta( $order_id, 'Longitude', sanitize_text_field($_POST['shippify_longitude'] ));
 	    }
+	    update_post_meta( $order_id, 'pickup_latitude', sanitize_text_field(get_option( 'woocommerce_shippify_settings' )["warehouse_latitude"]));
+	    update_post_meta( $order_id, 'pickup_longitude', sanitize_text_field(get_option( 'woocommerce_shippify_settings' )["warehouse_longitude"]));
 	}
+
   
 
    	public function customize_checkout_fields($fields){

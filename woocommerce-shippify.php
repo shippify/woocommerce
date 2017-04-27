@@ -23,10 +23,17 @@ class WC_Shippify{
 
     public function __construct() {
             
-            $this->includes();
+        $this->includes();
 
-            add_action( 'woocommerce_shipping_init',  array( $this, 'shipping_method_init'),10);
-            add_filter( 'woocommerce_shipping_methods', array( $this, 'include_shipping_methods'), 11);
+        add_action( 'init', array($this, 'start_session'), 1);
+        add_action( 'woocommerce_shipping_init',  array( $this, 'shipping_method_init'),10);
+        add_filter( 'woocommerce_shipping_methods', array( $this, 'include_shipping_methods'), 11);
+    }
+
+    public function start_session() {
+        if(!session_id()) {
+            session_start();
+        }
     }
 
     public function include_shipping_methods($methods){
