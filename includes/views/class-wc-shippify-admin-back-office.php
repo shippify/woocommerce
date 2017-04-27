@@ -11,6 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Shippify_Admin_Back_Office{
 
+    public $fetched_orders = "";
 
     /**
      * Shippify human readable equivalents to task status.
@@ -204,6 +205,7 @@ class WC_Shippify_Admin_Back_Office{
         switch ( $column ){
             case 'order-status' :
                 if (in_array("shippify", get_post_meta( $order_id, '_shipping_method', true)) && (get_post_meta( $the_order->id, '_is_dispatched', true ) == 'yes')){
+                    $this->fetched_orders = $this->fetched_orders . get_post_meta( $order_id, '_shippify_id', true). ',';
 
                     // Basic Auth
                     $args = array(
@@ -219,17 +221,23 @@ class WC_Shippify_Admin_Back_Office{
                     }else{
                         $decoded = json_decode($response['body'], true);
                         $status = $decoded['data']['status'];
-                        $col_val = $this->shippify_task_status[$status];                        
+                        if (!isset($status) || $status == ""){
+                            $col_val = "Error Fetching. Try Again.";    
+                        }else{
+                            $col_val = $this->shippify_task_status[$status]; 
+                        }                
                     }
-
                 //When the order isnt shipped via Shippify
                 }else{
                     $col_val = '-';
                 }
 
                 echo $col_val;
+
                 break;
+
         }
+        //echo "hola";
     }
 
     /**
@@ -239,6 +247,8 @@ class WC_Shippify_Admin_Back_Office{
     public function create_shippify_task($order_id){
 
         $task_endpoint = "https://api.shippify.co/task/new";
+
+        $order = new WC_Order($order_id);
 
         $products = '[{"id":"10234","name":"TV","qty":"2","size":"3","price":"0"}]'; //coger de package
 
@@ -264,17 +274,21 @@ class WC_Shippify_Admin_Back_Office{
         $api_id = get_option('shippify_id');
         $api_secret = get_option('shippify_secret');
 
+        $items = "[";
+        foreach ($order->get_items() as $item_id => $_product ) { 
+            $_product = $_product->get_product();
+            $items = $items . '{"id":"' . $_product->get_id() . '", 
+                                "name":"' . $_product->get_name() . '", 
+                                "qty": "' . '1' . '", 
+                                "size": "' . $this->calculate_product_shippify_size($_product) . '"
+                                },';
+        }
+        $items = substr($items, 0, -1) . ']';
+
         $request_body = '
         {
             "task" : {
-                "products": [
-                    {
-                        "id":"10234",
-                        "name":"TV",
-                        "qty":"2",
-                        "size":"3"
-                    }
-                ],
+                "products": '. $items . ',
                 "sender" : {
                     "email": "'. $sender_mail . '"
                 },
@@ -320,8 +334,53 @@ class WC_Shippify_Admin_Back_Office{
 
         return $response;
 
-    }    
+    }
 
+    public function calculate_product_shippify_size($product){
+
+        $height = $product->get_height();
+        $width = $product->get_width();
+        $length = $product->get_length();
+
+        if (!isset($height) || $height == ""){
+            return "3";
+        }
+        if (!isset($width) || $width == ""){
+            return "3";
+        }
+        if (!isset($length) || $length == ""){
+            return "3";
+        }
+
+        $width = floatval($width);
+        $height = floatval($height);
+        $length = floatval($length);
+
+        $array_size = array(1,2,3,4,5); 
+        $array_dimensions = array(50,80,120,150,150);
+        $radio_membership = 10;
+        $dimensions_array = array(10, 10, 10);
+        $final_percentages = array();
+
+        foreach ($array_size as $size){
+            $percentage = 0;
+            $max_percentage = 100/3;
+            foreach ($dimensions_array as $dimension) {
+                if  ($dimension < $array_dimensions[$size-1]){
+                    $percentage = $percentage + $max_percentage;
+                }elseif($dimension < $array_dimensions[$size-1] + $radio_membership){
+                    $pre_result = (1-(abs($array_dimensions[$size-1] - $dimension) / (2 * $radio_membership)));
+                    $tmp_p = $pre_result < 0 ? 0 : $pre_result;
+                    $percentage = $percentage + ((($pre_result * 100) * $max_percentage) / 100);
+                }else{
+                    $percentage = $percentage + 0;
+                }
+            }
+            $final_percentages[] = $percentage;
+        }
+        $maxs = array_keys($final_percentages, max($final_percentages));
+        return $array_size[$maxs[0]];
+    }
 }
 
 new WC_Shippify_Admin_Back_Office();

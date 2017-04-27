@@ -203,97 +203,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				);
 			}
 
-
-			/**
-			* Get the declared value from the package.
-			*
-			* @param  array $package Cart package.
-			*
-			* @return float
-			*/
-			protected function get_declared_value( $package ) {
-				return $package['contents_cost'];
-			}
-
-			/**
-			* Get shipping rate.
-			*
-			* @param  array $package Cart package.
-			*
-			* @return SimpleXMLElement|null
-			*/
-			protected function get_rate( $package ) {
-				/*
-				$api = new WC_Correios_Webservice( $this->id, $this->instance_id );
-				$api->set_debug( $this->debug );
-				$api->set_service( $this->get_code() );
-				$api->set_package( $package );
-				$api->set_origin_postcode( $this->origin_postcode );
-				$api->set_destination_postcode( $package['destination']['postcode'] );
-
-				if ( 'yes' === $this->declare_value ) {
-					$api->set_declared_value( $this->get_declared_value( $package ) );
-				}
-
-				$api->set_own_hands( 'yes' === $this->own_hands ? 'S' : 'N' );
-				$api->set_receipt_notice( 'yes' === $this->receipt_notice ? 'S' : 'N' );
-
-				$api->set_login( $this->get_login() );
-				$api->set_password( $this->get_password() );
-
-				$api->set_minimum_height( $this->minimum_height );
-				$api->set_minimum_width( $this->minimum_width );
-				$api->set_minimum_length( $this->minimum_length );
-
-				$shipping = $api->get_shipping();
-				*/
-				$shipping = 10;
-				return $shipping;
-			}
-
-			/**
-			* Get additional time.
-			*
-			* @param  array $package Package data.
-			*
-			* @return array
-			*/
-			protected function get_additional_time( $package = array() ) {
-				return apply_filters( 'woocommerce_correios_shipping_additional_time', $this->additional_time, $package );
-			}
-
-			/**
-			* Get accepted error codes.
-			*
-			* @return array
-			*/
-			protected function get_accepted_error_codes() {
-				/*
-				$codes   = apply_filters( 'woocommerce_correios_accepted_error_codes', array( '-33', '-3', '010' ) );
-				$codes[] = '0';
-
-				return $codes;
-				*/
-			}
-
-			/**
-			* Get shipping method label.
-			*
-			* @param  int   $days Days to deliver.
-			* @param  array $package Package data.
-			*
-			* @return string
-			*/
-			protected function get_shipping_method_label( $days, $package ) {
-				/*
-				if ( 'yes' === $this->show_delivery_time ) {
-					return wc_correios_get_estimating_delivery( $this->title, $days, $this->get_additional_time( $package ) );
-				}
-
-				return $this->title;
-				*/
-			}
-
 			/**
 			* Check if package uses only the selected shipping class.
 			*
@@ -329,72 +238,16 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			*/
 			public function calculate_shipping( $package = array() ) {
 				
-				//var_dump($package);
-				//echo '<script> console.log('. WC()->checkout .'); </script>';
-				//var_dump(WC()->checkout()["shippify"]);
 
 				// Check if valid to be calculeted.
-				/*
-				if ( '' === $package['destination']['postcode'] || 'BR' !== $package['destination']['country'] ) {
-					return;
-				}
-
-
+				//if ( '' === $package['destination']['postcode'] || 'BR' !== $package['destination']['country'] ) {
+				//	return;
+				//}
 
 				// Check for shipping classes.
-				if ( ! $this->has_only_selected_shipping_class( $package ) ) {
-					return;
-				}
-
-				$shipping = $this->get_rate( $package );
-
-				if ( ! isset( $shipping->Erro ) ) {
-					return;
-				}
-
-				$error_number = (string) $shipping->Erro;
-
-				// Exit if have errors.
-				if ( ! in_array( $error_number, $this->get_accepted_error_codes(), true ) ) {
-					return;
-				}
-
-
-
-				// Display Correios errors.
-				
-				$error_message = wc_correios_get_error_message( $error_number );
-				if ( '' !== $error_message && is_cart() ) {
-					$notice_type = ( '010' === $error_number ) ? 'notice' : 'error';
-					$notice      = '<strong>' . $this->title . ':</strong> ' . esc_html( $error_message );
-					wc_add_notice( $notice, $notice_type );
-				}
-
-				// Set the shipping rates.
-				$label = $this->get_shipping_method_label( (int) $shipping->PrazoEntrega, $package );
-				$cost  = wc_correios_normalize_price( esc_attr( (string) $shipping->Valor ) );
-
-				// Exit if don't have price.
-				if ( 0 === intval( $cost ) ) {
-					return;
-				}
-
-				// Apply fees.
-				$fee = $this->get_fee( $this->fee, $cost );
-
-				// Create the rate and apply filters.
-				$rate = apply_filters( 'woocommerce_correios_' . $this->id . '_rate', array(
-					'id'    => $this->id . $this->instance_id,
-					'label' => $label,
-					'cost'  => (float) $cost + (float) $fee,
-				), $this->instance_id, $package );
-
-				// Deprecated filter.
-				$rates = apply_filters( 'woocommerce_correios_shipping_methods', array( $rate ), $package );
-
-				// Add rate to WooCommerce.
-				$this->add_rate( $rates[0] );
-				*/
+				//if ( ! $this->has_only_selected_shipping_class( $package ) ) {
+				//	return;
+				//}
 
 				$api_id = get_option('shippify_id');
 				$api_secret = get_option('shippify_secret');
@@ -412,25 +265,33 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$delivery_latitude = $_SESSION["shippify_latitude"];
 				$delivery_longitude = $_SESSION["shippify_longitude"];
 
+				$items = "[";
+				foreach ( $package['contents'] as $item_id => $values ) { 
+			        $_product = $values['data']; 
+			        $items = $items . '{"id":"' . $_product->get_id() . '", 
+			        					"name":"' . $_product->get_name() . '", 
+			        					"qty": "' . '1' . '", 
+			        					"size": "' . $this->calculate_product_shippify_size($_product) . '", 
+			        					"price": "' . $_product->get_price() . '"
+			        					},';
+			    }
+			    $items = substr($items, 0, -1) . ']}]';
 
 
-				$data_value = '[{"pickup_location":{"lat":'. $pickup_latitude .',"lng":'. $pickup_longitude . '},"delivery_location":{"lat":' . $delivery_latitude . ',"lng":'. $delivery_longitude .'},"items":[{"id":"10234","name":"TV","qty":"2","size":"3","price":"0"}]}]';
+				$data_value = '[{"pickup_location":{"lat":'. $pickup_latitude .',"lng":'. $pickup_longitude . '},"delivery_location":{"lat":' . $delivery_latitude . ',"lng":'. $delivery_longitude .'},"items":' . $items;
 
 				$request_url = $this->fare_API . "data=" . $data_value;
 
 
 				$response = wp_remote_get( $request_url, $args );
 
+            	$decoded = json_decode($response['body'], true);
+            	$cost = $decoded['price'];
+
 				if (is_wp_error($response)){
 					$cost = 0;
 				}
 
-            	$decoded = json_decode($response['body'], true);
-            	$cost = $decoded['price'];
-
-				//if (!isset($cost) || $cost == ""){
-				//	return;
-				//}
 				if (is_cart()){
 					$cost = 0;
 				}
@@ -443,6 +304,53 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				
 				$this->add_rate($rate);
 			}
+
+
+			public function calculate_product_shippify_size($product){
+
+		        $height = $product->get_height();
+		        $width = $product->get_width();
+		        $length = $product->get_length();
+
+		        if (!isset($height) || $height == ""){
+		            return "3";
+		        }
+		        if (!isset($width) || $width == ""){
+		            return "3";
+		        }
+		        if (!isset($length) || $length == ""){
+		            return "3";
+		        }
+
+		        $width = floatval($width);
+		        $height = floatval($height);
+		        $length = floatval($length);
+
+		        $array_size = array(1,2,3,4,5); 
+		        $array_dimensions = array(50,80,120,150,150);
+		        $radio_membership = 10;
+		        $dimensions_array = array(10, 10, 10);
+		        $final_percentages = array();
+
+		        foreach ($array_size as $size){
+		            $percentage = 0;
+		            $max_percentage = 100/3;
+		            foreach ($dimensions_array as $dimension) {
+		                if  ($dimension < $array_dimensions[$size-1]){
+		                    $percentage = $percentage + $max_percentage;
+		                }elseif($dimension < $array_dimensions[$size-1] + $radio_membership){
+		                    $pre_result = (1-(abs($array_dimensions[$size-1] - $dimension) / (2 * $radio_membership)));
+		                    $tmp_p = $pre_result < 0 ? 0 : $pre_result;
+		                    $percentage = $percentage + ((($pre_result * 100) * $max_percentage) / 100);
+		                }else{
+		                    $percentage = $percentage + 0;
+		                }
+		            }
+		            $final_percentages[] = $percentage;
+		        }
+		        $maxs = array_keys($final_percentages, max($final_percentages));
+		        return $array_size[$maxs[0]];
+		    }
 		}
 	}
 }
