@@ -23,6 +23,8 @@ class WC_Shippify_Checkout{
 
     public function __construct() {
 
+
+
         add_filter( 'woocommerce_checkout_fields' , array( $this, 'customize_checkout_fields' ));
 
         add_action( 'woocommerce_after_order_notes', array( $this,'display_custom_checkout_fields' ));
@@ -111,7 +113,7 @@ class WC_Shippify_Checkout{
 
     public function display_custom_checkout_fields($checkout){
 
-        $checkout = WC()->checkout(); 
+        
 
 		echo '<div id="shippify_checkout" class="col3-set"><h2>' . __('Shippify') . '</h2>';
 
@@ -120,6 +122,11 @@ class WC_Shippify_Checkout{
 	            woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
 	        endforeach;
 	    echo '</div>';
+
+	    session_start();
+   		unset($_SESSION['shippify_longitude']);
+   		unset($_SESSION['shippify_latitude']);
+	    WC()->cart->calculate_shipping();
     }
 
 
@@ -134,15 +141,16 @@ class WC_Shippify_Checkout{
 	   	if( ! empty( $_POST['shippify_longitude'] ) ) {
 	        update_post_meta( $order_id, 'Longitude', sanitize_text_field($_POST['shippify_longitude'] ));
 	    }
-	    update_post_meta( $order_id, 'pickup_latitude', sanitize_text_field(get_option( 'woocommerce_shippify_settings' )["warehouse_latitude"]));
-	    update_post_meta( $order_id, 'pickup_longitude', sanitize_text_field(get_option( 'woocommerce_shippify_settings' )["warehouse_longitude"]));
+	    update_post_meta( $order_id, 'pickup_latitude', sanitize_text_field(get_option( 'shippify_instance_settings' )["warehouse_latitude"]));
+	    update_post_meta( $order_id, 'pickup_longitude', sanitize_text_field(get_option( 'shippify_instance_settings' )["warehouse_longitude"]));
 	}
 
   
 
    	public function customize_checkout_fields($fields){
-   		unset($_SESSION['shippify_longitude']);
-   		unset($_SESSION['shippify_latitude']);
+   		
+   		global $woocommerce;
+    	//var_dump($woocommerce->cart);
 
    		$fields["shippify"] = array(
    			'shippify_instructions' => array(
@@ -184,8 +192,8 @@ class WC_Shippify_Checkout{
 			}
 
 
-			$pickup_latitude = get_option( 'woocommerce_shippify_settings' )["warehouse_latitude"];
-			$pickup_longitude = get_option( 'woocommerce_shippify_settings' )["warehouse_longitude"];
+			$pickup_latitude = get_option( 'shippify_instance_settings' )["warehouse_latitude"];
+			$pickup_longitude = get_option( 'shippify_instance_settings' )["warehouse_longitude"];
 
 			$delivery_latitude = $_POST["shippify_latitude"];
 			$delivery_longitude = $_POST["shippify_longitude"];

@@ -22,7 +22,9 @@ class WC_Shippify_Order_Processing{
 		add_action( 'woocommerce_thankyou', array($this, 'display_shippify_order_data'), 20 );
     }
 
-    public function display_shippify_order_data($order_id){?>
+    public function display_shippify_order_data($order_id){
+
+    	?>
 	    <h2><?php _e( 'Shippify' ); ?></h2>
 	    <table class="shop_table shop_table_responsive additional_info">
 	        <tbody>
@@ -33,9 +35,7 @@ class WC_Shippify_Order_Processing{
 	        </tbody>
 	    </table>
 		<?php 
-
     }
-  
 }
 
 new WC_Shippify_Order_Processing();

@@ -38,7 +38,7 @@ class WC_Shippify_Admin_Back_Office{
         add_action( 'manage_shop_order_posts_custom_column' , array($this, 'custom_shippify_orders_column_content'), 10, 2 );
         add_filter( 'woocommerce_admin_order_actions', array($this,'add_shippify_order_action_button'), PHP_INT_MAX, 2 );
         add_action( 'admin_head', array($this,'add_shippify_order_actions_button_css' ));
-        add_action( 'woocommerce_admin_order_actions_end', array( $this, 'execute_shippify_order_action' ) );
+        add_action( 'woocommerce_admin_order_actions_end', array( $this, 'execute_shippify_order_action' ));
         add_filter( 'bulk_actions-edit-shop_order', array( $this, 'register_bulk_dispatch_action' ));
         add_filter( 'handle_bulk_actions-edit-shop_order', array( $this,'dispatch_bulk_action_handler'), 10, 3 );
         add_action( 'admin_notices', array($this,'shippify_admin_notices'));

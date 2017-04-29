@@ -19,44 +19,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class WC_Shippify{
+if ( ! class_exists( 'WC_Shippify' ) ){
 
-    public function __construct() {
+    class WC_Shippify{
+
+        public function __construct() {
+
+            add_action( 'init', array($this, 'start_session'), 1);
+            add_filter( 'woocommerce_shipping_methods', array( $this, 'include_shipping_methods'), 2);
+            $this->includes();
+            add_action( 'woocommerce_shipping_init',  array( $this, 'shipping_method_init'), 1);
+        }
+
+        public function start_session() {
+            if(!session_id()) {
+                //session_start();
+            }
+        }
+
+        public function include_shipping_methods($methods){
+            $methods['shippify'] = 'WC_Shippify_Shipping';
+            return $methods;
+        }
+
+        public function shipping_method_init(){
+            include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-shipping.php';
+        }
+
+        public function includes(){
+            include_once dirname( __FILE__ ) . '/includes/views/class-wc-shippify-settings.php';
+            include_once dirname( __FILE__ ) . '/includes/views/class-wc-shippify-admin-back-office.php';
+            include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-order-processing.php';
+            include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-checkout.php';
             
-        $this->includes();
-
-        add_action( 'init', array($this, 'start_session'), 1);
-        add_action( 'woocommerce_shipping_init',  array( $this, 'shipping_method_init'),10);
-        add_filter( 'woocommerce_shipping_methods', array( $this, 'include_shipping_methods'), 11);
-    }
-
-    public function start_session() {
-        if(!session_id()) {
-            session_start();
+            //include_once dirname( __FILE__ ) . '/includes/wc-shippify-ajax-handler.php';
         }
     }
-
-    public function include_shipping_methods($methods){
-        $methods['shippify'] = 'WC_Shippify_Shipping';
-        return $methods;
-    }
-
-    public function shipping_method_init(){
-        include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-shipping.php';
-
-    }
-
-    public function includes(){
-        include_once dirname( __FILE__ ) . '/includes/views/class-wc-shippify-settings.php';
-        include_once dirname( __FILE__ ) . '/includes/views/class-wc-shippify-admin-back-office.php';
-        include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-order-processing.php';
-        include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-checkout.php';
-        //include_once dirname( __FILE__ ) . '/includes/wc-shippify-ajax-handler.php';
-    }
-
-
 }
 
-$wcshippifyclass = new WC_Shippify();
+new WC_Shippify();
 
 ?>

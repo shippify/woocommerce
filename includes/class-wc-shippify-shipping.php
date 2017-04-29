@@ -32,140 +32,79 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			* @param int $instance_id Shipping zone instance ID.
 			*/
 			public function __construct( $instance_id = 0 ) {
-				$this->id           = 'shippify';
-				$this->method_title = __( 'Shippify', 'woocommerce-shippify' );
-				$this->more_link    = 'http://shippify.co/';		
-				$this->instance_id        = absint( $instance_id );
-				$this->method_description = sprintf( __( '%s is a shipping method.', 'woocommerce-shippify' ), $this->method_title );
-				$this->supports           = array(
-					'shipping-zones',
-					'instance-settings',
-				);
-				$this->title              = 'Shippify';
-				$this->availability = 'including';
-				$this->countries = array(
-					'EC',
-					'BR',
-					'CL',
-					'MX'
-				);
 
-				// Load the form fields.
-				$this->init();
-
-				// Define user set variables.
-				
-				$this->enabled            = $this->get_option('enabled');
-				$this->origin_postcode    = $this->get_option('origin_postcode');
-				$this->shipping_class_id  = (int) $this->get_option( 'shipping_class_id', '-1' );
-				$this->show_delivery_time = $this->get_option( 'show_delivery_time' );
-				$this->additional_time    = $this->get_option( 'additional_time' );
-				$this->warehouse_adress     = $this->get_option( 'warehouse_adress' );
-				$this->warehouse_latitude      = $this->get_option( 'warehouse_latitude' );
-				$this->warehouse_longitude     = $this->get_option( 'warehouse_longitude' );
-				$this->debug              = $this->get_option( 'debug' );
-
-				$this->init_settings(); 
-
-				add_action( 'woocommerce_update_options', array($this, 'process_admin_options' ) );
+				//if ($instance_id != 0){
 
 
-			}
+					$this->id           = 'shippify';
+					$this->method_id    = 
+					$this->enabled = 'yes';
+					$this->method_title = __( 'Shippify', 'woocommerce-shippify' );
+					//$this->more_link    = 'http://shippify.co/';		
+					$this->instance_id        = absint( $instance_id );
+					$this->method_description = sprintf( __( '%s is a shipping method.', 'woocommerce-shippify' ), $this->method_title );
+					$this->supports           = array(
+						'shipping-zones',
+						'instance-settings',
+					);
+					$this->title              = 'Shippify';
+					$this->availability = 'including';
+					$this->countries = array(
+						'EC',
+						'BR',
+						'CL',
+						'MX'
+					);
 
 
-			public function init(){
-                $this->init_form_fields(); 
-			}
+					//var_dump($this->warehouse_id);
 
-			public function admin_options(){
-				 ?>
-				<h2><?php _e('Shippify','woocommerce'); ?></h2>
-				<table class="form-table">
-				<?php $this->generate_settings_html(); ?>
-				</table> <?php
-			}
+					// Load the form fields.
 
-			/**
-			* Get log.
-			*
-			* @return string
-			*/
-			protected function get_log_link() {
-				return ' <a href="' . esc_url( admin_url( 'admin.php?page=wc-status&tab=logs&log_file=' . esc_attr( $this->id ) . '-' . sanitize_file_name( wp_hash( $this->id ) ) . '.log' ) ) . '">' . __( 'View logs.', 'woocommerce-shippify' ) . '</a>';
-			}
+					$this->init_form_fields(); 
+                	//$this->init_settings();
+					//var_dump($this->instance_id);
 
-			/**
-			* Get shipping classes options.
-			*
-			* @return array
-			*/
-			protected function get_shipping_classes_options() {
-				$shipping_classes = WC()->shipping->get_shipping_classes();
-				$options          = array(
-					'-1' => __( 'Any Shipping Class', 'woocommerce-shippify' ),
-					'0'  => __( 'No Shipping Class', 'woocommerce-shippify' ),
-				);
 
-				if ( ! empty( $shipping_classes ) ) {
-					$options += wp_list_pluck( $shipping_classes, 'name', 'term_id' );
-				}
+					$this->warehouse_id     	= $this->get_instance_option( 'warehouse_id' );
+					$this->warehouse_adress     = $this->get_instance_option( 'warehouse_adress' );
+					$this->warehouse_latitude   = $this->get_instance_option( 'warehouse_latitude' );
+					$this->warehouse_longitude  = $this->get_instance_option( 'warehouse_longitude' );
 
-				return $options;
+					if ($this->instance_id != 0){
+						update_option("shippify_instance_settings", array(
+								'warehouse_id' => 			$this->warehouse_id,
+								'warehouse_address' =>		$this->warehouse_adress, 
+								'warehouse_latitude' =>		$this->warehouse_latitude,
+								'warehouse_longitude' =>	$this->warehouse_longitude
+							));						
+					}
+
+
+
+					//if ($this->instance_id == $_GET['instance_id']){
+					add_action( 'woocommerce_update_options_shipping_shippify', array($this, 'process_admin_options' ), 3 );	
+					//}
+
+					
 			}
 
 			/**
 			* Admin options fields.
 			*/
 			public function init_form_fields() {
-				$this->form_fields = array(
-					'enabled' => array(
-						'title'   => __( 'Enable/Disable', 'woocommerce-shippify' ),
-						'type'    => 'checkbox',
-						'label'   => __( 'Enable this shipping method', 'woocommerce-shippify' ),
-						'default' => 'yes',
-					),
-					'Base WareHouse Configuration' => array(
-						'title'   => __( 'Behavior Options', 'woocommerce-shippify' ),
-						'type'    => 'title',
-						'default' => '',
-					),
-					'origin_postcode' => array(
-						'title'       => __( 'Origin Postcode', 'woocommerce-shippify' ),
-						'type'        => 'text',
-						'description' => __( 'The postcode of the location your packages are delivered from.', 'woocommerce-shippify' ),
-						'desc_tip'    => true,
-						'placeholder' => '00000-000',
-						'default'     => '',
-					),
-					'shipping_class_id' => array(
-						'title'       => __( 'Shipping Class', 'woocommerce-shippify' ),
-						'type'        => 'select',
-						'description' => __( 'If necessary, select a shipping class to apply this method.', 'woocommerce-shippify' ),
-						'desc_tip'    => true,
-						'default'     => '',
-						'class'       => 'wc-enhanced-select',
-						'options'     => $this->get_shipping_classes_options(),
-					),
-					'show_delivery_time' => array(
-						'title'       => __( 'Delivery Time', 'woocommerce-shippify' ),
-						'type'        => 'checkbox',
-						'label'       => __( 'Show estimated delivery time', 'woocommerce-shippify' ),
-						'description' => __( 'Display the estimated delivery time in working days.', 'woocommerce-shippify' ),
-						'desc_tip'    => true,
-						'default'     => 'no',
-					),
-					'additional_time' => array(
-						'title'       => __( 'Additional Days', 'woocommerce-shippify' ),
-						'type'        => 'text',
-						'description' => __( 'Additional working days to the estimated delivery.', 'woocommerce-shippify' ),
-						'desc_tip'    => true,
-						'default'     => '0',
-						'placeholder' => '0',
-					),
+				$this->instance_form_fields = array(
 					'warehouse_info' => array(
 						'title'   => __( 'Warehouse Information', 'woocommerce-shippify' ),
 						'type'    => 'title',
 						'default' => '',
+					),
+					'warehouse_id' => array(
+						'title'       => __( 'Warehouse ID', 'woocommerce-shippify' ),
+						'type'        => 'text',
+						'description' => __( 'The id of the warehouse from which the product is going to be dispatched' ),
+						'desc_tip'    => true,
+						'default'     => '',
 					),
 					'warehouse_adress' => array(
 						'title'       => __( 'Warehouse Adress', 'woocommerce-shippify' ),
@@ -187,48 +126,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 						'description' => __( 'The longitude coordinate of the warehouse from which the product is going to be dispatched' ),
 						'desc_tip'    => true,
 						'default'     => '',
-					),
-					'testing' => array(
-						'title'   => __( 'Testing', 'woocommerce-shippify' ),
-						'type'    => 'title',
-						'default' => '',
-					),
-					'debug' => array(
-						'title'       => __( 'Debug Log', 'woocommerce-shippify' ),
-						'type'        => 'checkbox',
-						'label'       => __( 'Enable logging', 'woocommerce-shippify' ),
-						'default'     => 'no',
-						'description' => sprintf( __( 'Log %s events, such as WebServices requests.', 'woocommerce-shippify' ), $this->method_title ) . $this->get_log_link(),
-					),
+					)
 				);
-			}
-
-			/**
-			* Check if package uses only the selected shipping class.
-			*
-			* @param  array $package Cart package.
-			* @return bool
-			*/
-			protected function has_only_selected_shipping_class( $package ) {
-				$only_selected = true;
-
-				if ( -1 === $this->shipping_class_id ) {
-					return $only_selected;
-				}
-
-				foreach ( $package['contents'] as $item_id => $values ) {
-					$product = $values['data'];
-					$qty     = $values['quantity'];
-
-					if ( $qty > 0 && $product->needs_shipping() ) {
-						if ( $this->shipping_class_id !== $product->get_shipping_class_id() ) {
-							$only_selected = false;
-							break;
-						}
-					}
-				}
-
-				return $only_selected;
 			}
 
 			/**
@@ -237,6 +136,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			* @param array $package Order package.
 			*/
 			public function calculate_shipping( $package = array() ) {
+
+				session_start();
 				
 
 				// Check if valid to be calculeted.
@@ -259,8 +160,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	                'method'  => 'GET'
 	            );                  
 
-				$pickup_latitude = get_option( 'woocommerce_shippify_settings' )["warehouse_latitude"];
-				$pickup_longitude = get_option( 'woocommerce_shippify_settings' )["warehouse_longitude"];
+				$pickup_latitude = get_option( 'shippify_instance_settings' )["warehouse_latitude"];
+				$pickup_longitude = get_option( 'shippify_instance_settings' )["warehouse_longitude"];
 
 				$delivery_latitude = $_SESSION["shippify_latitude"];
 				$delivery_longitude = $_SESSION["shippify_longitude"];
@@ -280,18 +181,18 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 				$data_value = '[{"pickup_location":{"lat":'. $pickup_latitude .',"lng":'. $pickup_longitude . '},"delivery_location":{"lat":' . $delivery_latitude . ',"lng":'. $delivery_longitude .'},"items":' . $items;
 
+
 				$request_url = $this->fare_API . "data=" . $data_value;
 
 
 				$response = wp_remote_get( $request_url, $args );
 
-            	$decoded = json_decode($response['body'], true);
-            	$cost = $decoded['price'];
-
 				if (is_wp_error($response)){
-					$cost = 0;
+					return;
+				}else{
+	            	$decoded = json_decode($response['body'], true);
+	            	$cost = $decoded['price'];					
 				}
-
 				if (is_cart()){
 					$cost = 0;
 				}
