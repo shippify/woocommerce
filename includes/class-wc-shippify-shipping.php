@@ -188,7 +188,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				foreach ( $package['contents'] as $item_id => $values ) { 
 			        $_product = $values['data']; 
 			        $items = $items . '{"id":"' . $_product->get_id() . '", 
-			        					"name":"' . $_product->get_name() . '", 
+			        					"name":"' . $_product->get_name() . '",
 			        					"qty": "' . $values['quantity'] . '", 
 			        					"size": "' . $this->calculate_product_shippify_size($_product) . '", 
 			        					"price": "' . $_product->get_price() . '"

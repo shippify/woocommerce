@@ -108,8 +108,6 @@ class WC_Shippify_Checkout{
 
     public function display_custom_checkout_fields($checkout){
 
-        //var_dump(WC()->cart->get_cart()); 
-
 		echo '<div id="shippify_checkout" class="col3-set"><h2>' . __('Shippify') . '</h2>';
 
 	    foreach ( $checkout->checkout_fields['shippify'] as $key => $field ) : 
@@ -140,6 +138,7 @@ class WC_Shippify_Checkout{
 	    update_post_meta( $order_id, 'pickup_longitude', sanitize_text_field($_SESSION['shippify_instance_settings']["warehouse_longitude"]));
 	    update_post_meta( $order_id, 'pickup_address', sanitize_text_field($_SESSION['shippify_instance_settings']["warehouse_address"]));
 	    update_post_meta( $order_id, 'pickup_id', sanitize_text_field($_SESSION['shippify_instance_settings']["warehouse_id"]));
+
 	}
 
   
