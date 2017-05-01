@@ -25,6 +25,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
 
 			public $fare_API = 'https://api.shippify.co/task/fare?';
+			public $warehouse_API = 'https://api.shippify.co/warehouse/list';
 
 			/*
 			* Initialize Shippify shipping method.
@@ -163,15 +164,32 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$pickup_latitude = $_SESSION['shippify_instance_settings']["warehouse_latitude"];
 				$pickup_longitude = $_SESSION['shippify_instance_settings']["warehouse_longitude"];
 
+				$pickup_id = $_SESSION['shippify_instance_settings']["warehouse_id"];
+
 				$delivery_latitude = $_SESSION["shippify_latitude"];
 				$delivery_longitude = $_SESSION["shippify_longitude"];
+				//var_dump($pickup_id);
+				if ($pickup_id != "" || isset($pickup_id)){
+					$warehouse_response = wp_remote_get($this->warehouse_API, $args);
+					if (!is_wp_error($warehouse_response)){
+						$warehouse_response = json_decode($warehouse_response['body'], true);
+						$warehouse_info = $warehouse_response["warehouses"];
+						foreach ($warehouse_info as $warehouse){
+							if ($warehouse["id"] == $pickup_id){
+								$pickup_longitude = $warehouse["lng"];
+								$pickup_latitude = $warehouse["lat"];	
+								break;							
+							}
+						}
+					}
+				}
 
 				$items = "[";
 				foreach ( $package['contents'] as $item_id => $values ) { 
 			        $_product = $values['data']; 
 			        $items = $items . '{"id":"' . $_product->get_id() . '", 
 			        					"name":"' . $_product->get_name() . '", 
-			        					"qty": "' . '1' . '", 
+			        					"qty": "' . $values['quantity'] . '", 
 			        					"size": "' . $this->calculate_product_shippify_size($_product) . '", 
 			        					"price": "' . $_product->get_price() . '"
 			        					},';

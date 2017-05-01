@@ -258,10 +258,10 @@ class WC_Shippify_Admin_Back_Office{
         $recipient_email = get_post_meta( $order_id, '_billing_email', true );
         $recipient_phone = get_post_meta( $order_id, '_billing_phone', true );
 
-
+        $pickup_warehouse = get_post_meta( $order_id, 'pickup_id', true );
         $pickup_latitude = get_post_meta( $order_id, 'pickup_latitude', true );
         $pickup_longitude = get_post_meta( $order_id, 'pickup_longitude', true );
-        $pickup_address =  $_SESSION['shippify_instance_settings']["warehouse_address"];
+        $pickup_address = get_post_meta( $order_id, 'pickup_address', true );
 
         $deliver_lat = get_post_meta( $order_id, 'Latitude', true );
         $deliver_lon = get_post_meta( $order_id, 'Longitude', true );
@@ -275,15 +275,44 @@ class WC_Shippify_Admin_Back_Office{
         $api_secret = get_option('shippify_secret');
 
         $items = "[";
-        foreach ($order->get_items() as $item_id => $_product ) { 
-            $_product = $_product->get_product();
+        foreach ($order->get_items() as $item_id => $_preproduct ) { 
+            $_product = $_preproduct->get_product();
             $items = $items . '{"id":"' . $_product->get_id() . '", 
                                 "name":"' . $_product->get_name() . '", 
-                                "qty": "' . '1' . '", 
+                                "qty": "' . $_preproduct['quantity'] . '", 
                                 "size": "' . $this->calculate_product_shippify_size($_product) . '"
                                 },';
         }
         $items = substr($items, 0, -1) . ']';
+
+        $wh_args = array(
+            'headers' => array(
+                'Authorization' => 'Basic ' . base64_encode( $api_id . ':' . $api_secret )
+            ),
+            'method'  => 'GET'
+        );                  
+
+        $pickup_id = '';
+        if ($pickup_warehouse != "" || isset($pickup_warehouse)){
+            $warehouse_response = wp_remote_get('https://api.shippify.co/warehouse/list', $wh_args);
+            if (!is_wp_error($warehouse_response)){
+                $warehouse_response = json_decode($warehouse_response['body'], true);
+                $warehouse_info = $warehouse_response["warehouses"];
+                foreach ($warehouse_info as $warehouse){
+                    if ($warehouse["id"] == $pickup_warehouse){
+                        $pickup_id = $pickup_warehouse;
+                        break;                          
+                    }
+                }
+            }
+        }    
+
+        if ($pickup_id == ''){
+            $warehouse_to_request = '';
+        }else{
+            $warehouse_to_request = ',
+                "warehouse": "'.  $pickup_id .'"';
+        }
 
         $request_body = '
         {
@@ -300,7 +329,7 @@ class WC_Shippify_Admin_Back_Office{
                 "pickup": {
                     "lat": '. $pickup_latitude . ',
                     "lng": '. $pickup_longitude . ',
-                    "address": "'. $pickup_address . '"
+                    "address": "'. $pickup_address . '"'. $warehouse_to_request . '
                 },
                 "deliver": {
                     "lat": '. $deliver_lat . ',

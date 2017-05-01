@@ -63,18 +63,6 @@ function placeMarker(location) {
 
 jQuery(function($) {
 
-  $('#billing_country').on('change', function(){
-    var country = $('#select2-billing_country-container').attr('title');
-    console.log('ok');
-    console.log(country);
-    var geocoder = new google.maps.Geocoder();
-    geocoder.geocode({'address': country}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        map.setCenter(results[0].geometry.location);
-      }
-    });
-  });
-
   $("#map").click(function() {
     $("#shippify_latitude").val(marker.getPosition().lat());
     $("#shippify_latitude").trigger('change');
