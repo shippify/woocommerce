@@ -72,12 +72,12 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					$this->warehouse_longitude  = $this->get_instance_option( 'warehouse_longitude' );
 
 					if ($this->instance_id != 0){
-						update_option("shippify_instance_settings", array(
+						$_SESSION["shippify_instance_settings"] = array(
 								'warehouse_id' => 			$this->warehouse_id,
 								'warehouse_address' =>		$this->warehouse_adress, 
 								'warehouse_latitude' =>		$this->warehouse_latitude,
 								'warehouse_longitude' =>	$this->warehouse_longitude
-							));						
+						);						
 					}
 
 
@@ -160,8 +160,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	                'method'  => 'GET'
 	            );                  
 
-				$pickup_latitude = get_option( 'shippify_instance_settings' )["warehouse_latitude"];
-				$pickup_longitude = get_option( 'shippify_instance_settings' )["warehouse_longitude"];
+				$pickup_latitude = $_SESSION['shippify_instance_settings']["warehouse_latitude"];
+				$pickup_longitude = $_SESSION['shippify_instance_settings']["warehouse_longitude"];
 
 				$delivery_latitude = $_SESSION["shippify_latitude"];
 				$delivery_longitude = $_SESSION["shippify_longitude"];

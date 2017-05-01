@@ -18,12 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class WC_Shippify_Checkout{
 
-	protected $is_selected = true;
-	var $countries;
-
     public function __construct() {
-
-
 
         add_filter( 'woocommerce_checkout_fields' , array( $this, 'customize_checkout_fields' ));
 
@@ -47,7 +42,7 @@ class WC_Shippify_Checkout{
 		add_action('woocommerce_checkout_update_order_review', array($this, 'action_woocommerce_checkout_update_order_review'), 900, 2);
 		
 		add_filter( 'style_loader_src', array($this, 'remove_cssjs_query_string'), 1, 2 );
-		add_filter( 'script_loader_src', array($this, 'remove_cssjs_query_string'), 1, 2 );
+		//add_filter( 'script_loader_src', array($this, 'remove_cssjs_query_string'), 1, 2 );
 
     }
 
@@ -141,8 +136,8 @@ class WC_Shippify_Checkout{
 	   	if( ! empty( $_POST['shippify_longitude'] ) ) {
 	        update_post_meta( $order_id, 'Longitude', sanitize_text_field($_POST['shippify_longitude'] ));
 	    }
-	    update_post_meta( $order_id, 'pickup_latitude', sanitize_text_field(get_option( 'shippify_instance_settings' )["warehouse_latitude"]));
-	    update_post_meta( $order_id, 'pickup_longitude', sanitize_text_field(get_option( 'shippify_instance_settings' )["warehouse_longitude"]));
+	    update_post_meta( $order_id, 'pickup_latitude', sanitize_text_field($_SESSION['shippify_instance_settings']["warehouse_latitude"]));
+	    update_post_meta( $order_id, 'pickup_longitude', sanitize_text_field($_SESSION['shippify_instance_settings']["warehouse_longitude"]));
 	}
 
   
@@ -156,8 +151,8 @@ class WC_Shippify_Checkout{
    			'shippify_instructions' => array(
 				'type'         => 'text',
 				'class'         => array('form-row form-row-wide'),
-				'label'         => __('Instructions'),
-				'placeholder'   => __('Al lado de una tienda...'),
+				'label'         => __('Reference'),
+				'placeholder'   => __('Reference to get to the delivery place.'),
 				'required'     => false
 			),
    			'shippify_latitude' => array(
@@ -181,7 +176,7 @@ class WC_Shippify_Checkout{
    	}
 
 	public function shippify_validate_order() {
-
+		session_start();
 		if ( in_array( 'shippify', $_POST["shipping_method"])){
 
 			if ($_POST['shippify_latitude'] == "" || $_POST['shippify_longitude'] == "" ){
@@ -192,8 +187,8 @@ class WC_Shippify_Checkout{
 			}
 
 
-			$pickup_latitude = get_option( 'shippify_instance_settings' )["warehouse_latitude"];
-			$pickup_longitude = get_option( 'shippify_instance_settings' )["warehouse_longitude"];
+			$pickup_latitude = $_SESSION['shippify_instance_settings']["warehouse_latitude"];
+			$pickup_longitude = $_SESSION['shippify_instance_settings']["warehouse_longitude"];
 
 			$delivery_latitude = $_POST["shippify_latitude"];
 			$delivery_longitude = $_POST["shippify_longitude"];

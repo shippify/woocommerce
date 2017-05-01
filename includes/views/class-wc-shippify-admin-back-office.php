@@ -245,7 +245,7 @@ class WC_Shippify_Admin_Back_Office{
      * @param string $order_ir Shop order identifier. 
      */
     public function create_shippify_task($order_id){
-
+        session_start();
         $task_endpoint = "https://api.shippify.co/task/new";
 
         $order = new WC_Order($order_id);
@@ -261,7 +261,7 @@ class WC_Shippify_Admin_Back_Office{
 
         $pickup_latitude = get_post_meta( $order_id, 'pickup_latitude', true );
         $pickup_longitude = get_post_meta( $order_id, 'pickup_longitude', true );
-        $pickup_address =  "test"; //poner y coger de settings
+        $pickup_address =  $_SESSION['shippify_instance_settings']["warehouse_address"];
 
         $deliver_lat = get_post_meta( $order_id, 'Latitude', true );
         $deliver_lon = get_post_meta( $order_id, 'Longitude', true );
