@@ -314,6 +314,13 @@ class WC_Shippify_Admin_Back_Office{
                 "warehouse": "'.  $pickup_id .'"';
         }
 
+        $total_amount = '';
+        $payment_method = get_post_meta( $order_id, '_payment_method', true );
+        if ($payment_method == 'cod'){
+            $order_total = $order->get_total();     
+            $total_amount = '"total_amount": "' . $order_total . '",';    
+        }
+
         $request_body = '
         {
             "task" : {
@@ -330,7 +337,8 @@ class WC_Shippify_Admin_Back_Office{
                     "lat": '. $pickup_latitude . ',
                     "lng": '. $pickup_longitude . ',
                     "address": "'. $pickup_address . '"'. $warehouse_to_request . '
-                },
+                }, 
+                '. $total_amount . '
                 "deliver": {
                     "lat": '. $deliver_lat . ',
                     "lng": '. $deliver_lon . ',
