@@ -1,11 +1,9 @@
 <?php 
-//session_start();
+
 /**
  * Shippify shipping method.
  *
- * @package 
- * @since   
- * @version 
+ * @version 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,21 +11,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Shippify shiping method class
- * 
+ *
+ * Shippify shiping method class. Supports shipping-zones and instance settings.
+ * Shipping calculations are based on Shippify API.
  */
 
+// Check if woocommerce is active
 if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 	
 	if ( ! class_exists( 'WC_Shippify_Shipping' ) ) {
 
 		class WC_Shippify_Shipping extends WC_Shipping_Method {
 
-
 			public $fare_API = 'https://api.shippify.co/task/fare?';
 			public $warehouse_API = 'https://api.shippify.co/warehouse/list';
 
-			/*
+			/**
 			* Initialize Shippify shipping method.
 			*
 			* @param int $instance_id Shipping zone instance ID.
@@ -35,7 +34,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			public function __construct( $instance_id = 0 ) {
 
 				//if ($instance_id != 0){
-
 
 					$this->id           = 'shippify';
 					$this->method_id    = 
@@ -58,20 +56,21 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					);
 
 
-					//var_dump($this->warehouse_id);
 
 					// Load the form fields.
-
 					$this->init_form_fields(); 
-                	//$this->init_settings();
-					//var_dump($this->instance_id);
 
-
+					// Set instance options values if they are defined.
 					$this->warehouse_id     	= $this->get_instance_option( 'warehouse_id' );
 					$this->warehouse_adress     = $this->get_instance_option( 'warehouse_adress' );
 					$this->warehouse_latitude   = $this->get_instance_option( 'warehouse_latitude' );
 					$this->warehouse_longitude  = $this->get_instance_option( 'warehouse_longitude' );
 
+					/**
+					 *
+					 * Since (in our shipping method), the checkout page needs to know the information about the instance (to validate task creation),
+					 * we use SESSION variables to store the warehouse information concerning the instance, so the checkout can have access to them.
+					 */
 					if ($this->instance_id != 0){
 						$_SESSION["shippify_instance_settings"] = array(
 								'warehouse_id' => 			$this->warehouse_id,
@@ -81,17 +80,13 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 						);						
 					}
 
-
-
-					//if ($this->instance_id == $_GET['instance_id']){
 					add_action( 'woocommerce_update_options_shipping_shippify', array($this, 'process_admin_options' ), 3 );	
-					//}
-
 					
 			}
 
 			/**
-			* Admin options fields.
+			*
+			* Admin instance options fields.
 			*/
 			public function init_form_fields() {
 				$this->instance_form_fields = array(
@@ -132,7 +127,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			}
 
 			/**
-			* Calculates the shipping rate.
+			* Calculates the shipping rate. This calculations are based on 
 			*
 			* @param array $package Order package.
 			*/
@@ -151,9 +146,11 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				//	return;
 				//}
 
+				// Credentials
 				$api_id = get_option('shippify_id');
 				$api_secret = get_option('shippify_secret');
 
+				// Basic Authentication
 	            $args = array(
 	                'headers' => array(
 	                    'Authorization' => 'Basic ' . base64_encode( $api_id . ':' . $api_secret )
@@ -161,14 +158,16 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	                'method'  => 'GET'
 	            );                  
 
+	            // Pickup information
 				$pickup_latitude = $_SESSION['shippify_instance_settings']["warehouse_latitude"];
 				$pickup_longitude = $_SESSION['shippify_instance_settings']["warehouse_longitude"];
-
 				$pickup_id = $_SESSION['shippify_instance_settings']["warehouse_id"];
 
+				// Dinamically generated coordinates
 				$delivery_latitude = $_SESSION["shippify_latitude"];
 				$delivery_longitude = $_SESSION["shippify_longitude"];
-				//var_dump($pickup_id);
+				
+				// If there is defined a warehouse id. Check if valid. Then use the coordinates of that warehouse.
 				if ($pickup_id != "" || isset($pickup_id)){
 					$warehouse_response = wp_remote_get($this->warehouse_API, $args);
 					if (!is_wp_error($warehouse_response)){
@@ -184,6 +183,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 					}
 				}
 
+				// Constructing the items array
 				$items = "[";
 				foreach ( $package['contents'] as $item_id => $values ) { 
 			        $_product = $values['data']; 
@@ -196,10 +196,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 			    }
 			    $items = substr($items, 0, -1) . ']}]';
 
-
+			    // Merging the request parameter
 				$data_value = '[{"pickup_location":{"lat":'. $pickup_latitude .',"lng":'. $pickup_longitude . '},"delivery_location":{"lat":' . $delivery_latitude . ',"lng":'. $delivery_longitude .'},"items":' . $items;
 
-
+				// Final request url
 				$request_url = $this->fare_API . "data=" . $data_value;
 
 
@@ -211,6 +211,8 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	            	$decoded = json_decode($response['body'], true);
 	            	$cost = $decoded['price'];					
 				}
+
+				
 				if (is_cart()){
 					$cost = 0;
 				}
@@ -224,7 +226,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 				$this->add_rate($rate);
 			}
 
-
+		    /**
+		    * Diffuse Logic Algorithm used to calculate Shippify product size based on the product dimensions. 
+		    * @param WC_Product The product to calculate the size. 
+		    */
 			public function calculate_product_shippify_size($product){
 
 		        $height = $product->get_height();

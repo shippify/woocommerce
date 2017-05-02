@@ -1,18 +1,11 @@
 <?php
-/**
- * Shippify shipping method.
- *
- * @package 
- * @since   
- * @version 
- */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Shippify shiping method class
+ * Shippify Checkout class.
  * 
  */
 
@@ -56,11 +49,9 @@ class WC_Shippify_Checkout{
 
 	function action_woocommerce_checkout_update_order_review($array, $int)
 	{
-
 		if (in_array("shippify", WC()->session->get('chosen_shipping_methods'))){
 			WC()->cart->calculate_shipping();		
 		}
-					
 	    return;
 	}
 

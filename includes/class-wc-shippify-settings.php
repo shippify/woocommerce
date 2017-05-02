@@ -18,9 +18,9 @@ class WC_Shippify_Settings{
     }
 
     /**
-     * Hooked to woocommerce_get_sections_products,
-     * This method creates the Shippify general settings section in the products tab.
-     * 
+     * Hooked to woocommerce_get_sections_api,
+     * This method creates the Shippify general settings section in the API tab.
+     * @param array $sections Contains all the sections.
      */
     public function add_shippify_to_settings($sections){
         $sections['shippify'] = __( 'Shippify', 'woocommerce-shippify' );
@@ -28,9 +28,10 @@ class WC_Shippify_Settings{
     }
 
     /**
-     * Hooked to woocommerce_get_settings_products,
+     * Hooked to woocommerce_get_settings_api,
      * This method creates the fields of the Shippify general settings section.
-     * 
+     * @param array $settings Setting of the current section
+     * @param string $current_section Current Section ID
      */
     public function shippify_all_settings($settings, $current_section = ""){
 

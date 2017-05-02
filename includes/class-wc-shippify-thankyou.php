@@ -1,22 +1,16 @@
 <?php
-/**
- * Shippify shipping method.
- *
- * @package 
- * @since   
- * @version 
- */
+
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 /**
- * Shippify shiping method class
+ * Shippify thankyou class.
  * 
  */
 
-class WC_Shippify_Order_Processing{
+class WC_Shippify_Thankyou{
 
     public function __construct() {
 		add_action( 'woocommerce_thankyou', array($this, 'display_shippify_order_data'), 20 );
@@ -38,6 +32,6 @@ class WC_Shippify_Order_Processing{
     }
 }
 
-new WC_Shippify_Order_Processing();
+new WC_Shippify_Thankyou();
 
 ?>

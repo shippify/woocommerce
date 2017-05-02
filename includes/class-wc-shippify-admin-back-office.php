@@ -11,7 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WC_Shippify_Admin_Back_Office{
 
-    public $fetched_orders = "";
 
     /**
      * Shippify human readable equivalents to task status.
@@ -34,15 +33,100 @@ class WC_Shippify_Admin_Back_Office{
      * Initialize actions and filters.
      */
     public function __construct() {
+        $this->retrieved_status = "";
+        $this->fetched_flag = false;
         add_filter( 'manage_edit-shop_order_columns', array($this, 'custom_shippify_order_column'),11);
-        add_action( 'manage_shop_order_posts_custom_column' , array($this, 'custom_shippify_orders_column_content'), 10, 2 );
+        add_action( 'manage_shop_order_posts_custom_column' , array($this, 'fetch_shippify_orders_status'), 10, 2 );
         add_filter( 'woocommerce_admin_order_actions', array($this,'add_shippify_order_action_button'), PHP_INT_MAX, 2 );
         add_action( 'admin_head', array($this,'add_shippify_order_actions_button_css' ));
         add_action( 'woocommerce_admin_order_actions_end', array( $this, 'execute_shippify_order_action' ));
         add_filter( 'bulk_actions-edit-shop_order', array( $this, 'register_bulk_dispatch_action' ));
         add_filter( 'handle_bulk_actions-edit-shop_order', array( $this,'dispatch_bulk_action_handler'), 10, 3 );
         add_action( 'admin_notices', array($this,'shippify_admin_notices'));
+
+
     }
+
+    /**
+     * Hooked to filter: manage_shop_order_posts_custom_column,
+     * Fetch onto the Shippify dispatched order status and shows it in the order table.
+     * @param string $column Shop order table column identifier. 
+     */
+    public function fetch_shippify_orders_status($column){
+        //session_start();
+        global $post, $woocommerce, $the_order;
+
+        $api_id = get_option('shippify_id');
+        $api_secret = get_option('shippify_secret');
+        $order_id = $the_order->id;  
+        //session_unset();
+        switch ( $column ){
+            case 'order-status' :
+                if ($this->fetched_flag == false){
+
+                    //Get all the orders 
+
+                    $this->fetched_flag = true;
+                    $all = get_posts(array(
+                        'numberposts' => -1,
+                        'post_type'   => wc_get_order_types(),
+                        'post_status' => array_keys( wc_get_order_statuses()),
+                    ));
+
+                    $fetched_orders = '';
+
+                    //Get all the orders shippify ID
+                    foreach ($all as $post){
+                        $fetched_orders .= get_post_meta( $post->ID, '_shippify_id', true ) . ',';
+                    }
+
+                    //Prepare the request and store the response in an instance variable
+                    $args = array(
+                        'headers' => array(
+                            'Authorization' => 'Basic ' . base64_encode( $api_id . ':' . $api_secret )
+                        ),
+                        'method'  => 'GET'
+                    );
+
+                    $fetch_endpoint = 'https://api.shippify.co/v1/deliveries/' . $fetched_orders;
+
+                    $response = wp_remote_get( $fetch_endpoint, $args );
+                    if (is_wp_error($response)){
+                        $this->retrieved_status = "Error Fetching. Try Again.";
+                    }else{
+                        $decoded = json_decode($response['body'], true);
+                        $this->retrieved_status = $decoded["deliveries"];  
+                    }
+                }
+
+                //Search for every order status shipped via-Shippify on the response.
+                if (in_array("shippify", get_post_meta( $order_id, '_shipping_method', true)) && (get_post_meta( $the_order->id, '_is_dispatched', true ) == 'yes')){
+                    $order_to_fetch = get_post_meta($order_id, '_shippify_id', true);
+                    if ($this->retrieved_status == "Error Fetching. Try Again."){
+                        $col_val = "Error Fetching. Try Again.";    
+                    }else{
+                        $found = false;
+                        foreach ($this->retrieved_status as $response_order){
+                            if ($response_order["id"] == $order_to_fetch){
+                                $col_val = $this->shippify_task_status[$response_order["state"]]; 
+                                $found = true;
+                                break;
+                            }
+                        }
+                        if ($found == false){
+                            $col_val = "Error Fetching. Try Again.";
+                        }
+                    }
+                }else{
+                    $col_val = '-';
+                }
+                //Show the result on the table
+                echo $col_val;    
+            break;
+        }
+    }
+
+
 
     /**
     * Hooked to action: admin_notices.
@@ -189,56 +273,6 @@ class WC_Shippify_Admin_Back_Office{
     }
 
 
-    /**
-     * Hooked to filter: manage_shop_order_posts_custom_column,
-     * Fetch onto the Shippify dispatched order status and shows it in the order table.
-     * @param string $column Shop order table column identifier. 
-     */
-    public function custom_shippify_orders_column_content($column){
-
-        global $post, $woocommerce, $the_order;
-        $api_id = get_option('shippify_id');
-        $api_secret = get_option('shippify_secret');
-        $order_id = $the_order->id;
-        $task_endpoint =  "https://api.shippify.co/task/info/" . get_post_meta( $order_id, '_shippify_id', true);  
-
-        switch ( $column ){
-            case 'order-status' :
-                if (in_array("shippify", get_post_meta( $order_id, '_shipping_method', true)) && (get_post_meta( $the_order->id, '_is_dispatched', true ) == 'yes')){
-                    $this->fetched_orders = $this->fetched_orders . get_post_meta( $order_id, '_shippify_id', true). ',';
-
-                    // Basic Auth
-                    $args = array(
-                        'headers' => array(
-                            'Authorization' => 'Basic ' . base64_encode( $api_id . ':' . $api_secret )
-                        ),
-                        'method'  => 'GET'
-                    );                    
-                    // Fetching the task
-                    $response = wp_remote_get( $task_endpoint, $args );
-                    if (is_wp_error($response)){
-                        $col_val = "Error Fetching. Try Again.";
-                    }else{
-                        $decoded = json_decode($response['body'], true);
-                        $status = $decoded['data']['status'];
-                        if (!isset($status) || $status == ""){
-                            $col_val = "Error Fetching. Try Again.";    
-                        }else{
-                            $col_val = $this->shippify_task_status[$status]; 
-                        }                
-                    }
-                //When the order isnt shipped via Shippify
-                }else{
-                    $col_val = '-';
-                }
-
-                echo $col_val;
-
-                break;
-
-        }
-        //echo "hola";
-    }
 
     /**
      * Creates the Shippify Task of a shop order.
@@ -368,11 +402,14 @@ class WC_Shippify_Admin_Back_Office{
             return false;
         }
 
-
         return $response;
 
     }
 
+    /**
+    * Diffuse Logic Algorithm used to calculate Shippify product size based on the product dimensions. 
+    * @param WC_Product The product to calculate the size. 
+    */
     public function calculate_product_shippify_size($product){
 
         $height = $product->get_height();
