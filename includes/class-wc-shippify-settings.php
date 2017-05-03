@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WC_Shippify_Settings{
 
     public function __construct() {
-        add_filter( 'woocommerce_get_sections_api', array( $this, 'add_shippify_to_settings' ));
-        add_filter( 'woocommerce_get_settings_api', array( $this, 'shippify_all_settings' ), 10, 2);       
+        add_filter( 'woocommerce_get_sections_api', array( $this, 'add_shippify_to_settings' ) );
+        add_filter( 'woocommerce_get_settings_api', array( $this, 'shippify_all_settings' ), 10, 2 );       
     }
 
     /**
@@ -22,7 +22,7 @@ class WC_Shippify_Settings{
      * This method creates the Shippify general settings section in the API tab.
      * @param array $sections Contains all the sections.
      */
-    public function add_shippify_to_settings($sections){
+    public function add_shippify_to_settings( $sections ) {
         $sections['shippify'] = __( 'Shippify', 'woocommerce-shippify' );
         return $sections;
     }
@@ -33,9 +33,9 @@ class WC_Shippify_Settings{
      * @param array $settings Setting of the current section
      * @param string $current_section Current Section ID
      */
-    public function shippify_all_settings($settings, $current_section = ""){
+    public function shippify_all_settings( $settings, $current_section = "" ) {
 
-        if ( $_GET['section'] == "shippify" ) {
+        if ( "shippify" == $_GET['section'] ) {
 
             $settings_slider = array();
 
@@ -43,7 +43,7 @@ class WC_Shippify_Settings{
                 'name' => __( 'Shippify Settings', 'woocommerce-shippify' ), 
                 'type' => 'title', 
                 'desc' => __( 'The following options are used to configure Shippify', 'woocommerce-shippify' ), 
-                'id' => 'shippify' 
+                'id'   => 'shippify' 
             );
 
             $settings_slider[] = array(
@@ -64,7 +64,7 @@ class WC_Shippify_Settings{
 
             $settings_slider[] = array( 
                 'type' => 'sectionend', 
-                'id' => 'shippify' 
+                'id'   => 'shippify' 
             );
 
             return $settings_slider;
@@ -80,5 +80,3 @@ class WC_Shippify_Settings{
 }
 
 new WC_Shippify_Settings();
-
-?>

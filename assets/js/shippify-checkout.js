@@ -1,6 +1,6 @@
 // This file triggers the appearance and dissapearance of the Shippify fields in checkout.
-jQuery(function($) {
-	$(document).ready(function(){
+jQuery( function($) {
+	$( document ).ready(function(){
 		$("#billing_address_1").val($("#billing_address_1").val() + " ");
 		$("#billing_address_1").trigger('change');
 

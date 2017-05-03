@@ -10,13 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * 
  */
 
-class WC_Shippify_Thankyou{
+class WC_Shippify_Thankyou {
 
     public function __construct() {
-		add_action( 'woocommerce_thankyou', array($this, 'display_shippify_order_data'), 20 );
+		add_action( 'woocommerce_thankyou', array( $this, 'display_shippify_order_data' ), 20 );
     }
 
-    public function display_shippify_order_data($order_id){
+    public function display_shippify_order_data( $order_id ) {
 
     	?>
 	    <h2><?php _e( 'Shippify' ); ?></h2>
@@ -33,5 +33,3 @@ class WC_Shippify_Thankyou{
 }
 
 new WC_Shippify_Thankyou();
-
-?>
