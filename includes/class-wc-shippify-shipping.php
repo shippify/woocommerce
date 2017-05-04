@@ -16,9 +16,20 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Shipping calculations are based on Shippify API.
  */
 
+
+$active_plugins = (array) get_option( 'active_plugins', array() );
+
+// Check for multisite configuration
+if ( is_multisite() ) {
+
+    $network_activated_plugins = array_keys( get_site_option( 'active_sitewide_plugins', array() ) );
+    $active_plugins            = array_merge( $active_plugins, $network_activated_plugins );
+
+}
+
 // Check if woocommerce is active
-if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-	
+if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
+
 	if ( ! class_exists( 'WC_Shippify_Shipping' ) ) {
 
 		class WC_Shippify_Shipping extends WC_Shipping_Method {

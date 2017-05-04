@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * to provide the APP ID and APP SECRET to access the Shippify API.
  */
 
-class WC_Shippify_Settings{
+class WC_Shippify_Settings {
 
     public function __construct() {
         add_filter( 'woocommerce_get_sections_api', array( $this, 'add_shippify_to_settings' ) );
