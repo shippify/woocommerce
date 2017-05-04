@@ -93,7 +93,12 @@ class WC_Shippify_Admin_Back_Office {
                         $this->retrieved_status = "Error Fetching. Try Again.";
                     }else {
                         $decoded = json_decode( $response['body'], true );
-                        $this->retrieved_status = $decoded["deliveries"];  
+                        if ( ! isset($decoded["deliveries"])){
+                            $this->retrieved_status = "Error Fetching. Try Again.";
+                        }else{
+                            $this->retrieved_status = $decoded["deliveries"];   
+                        }
+                         
                     }
                 }
 

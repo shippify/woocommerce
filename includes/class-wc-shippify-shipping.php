@@ -44,10 +44,8 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 			*/
 			public function __construct( $instance_id = 0 ) {
 
-				//if ($instance_id != 0){
-
 					$this->id           = 'shippify';
-					$this->method_id    = 
+					$this->method_id    = '';
 					$this->enabled 		= 'yes';
 					$this->method_title = __( 'Shippify', 'woocommerce-shippify' );
 					$this->more_link    = 'http://shippify.co/';		

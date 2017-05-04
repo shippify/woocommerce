@@ -42,18 +42,43 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 
         class WC_Shippify {
 
+            protected static $instance = null;
+
             public function __construct() {
-                //add_action( 'init', array($this, 'start_session'), 1);
-                add_filter( 'woocommerce_shipping_methods', array( $this, 'include_shipping_methods' ), 2 );
-                $this->includes();
-                add_action( 'woocommerce_shipping_init',  array( $this, 'shipping_method_init' ), 1 );
+                
+                if ( class_exists( 'WC_Integration' ) ) {
+
+                    $this->includes();
+                    add_filter( 'woocommerce_shipping_methods', array( $this, 'include_shipping_methods' ), 2 );
+                    add_action( 'woocommerce_shipping_init',  array( $this, 'shipping_method_init' ), 1 );
+                    add_filter( 'woocommerce_integrations', array( $this, 'add_shippify_integration' ) );    
+                }
             }
 
-            // This method solves the session_start() warning... HOWEVER. For some reason, it makes the shipping price dissapear in the thankyou page.
-            public function start_session() {
-                if( ! session_id() ) {
-                    //session_start();
+            /**
+             * Include Shippify integration to WooCommerce.
+             *
+             * @param  array $integrations Default integrations.
+             * @return array
+             */
+            public function add_shippify_integration( $integrations ) {
+                $integrations[] = 'WC_Shippify_Integration';
+
+                return $integrations;
+            }    
+
+            /**
+             * Return an instance of this class.
+             *
+             * @return object A single instance of this class.
+             */        
+            public static function get_instance() {
+                // If the single instance hasn't been set, set it now.
+                if ( null === self::$instance ) {
+                    self::$instance = new self;
                 }
+
+                return self::$instance;
             }
 
             /**
@@ -79,7 +104,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
              * Include every other class.
              */   
             public function includes(){
-                include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-settings.php';
+                include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-integration.php';
                 include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-admin-back-office.php';
                 include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-thankyou.php';
                 include_once dirname( __FILE__ ) . '/includes/class-wc-shippify-checkout.php';
@@ -87,5 +112,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
         }
     }
 
-    new WC_Shippify();
+    add_action( 'plugins_loaded', array( 'WC_Shippify', 'get_instance' ) );
 }
+
