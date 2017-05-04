@@ -1,16 +1,21 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit; // Exit if accessed directly.
 }
 
 /**
  * Shippify Checkout class.
- * 
+ * This class is in charge of everything related to the Shippify Checkout configuration.
+ * @since   1.0.0
+ * @version 1.0.0
  */
 
 class WC_Shippify_Checkout {
 
+	/**
+	 * Adding Actions and Filters
+	 */
     public function __construct() {
 
         add_filter( 'woocommerce_checkout_fields' , array( $this, 'customize_checkout_fields' ) );
@@ -21,6 +26,7 @@ class WC_Shippify_Checkout {
 
         add_action( 'woocommerce_admin_order_data_after_order_details', array( $this,'display_order_data_in_admin' ) );
 
+        //Enqueueing CSS and JS files
         wp_enqueue_script( 'wc-shippify-checkout', plugins_url( '../assets/js/shippify-checkout.js', __FILE__ ), array( 'jquery' ) ); 
         wp_enqueue_style( 'wc-shippify-map-css', plugins_url( '../assets/css/shippify-map.css', __FILE__ ) ); 
         wp_enqueue_style( 'wc-shippify-fields-css', plugins_url( '../assets/css/shippify-checkout-fields.css', __FILE__ ) ); 
@@ -34,28 +40,28 @@ class WC_Shippify_Checkout {
 
 		add_action( 'woocommerce_checkout_update_order_review', array( $this, 'action_woocommerce_checkout_update_order_review' ), 900, 2 );
 		
-		//add_filter( 'style_loader_src', array( $this, 'remove_cssjs_query_string' ), 1, 2 );
-		//add_filter( 'script_loader_src', array($this, 'remove_cssjs_query_string'), 1, 2 );
-
     }
 
-
-	function remove_cssjs_query_string( $src ) {
-		if( strpos( $src, '?ver=' ) )
-		$src = remove_query_arg( 'ver', $src );
-		return $src;
-	}
-
-
-	function action_woocommerce_checkout_update_order_review( $array, $int ) {
+	/**
+	 * Hooked to Action: woocommerce_checkout_update_order_review
+	 * Everytime the order is updated, if Shippify is selected as shipping method, the calculate shipping method of the cart is called.
+	 * This is a critic call to calculate the shipping price dinamically.
+	 * @return NULL
+	 */
+	public function action_woocommerce_checkout_update_order_review( $array, $int ) {
 		if ( in_array( "shippify", WC()->session->get( 'chosen_shipping_methods' ) ) ) {
 			WC()->cart->calculate_shipping();		
 		}
 	    return;
 	}
 
-
-
+	/**
+	 * Hooked to Filter: woocommerce_cart_shipping_method_full_label
+	 * Change Shippify label depending on the page the user is.
+	 * @param string $method The shipping method id
+	 * @param $full_label The current shipping method label
+	 * @return string The label to show.
+	 */
 	public function change_shipping_label( $full_label, $method ) {
 		if ( "shippify" == $method->id ){
 			if ( is_cart() ) {
@@ -67,7 +73,11 @@ class WC_Shippify_Checkout {
 	    return $full_label;
 	}
 
-    //HAY QUE MOVER
+	/**
+	 * Hooked to Action: woocommerce_admin_order_data_after_order_details
+	 * Display Shippify order meta data in the order detail admin page.
+	 * @param WC_Order $order The order
+	 */
     public function display_order_data_in_admin( $order ) {
     	if ( in_array( "shippify", get_post_meta( $order->id, '_shipping_method', true ) ) ) {
     		?>
@@ -86,6 +96,12 @@ class WC_Shippify_Checkout {
 	
     }
 
+
+	/**
+	 * Hooked to Action: woocommerce_after_checkout_form
+	 * Insert our interactive map in checkout.
+	 * @param array $after Every field after the checkout form.
+	 */
     public function add_map( $after ) {
     	echo '<div id="shippify_map">';
     	echo '<h4>Delivery Position  </h4> <p> Click on the map to put a marker. </p>';
@@ -95,7 +111,11 @@ class WC_Shippify_Checkout {
     	echo '</div>';
     }
 
-
+	/**
+	 * Hooked to Action: woocommerce_after_order_notes.
+	 * Display in checkout our custom Shippify fields.
+	 * @param array $checkout The checkout fields array
+	 */
     public function display_custom_checkout_fields( $checkout ) {
 
         //var_dump(WC()->cart->get_cart()); 
@@ -108,13 +128,18 @@ class WC_Shippify_Checkout {
 	    echo '</div>';
 
 	    session_start();
+	    // Set shipping price to $0 to not confuse the user.
    		unset( $_SESSION['shippify_longitude'] );
    		unset( $_SESSION['shippify_latitude'] );
 	    WC()->cart->calculate_shipping();
     }
 
 
-	// save the extra field when checkout is processed
+	/**
+	 * Hooked to Action: woocommerce_checkout_update_order_meta.
+	 * Save Shippify custom checkout fields to the order when checkout is processed.
+	 * @param string $order_id The order id
+	 */
 	public function save_custom_checkout_fields( $order_id ) {
 	    if( ! empty( $_POST['shippify_instructions'] ) ) {
 	        update_post_meta( $order_id, 'Instructions', sanitize_text_field( $_POST['shippify_instructions'] ) );
@@ -132,7 +157,12 @@ class WC_Shippify_Checkout {
 	}
 
   
-
+  	/**
+	 * Hooked to Filter: woocommerce_checkout_fields.
+	 * Add Shippify custom checkout fields to the checkout form.
+	 * @param array $fields The checkout form fields
+	 * @return array The checkout form fields
+	 */
    	public function customize_checkout_fields( $fields ) {
    		
    		global $woocommerce;
@@ -165,10 +195,17 @@ class WC_Shippify_Checkout {
 
    	}
 
+  	/**
+	 * Hooked to Action: woocommerce_checkout_process.
+	 * Validate the Shippify fields in checkout.
+	 * The methods tries to obtain the shippify fare of the task the API would create if the order is placed just as it is right now.
+	 * Warning messages appear and the order does not place if the request fails or any fields are empty.
+	 */
 	public function shippify_validate_order() {
 		session_start();
 		if ( in_array( 'shippify', $_POST["shipping_method"] ) ) {
 
+			// No marker on Map
 			if ( "" == $_POST['shippify_latitude'] || "" == $_POST['shippify_longitude'] ) {
 				wc_add_notice( __( 'Shippify: Please, locate the marker of your address in the map.' ), 'error' );
 			}
@@ -176,13 +213,17 @@ class WC_Shippify_Checkout {
 				wc_add_notice( __( 'Shippify: Please, write descriptive instructions.' ), 'error' );
 			}
 
+			// Getting pickup information based on shipping zone
 			$pickup_warehouse = $_SESSION['shippify_instance_settings']["warehouse_id"];
 			$pickup_latitude = $_SESSION['shippify_instance_settings']["warehouse_latitude"];
 			$pickup_longitude = $_SESSION['shippify_instance_settings']["warehouse_longitude"];
 
+			// Get Delivery information (marker position)
 			$delivery_latitude = $_POST["shippify_latitude"];
 			$delivery_longitude = $_POST["shippify_longitude"];
 
+			// Construct the request. 
+			// Items array is just hardcoded. We just want to know if the task can be created.
             $data_value = '[{"pickup_location":{"lat":'. $pickup_latitude .',"lng":'. $pickup_longitude . '},"delivery_location":{"lat":' . $delivery_latitude . ',"lng":'. $delivery_longitude .'},"items":[{"id":"10234","name":"TV","qty":"2","size":"3","price":"0"}]}]';
 
 
@@ -190,6 +231,7 @@ class WC_Shippify_Checkout {
 			$api_id = get_option( 'shippify_id' );
 			$api_secret = get_option( 'shippify_secret' );
 
+			// Basic Authorization
             $args = array(
                 'headers' => array(
                     'Authorization' => 'Basic ' . base64_encode( $api_id . ':' . $api_secret )
@@ -201,6 +243,7 @@ class WC_Shippify_Checkout {
             $decoded = json_decode( $response['body'], true );
             $price = $decoded['price'];
 
+            // Check if task could be created
 			if ( ! isset($price) || "" == $price ) {
 				wc_add_notice( __( 'Shippify: We are unable to make a route to your address. Verify the marker in the map is correctly positioned.' ), 'error' );
 			}  

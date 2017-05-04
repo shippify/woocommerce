@@ -2,12 +2,13 @@
 
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit; // Exit if accessed directly.
 }
 
 /**
- * Shippify thankyou class.
- * 
+ * Shippify thankyou class. Handles the Thankyou page. 
+ * @since   1.0.0
+ * @version 1.0.0
  */
 
 class WC_Shippify_Thankyou {

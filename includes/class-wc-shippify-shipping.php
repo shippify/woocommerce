@@ -3,18 +3,13 @@
 /**
  * Shippify shipping method.
  *
+ * @since   1.0.0
  * @version 1.0.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit; // Exit if accessed directly.
 }
-
-/**
- *
- * Shippify shiping method class. Supports shipping-zones and instance settings.
- * Shipping calculations are based on Shippify API.
- */
 
 
 $active_plugins = (array) get_option( 'active_plugins', array() );
@@ -32,6 +27,11 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 
 	if ( ! class_exists( 'WC_Shippify_Shipping' ) ) {
 
+		/**
+		 *
+		 * Shippify shiping method class. Supports shipping-zones and instance settings.
+		 * Shipping calculations are based on Shippify API.
+		 */
 		class WC_Shippify_Shipping extends WC_Shipping_Method {
 
 			public $fare_API = 'https://api.shippify.co/task/fare?';
@@ -134,8 +134,8 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 			}
 
 			/**
-			* Calculates the shipping rate. This calculations are based on 
-			*
+			* Calculates the shipping rate. This calculations are based on the dinamically produced coordinates in checkout, warehouse information
+			* of the shippign zone and package information.
 			* @param array $package Order package.
 			*/
 			public function calculate_shipping( $package = array() ) {

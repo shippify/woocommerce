@@ -8,6 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Shippify Admin Back-Office class. 
  * This class provides back-office functionality for the Admin to dispatch and
  * review orders that deliver with Shippify.
+ *
+ * @since   1.0.0
+ * @version 1.0.0
  */
 class WC_Shippify_Admin_Back_Office {
 
@@ -134,25 +137,53 @@ class WC_Shippify_Admin_Back_Office {
 
     /**
     * Hooked to action: admin_notices.
-    * Shows admin alerts when the user performs a dispatch action or dispatch bulk action Shippify.
+    * Shows admin alerts when the user performs a dispatch action or dispatch bulk action Shippify or
+    * when the user hasn't set their Shippify credentials.
     * @param string $doaction Bulk action applied.
     * @param string $redirect_to URL to redirect.
     * @return array $post_ids Contains all the selected orders ids.
     */   
     public function shippify_admin_notices() {
-
+        // Single Dispatch Error
         if ( 'singleError' == $_GET['error']  && 'shop_order' == $_GET['post_type'] ) {
             echo '<div class="error notice is-dismissible"><p>' . 'The order #'. $_GET['order_dispatched'] . ' was not dispatched correctly. Check your settings or try again later.' . '</p></div>';    
         }
+        // Bulk Dispatch Error
         if ( 'multipleError' == $_GET['error']  && 'shop_order' == $_GET['post_type'] ) {
             echo '<div class="notice notice-warning is-dismissible"><p>' . 'One or more orders were not successfully dispatched. Try dispatching orders individually, check your settings or try again later.' . '</p></div>';    
         }
+        // Single Dispatch Success
         if (  'none' == $_GET['error'] &&  'shop_order' == $_GET['post_type'] && ! isset( $_GET['bulk_dispatched_orders'] ) ) {
             echo '<div class="notice notice-success is-dismissible"><p>' . 'The order #'. $_GET['order_dispatched'] . ' was dispatched successfully. ' . '</p></div>'; 
         }
+        // Bulk Dispatch Success
         if ( 'none' == $_GET['error']  && isset( $_GET['bulk_dispatched_orders'] ) ) {
             echo '<div class="notice notice-success is-dismissible"><p>' . 'All the selected orders were dispatched successfully.' . '</p></div>'; 
         }
+        // Empty Credentials
+        if ( isset( $_GET['page'] ) && 'wc-settings' == $_GET['page'] && isset( $_GET['section'] ) && 'shippify-integration' == $_GET['section'] ) return; // Don't show these notices in the same settings screen.
+
+        $api_key = get_option( 'shippify_id' );
+        $api_secret = get_option( 'shippify_secret' );
+
+        if ( '' == $api_key || '' == $api_secret ) {
+            $url = $this->get_settings_url();
+            echo '<div class="updated fade"><p>' . sprintf( __( '%sWooCommerce Shippify is almost ready.%s To get started, %sconnect your Shippify account%s.', 'woocommerce-shippify' ), '<strong>', '</strong>', '<a href="' . esc_url( $url ) . '">', '</a>' ) . '</p></div>' . "\n";
+        }
+    }
+
+    /**
+    *
+    * Get Shippify Integration Settings URL.
+    * @return string Contains the Shippify Integration Settings URL.
+    */
+    public function get_settings_url(){
+        $url = admin_url( 'admin.php' );
+        $url = add_query_arg( 'page', 'wc-settings', $url );
+        $url = add_query_arg( 'tab', 'integration', $url );
+        $url = add_query_arg( 'section', 'shippify-integration', $url );
+
+        return $url;       
     }
 
 
@@ -286,34 +317,40 @@ class WC_Shippify_Admin_Back_Office {
      */
     public function create_shippify_task( $order_id ) {
         session_start();
+
         $task_endpoint = "https://api.shippify.co/task/new";
 
         $order = new WC_Order( $order_id );
 
-        $products = '[{"id":"10234","name":"TV","qty":"2","size":"3","price":"0"}]'; //coger de package
+        // Get all the neccesary information 
 
-        $sender_mail = "lkuffo@espol.edu.ec"; //poner y coger de settings
+        $sender_mail = get_option( 'shippify_sender_email' ); //poner y coger de settings
 
         $recipient_name = get_post_meta( $order_id, '_billing_first_name', true ) . get_post_meta( $order_id, '_billing_last_name', true ) ;
         $recipient_email = get_post_meta( $order_id, '_billing_email', true );
         $recipient_phone = get_post_meta( $order_id, '_billing_phone', true );
 
+        // Shipping Zone information
         $pickup_warehouse = get_post_meta( $order_id, 'pickup_id', true );
         $pickup_latitude = get_post_meta( $order_id, 'pickup_latitude', true );
         $pickup_longitude = get_post_meta( $order_id, 'pickup_longitude', true );
         $pickup_address = get_post_meta( $order_id, 'pickup_address', true );
 
+        // Delivery Information
         $deliver_lat = get_post_meta( $order_id, 'Latitude', true );
         $deliver_lon = get_post_meta( $order_id, 'Longitude', true );
         $deliver_address = get_post_meta( $order_id, '_billing_address_1', true ) .  get_post_meta( $order_id, '_billing_address_2', true );
 
+        // References
         $note = get_post_meta( $order_id, 'Instructions', true );
 
         $ref_id = $order_id;
 
+        // Credentials
         $api_id = get_option( 'shippify_id' );
         $api_secret = get_option( 'shippify_secret' );
 
+        // Constructing the items array
         $items = "[";
         foreach ( $order->get_items() as $item_id => $_preproduct ) { 
             $_product = $_preproduct->get_product();
@@ -325,13 +362,15 @@ class WC_Shippify_Admin_Back_Office {
         }
         $items = substr( $items, 0, -1 ) . ']';
 
+        // Basic Auth
         $wh_args = array(
             'headers' => array(
                 'Authorization' => 'Basic ' . base64_encode( $api_id . ':' . $api_secret )
             ),
             'method'  => 'GET'
-        );                  
+        );
 
+        // If there is defined a warehouse id. Check if valid. Then use the coordinates of that warehouse.
         $pickup_id = '';
         if ( "" != $pickup_warehouse  || isset( $pickup_warehouse ) ) {
             $warehouse_response = wp_remote_get( 'https://api.shippify.co/warehouse/list', $wh_args );
@@ -354,6 +393,7 @@ class WC_Shippify_Admin_Back_Office {
                 "warehouse": "' .  $pickup_id .'"';
         }
 
+        // Checking if Cash on Delivery
         $total_amount = '';
         $payment_method = get_post_meta( $order_id, '_payment_method', true );
         if ( 'cod' == $payment_method ) {
@@ -361,6 +401,7 @@ class WC_Shippify_Admin_Back_Office {
             $total_amount = '"total_amount": "' . $order_total . '",';    
         }
 
+        // Constructing the POST request
         $request_body = '
         {
             "task" : {

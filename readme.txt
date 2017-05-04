@@ -26,6 +26,8 @@ The plugin currently offers the following functionalities:
 - Admin decides when to dispatch orders at orders page.
 - Bulk orders dispatch.
 - Shippify order status displayed at orders page.
+- Supports Cash on Delivery.
+- Multisite Support.
 
 = Installation: =
 
@@ -41,7 +43,7 @@ The plugin currently offers the following functionalities:
 To use the plugin correctly, the shop owner should follow these instructions to configure the settings:
 
 1. Configure Shippify API Settings: 
-    1. In the admin panel, go to WooCommerce -> Settings -> API -> Shippify.
+    1. In the admin panel, go to WooCommerce -> Settings -> Integration -> Shippify.
     2. Enter the APP ID and the APP SECRET provided to you, as they are in the Shippify Dashboard Settings.
     3. Save Changes.
 

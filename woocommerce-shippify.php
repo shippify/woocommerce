@@ -111,7 +111,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
             }
         }
     }
-
+    // Get the instance of the plugin
     add_action( 'plugins_loaded', array( 'WC_Shippify', 'get_instance' ) );
 }
 
