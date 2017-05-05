@@ -104,7 +104,7 @@ class WC_Shippify_Checkout {
 	 */
     public function add_map( $after ) {
     	echo '<div id="shippify_map">';
-    	echo '<h4>Delivery Position  </h4> <p> Click on the map to put a marker. </p>';
+    	echo '<h4>Delivery Position  </h4> <p> Click on the map to put a marker where you want your order to be delivered. </p>';
     	echo '<input id="pac-input" class="controls" type="text" placeholder="Search Box">';
     	echo '<div id="map"></div>';
     	wp_enqueue_script( 'wc-shippify-google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDEXSakl9V0EJ_K3qHnnrVy8IEy3Mmo5Hw&libraries=places&callback=initMap', $in_footer = true );

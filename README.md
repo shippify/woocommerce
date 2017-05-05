@@ -31,7 +31,7 @@ The plugin currently offers the following functionalities:
 - Shippify as a shipping method in Checkout.
 - WooCommerce Shipping Zones support. 
 - Shippify fares showed dinamically to the customers in checkout.
-- Admin decides when to dispatch orders at orders page.
+- Dispatch orders at the WooCommerce Admin orders page.
 - Bulk orders dispatch.
 - Shippify order status displayed at orders page.
 - Supports Cash on Delivery.
@@ -102,18 +102,20 @@ To use the plugin correctly, the shop owner should follow these instructions to 
 
 ## Screenshots ##
 
-### Shipping Option
+### Shippify in Checkout Order Review
 ![alt text](https://cloud.githubusercontent.com/assets/550702/25629238/7d876504-2f2e-11e7-8183-6d0c92d8c867.png "Shipping option")
 
-### API Setup
+### Shippify Integration Setup
 ![alt text](https://cloud.githubusercontent.com/assets/550702/25629251/8647e86c-2f2e-11e7-9e9f-2b750c6c6e9a.png "API Setup")
 
-### Warehouse Setup
+### Shipping Zone Warehouse Setup
 ![alt text](https://cloud.githubusercontent.com/assets/550702/25629256/8a686340-2f2e-11e7-8d78-108d203a8855.png "Warehouse Setup")
 
-### Shippify Delivery
-![alt text](https://cloud.githubusercontent.com/assets/550702/25629260/8d47e32e-2f2e-11e7-8d77-846cb8c3fef9.png "Shippify delivery")
+### Shippify As a Shipping Method
+![alt text](https://cloud.githubusercontent.com/assets/550702/25629260/8d47e32e-2f2e-11e7-8d77-846cb8c3fef9.png "Shippify As a Shipping Method")
 
+### Dispatch Action at Orders 
+![alt text](http://imgur.com/a/JPXAf "Dispatch Action at Orders")
 
-
-
+### Shippify Checkout Fields
+![alt text](http://imgur.com/a/2ZlBz "Shippify Checkout Fields")

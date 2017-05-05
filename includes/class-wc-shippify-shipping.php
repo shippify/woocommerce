@@ -88,7 +88,6 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 					}
 
 					add_action( 'woocommerce_update_options_shipping_shippify', array( $this, 'process_admin_options' ), 3 );	
-					
 			}
 
 			/**
@@ -140,18 +139,15 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 			*/
 			public function calculate_shipping( $package = array() ) {
 
-				session_start();
+				// Prevent Warning from Cart page
+				if ( ! is_cart() ){
+					session_start();	
+				}
 				
-
 				// Check if valid to be calculeted.
-				//if ( '' === $package['destination']['postcode'] || 'BR' !== $package['destination']['country'] ) {
-				//	return;
-				//}
-
-				// Check for shipping classes.
-				//if ( ! $this->has_only_selected_shipping_class( $package ) ) {
-				//	return;
-				//}
+				if ( ! in_array( $package['destination']['country'], $this->countries ) ) {
+					return;
+				}
 
 				// Credentials
 				$api_id = get_option( 'shippify_id' );
