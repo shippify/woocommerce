@@ -115,7 +115,7 @@ To use the plugin correctly, the shop owner should follow these instructions to 
 ![alt text](https://cloud.githubusercontent.com/assets/550702/25629260/8d47e32e-2f2e-11e7-8d77-846cb8c3fef9.png "Shippify As a Shipping Method")
 
 ### Dispatch Action at Orders 
-![alt text](http://imgur.com/a/JPXAf "Dispatch Action at Orders")
+![alt text](http://i.imgur.com/dYlcw0O.png "Dispatch Action at Orders")
 
 ### Shippify Checkout Fields
-![alt text](http://imgur.com/a/2ZlBz "Shippify Checkout Fields")
+![alt text](http://i.imgur.com/jCFLX9n.png "Shippify Checkout Fields")
