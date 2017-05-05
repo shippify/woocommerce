@@ -84,7 +84,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 								'warehouse_address'   =>	$this->warehouse_adress, 
 								'warehouse_latitude'  =>	$this->warehouse_latitude,
 								'warehouse_longitude' =>	$this->warehouse_longitude
-						);						
+						);
 					}
 
 					add_action( 'woocommerce_update_options_shipping_shippify', array( $this, 'process_admin_options' ), 3 );	
@@ -153,6 +153,11 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 				$api_id = get_option( 'shippify_id' );
 				$api_secret = get_option( 'shippify_secret' );
 
+				// If integration settings are not configured, method doesnt show.
+				if ('' == $api_id || '' == $api_secret){
+					return;
+				}
+
 				// Basic Authentication
 	            $args = array(
 	                'headers' => array(
@@ -166,6 +171,11 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 				$pickup_longitude = $_SESSION['shippify_instance_settings']["warehouse_longitude"];
 				$pickup_id = $_SESSION['shippify_instance_settings']["warehouse_id"];
 
+				// If shipping zone is not configured, method doesnt show.
+				if ('' == $pickup_id && '' == $pickup_longitude && '' == $pickup_latitude){
+					return;
+				}
+
 				// Dinamically generated coordinates
 				$delivery_latitude = $_SESSION["shippify_latitude"];
 				$delivery_longitude = $_SESSION["shippify_longitude"];
@@ -173,14 +183,16 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 				// If there is defined a warehouse id. Check if valid. Then use the coordinates of that warehouse.
 				if ( "" != $pickup_id || isset( $pickup_id ) ) {
 					$warehouse_response = wp_remote_get( $this->warehouse_API, $args );
-					if ( ! is_wp_error( $warehouse_response) ) {
+					if ( ! is_wp_error( $warehouse_response ) ) {
 						$warehouse_response = json_decode( $warehouse_response['body'], true );
 						$warehouse_info = $warehouse_response["warehouses"];
-						foreach ( $warehouse_info as $warehouse ) {
-							if ( $warehouse["id"] == $pickup_id ) {
-								$pickup_longitude = $warehouse["lng"];
-								$pickup_latitude = $warehouse["lat"];	
-								break;							
+						if ( isset( $warehouse_info ) && '' !== $warehouse_info  ) {
+							foreach ( $warehouse_info as $warehouse ) {
+								if ( $warehouse["id"] == $pickup_id ) {
+									$pickup_longitude = $warehouse["lng"];
+									$pickup_latitude = $warehouse["lat"];	
+									break;							
+								}
 							}
 						}
 					}
