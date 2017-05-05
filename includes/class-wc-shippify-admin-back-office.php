@@ -127,8 +127,8 @@ class WC_Shippify_Admin_Back_Office {
                     $col_val = '-';
                 }
                 //Show the result on the table
-                echo $col_val;  
-
+                echo $col_val;
+                
             break;
         }
     }
@@ -322,10 +322,10 @@ class WC_Shippify_Admin_Back_Office {
 
         $order = new WC_Order( $order_id );
 
-        // Get all the neccesary information 
-
+        // Sender Email
         $sender_mail = get_option( 'shippify_sender_email' ); //poner y coger de settings
 
+        // Recipient Information
         $recipient_name = get_post_meta( $order_id, '_billing_first_name', true ) . get_post_meta( $order_id, '_billing_last_name', true ) ;
         $recipient_email = get_post_meta( $order_id, '_billing_email', true );
         $recipient_phone = get_post_meta( $order_id, '_billing_phone', true );
