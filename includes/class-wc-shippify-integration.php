@@ -34,10 +34,14 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
             $this->shippify_api_key    = $this->get_option( 'api_key' );
             $this->shippify_api_secret = $this->get_option( 'api_secret' );
             $this->shippify_sender_email = $this->get_option( 'sender_email' );
+            $this->shippify_free_shipping = $this->get_option( 'shippify_free_shipping' );
+            $this->shippify_instant_dispatch = $this->get_option( 'shippify_instant_dispatch' );
 
             update_option( 'shippify_id', $this->shippify_api_key );
             update_option( 'shippify_secret', $this->shippify_api_secret );
             update_option( 'shippify_sender_email', $this->shippify_sender_email );
+            update_option( 'shippify_free_shipping', $this->shippify_free_shipping );
+            update_option( 'shippify_instant_dispatch', $this->shippify_instant_dispatch );
 
             add_action( 'woocommerce_update_options_integration_' .  $this->id, array( $this, 'process_admin_options' ) );
 
@@ -68,6 +72,25 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
                     'title'             => __( 'Sender E-mail', 'woocommerce-shippify' ),
                     'type'              => 'text',
                     'description'       => __( 'Enter the e-mail you want to recieve notifications from Shippify. This email is going to be used to create tasks.', 'woocommerce-shippify' ),
+                    'desc_tip'          => true,
+                    'default'           => ''
+                ),
+                'shippify_customizations' => array(
+                    'title'   => __( 'Shop Customizations', 'woocommerce-shippify' ),
+                    'type'    => 'title',
+                    'default' => '',
+                ),
+                'shippify_free_shipping' => array(
+                    'title'             => __( 'Store Pays the Delivery', 'woocommerce-shippify' ),
+                    'type'              => 'checkbox',
+                    'description'       => __( 'If marked, the shipping fare would be charged to the store insted of the final customer. ', 'woocommerce-shippify' ),
+                    'desc_tip'          => true,
+                    'default'           => ''
+                ),
+                'shippify_instant_dispatch' => array(
+                    'title'             => __( 'Instant Dispatch', 'woocommerce-shippify' ),
+                    'type'              => 'checkbox',
+                    'description'       => __( 'If marked, the order is dispatched inmediatelly after the customer place the order. Please, make sure your store is capable of handling this option.' ),
                     'desc_tip'          => true,
                     'default'           => ''
                 )
