@@ -225,7 +225,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 				}
 
 				
-				if ( is_cart() ) {
+				if ( is_cart() || 'yes' == get_option( 'shippify_free_shipping' ) ) {
 					$cost = 0;
 				}
 				

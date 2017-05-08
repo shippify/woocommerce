@@ -58,6 +58,10 @@ class WC_Shippify_Checkout {
 				$full_label = "Shippify: Same Day Delivery - Proceed to Checkout for fares";	
 			} elseif ( is_checkout() ) {
 				$full_label = $full_label . " - Same Day Delivery ";
+
+				if ( 'yes' == get_option( 'shippify_free_shipping' ) ) {
+					$full_label = $full_label .  " FREE! ";
+				}
 			}	
 		}
 	    return $full_label;
