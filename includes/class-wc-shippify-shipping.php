@@ -66,6 +66,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 
 					// Load the form fields.
 					$this->init_form_fields(); 
+					//$this->init_settings();    
 
 					// Set instance options values if they are defined.
 					$this->warehouse_id     	= $this->get_instance_option( 'warehouse_id' );
@@ -76,18 +77,18 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 					/**
 					 *
 					 * Since (in our shipping method), the checkout page needs to know the information about the instance (to validate task creation),
-					 * we use SESSION variables to store the warehouse information concerning the instance, so the checkout can have access to them.
+					 * we use cookies to store the warehouse information concerning the instance, so the checkout can have access to them.
 					 */
-					if ( 0 != $this->instance_id ) {
-						$_SESSION["shippify_instance_settings"] = array(
-								'warehouse_id' 		  => 	$this->warehouse_id,
-								'warehouse_address'   =>	$this->warehouse_adress, 
-								'warehouse_latitude'  =>	$this->warehouse_latitude,
-								'warehouse_longitude' =>	$this->warehouse_longitude
-						);
+					if ( 0 != $this->instance_id && ! is_cart()) {
+
+						setcookie( 'warehouse_id', $this->warehouse_id );
+						setcookie( 'warehouse_address', $this->warehouse_adress );
+						setcookie( 'warehouse_latitude', $this->warehouse_latitude );
+						setcookie( 'warehouse_longitude', $this->warehouse_longitude );
 					}
 
-					add_action( 'woocommerce_update_options_shipping_shippify', array( $this, 'process_admin_options' ), 3 );	
+					add_action( 'woocommerce_update_options_shipping_shippify', array( $this, 'process_admin_options' ), 3 );
+
 			}
 
 			/**
@@ -138,11 +139,6 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 			* @param array $package Order package.
 			*/
 			public function calculate_shipping( $package = array() ) {
-
-				// Prevent Warning from Cart page
-				if ( ! is_cart() ){
-					session_start();	
-				}
 				
 				// Check if valid to be calculeted.
 				if ( ! in_array( $package['destination']['country'], $this->countries ) ) {
@@ -166,10 +162,10 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 	                'method'  => 'GET'
 	            );                  
 
-	            // Pickup information
-				$pickup_latitude = $_SESSION['shippify_instance_settings']["warehouse_latitude"];
-				$pickup_longitude = $_SESSION['shippify_instance_settings']["warehouse_longitude"];
-				$pickup_id = $_SESSION['shippify_instance_settings']["warehouse_id"];
+
+				$pickup_latitude = $_COOKIE["warehouse_latitude"];
+				$pickup_longitude = $_COOKIE["warehouse_longitude"];
+				$pickup_id = $_COOKIE["warehouse_id"];
 
 				// If shipping zone is not configured, method doesnt show.
 				if ('' == $pickup_id && '' == $pickup_longitude && '' == $pickup_latitude){
@@ -177,8 +173,9 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 				}
 
 				// Dinamically generated coordinates
-				$delivery_latitude = $_SESSION["shippify_latitude"];
-				$delivery_longitude = $_SESSION["shippify_longitude"];
+				$delivery_latitude = $_COOKIE["shippify_latitude"];
+				$delivery_longitude = $_COOKIE["shippify_longitude"];
+
 				
 				// If there is defined a warehouse id. Check if valid. Then use the coordinates of that warehouse.
 				if ( "" != $pickup_id || isset( $pickup_id ) ) {

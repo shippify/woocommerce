@@ -15,10 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
 
-
-
     class WC_Shippify_Integration extends WC_Integration {
-
 
         /**
          * Init and hook in the integration.

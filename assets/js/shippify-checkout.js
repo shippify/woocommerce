@@ -1,6 +1,6 @@
 /**
  *
- * This file triggers the appearance and dissapearance of the Shippify fields in checkout.
+ * This function triggers the appearance and dissapearance of the Shippify fields in checkout and the calculate shipping method.
  */
 jQuery( function($) {
 	$( document ).ready(function(){
