@@ -1,7 +1,6 @@
 /*
  * JavaScript file to produce the interactive Map and its functionalities in Checkout.
  */
-
 var marker;
 var map;
 
@@ -71,15 +70,21 @@ jQuery(function($) {
     * costs of the order. Which triggers the shipping calculation. 
     */
     $("#map").click(function() {
+
         $("#shippify_latitude").val(marker.getPosition().lat());
         $("#shippify_latitude").trigger('change');
 
         $("#shippify_longitude").val(marker.getPosition().lng());
         $("#shippify_longitude").trigger('change'); 
-    // POST request made to our handler file to update the SESSION variables of latitude and longitude coordinates which are used to calculate shipping.
-        $.post("../wp-content/plugins/woocommerce-shippify/includes/wc-shippify-ajax-handler.php", {
-            shippify_latitude:marker.getPosition().lat(), 
-            shippify_longitude:marker.getPosition().lng()
-        });
+
+        // We change the address field value. Then trigger 'change' event. Which triggers calculate_shipping()
+        $( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
+
+        $( '#billing_address_1' ).trigger( 'change' );
+
+        // We use cookies to store the marker coordinates
+        document.cookie = "shippify_latitude=" + marker.getPosition().lat();
+        document.cookie = "shippify_longitude=" + marker.getPosition().lng();
+
     });
 });

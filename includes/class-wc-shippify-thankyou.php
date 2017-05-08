@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Shippify thankyou class. Handles the Thankyou page. 
+ * Shippify thankyou class. Handles the Thankyou page action and filters. 
  * @since   1.0.0
  * @version 1.0.0
  */

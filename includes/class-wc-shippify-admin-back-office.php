@@ -47,6 +47,7 @@ class WC_Shippify_Admin_Back_Office {
         add_filter( 'bulk_actions-edit-shop_order', array( $this, 'register_bulk_dispatch_action' ) );
         add_filter( 'handle_bulk_actions-edit-shop_order', array( $this,'dispatch_bulk_action_handler' ), 10, 3 );
         add_action( 'admin_notices', array($this, 'shippify_admin_notices') );
+        add_action( 'woocommerce_admin_order_data_after_order_details', array( $this,'display_order_data_in_admin' ) );
 
     }
 
@@ -305,18 +306,41 @@ class WC_Shippify_Admin_Back_Office {
      * @param array $columns Shop order table columns.
      */
     public function custom_shippify_order_column( $columns ) {
-        $columns['order-status'] = __( 'Shippify Order Status','woocommerce-shippify');
+        if ($_GET['post_status'] != 'trash'){
+            $columns['order-status'] = __( 'Shippify Order Status','woocommerce-shippify');            
+        }
+
         return $columns;
     }
 
 
+    /**
+     * Hooked to Action: woocommerce_admin_order_data_after_order_details
+     * Display Shippify order meta data in the order detail admin page.
+     * @param WC_Order $order The order
+     */
+    public function display_order_data_in_admin( $order ) {
+        if ( in_array( "shippify", get_post_meta( $order->id, '_shipping_method', true ) ) ) {
+            ?>
+            <div class="order_data_column">
+                <h4><?php _e( 'Shippify', 'woocommerce' ); ?></h4>
+                <?php 
+                    echo '<p><strong>' . __( 'Instructions' ) . ':</strong>' . " \n" . get_post_meta( $order->id, 'Instructions', true ) . '</p>';
+                    echo '<p><strong>' . __( 'Shippify ID' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, '_shippify_id', true ) . '</p>'; 
+                    echo '<p><strong>' . __( 'Deliver Latitude' ) . ':</strong>' .  " \n"  .  get_post_meta( $order->id, 'Latitude', true ) . '</p>'; 
+                    echo '<p><strong>' . __( 'Deliver Longitude' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, 'Longitude', true ) . '</p>';
+                    echo '<p><strong>' . __( 'Pickup Latitude' ) . ':</strong>' .  " \n"  .  get_post_meta( $order->id, 'pickup_latitude', true ) . '</p>'; 
+                    echo '<p><strong>' . __( 'Pickup Longitude' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, 'pickup_longitude', true ) . '</p>'; ?>
+            </div>
+            <?php           
+        }
+    }
 
     /**
      * Creates the Shippify Task of a shop order.
      * @param string $order_ir Shop order identifier. 
      */
     public function create_shippify_task( $order_id ) {
-        session_start();
 
         $task_endpoint = "https://api.shippify.co/task/new";
 
