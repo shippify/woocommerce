@@ -347,7 +347,7 @@ class WC_Shippify_Admin_Back_Office {
         $order = new WC_Order( $order_id );
 
         // Sender Email
-        $sender_mail = get_option( 'shippify_sender_email' ); //poner y coger de settings
+        $sender_mail = get_option( 'shippify_sender_email' );
 
         // Recipient Information
         $recipient_name = get_post_meta( $order_id, '_billing_first_name', true ) . get_post_meta( $order_id, '_billing_last_name', true ) ;
