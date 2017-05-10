@@ -24,7 +24,7 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
 
             $this->id = 'shippify-integration';
             $this->method_title       = __( 'Shippify', 'woocommerce-shippify' );
-            $this->method_description = __( 'The following options are used to configure the Shippify Integration.', 'woocommerce-integration-demo' );
+            $this->method_description = __( 'The following options are used to configure the Shippify Integration.', 'woocommerce-shippify' );
 
             // Load the settings.
             $this->init_form_fields();
@@ -90,7 +90,7 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
                 'shippify_instant_dispatch' => array(
                     'title'             => __( 'Instant Dispatch', 'woocommerce-shippify' ),
                     'type'              => 'checkbox',
-                    'description'       => __( 'If marked, the order is dispatched inmediatelly after the customer place the order. Please, make sure your store is capable of handling this option.' ),
+                    'description'       => __( 'If marked, the order is dispatched inmediatelly after the customer place the order. Please, make sure your store is capable of handling this option.', 'woocommerce-shippify' ),
                     'desc_tip'          => true,
                     'default'           => ''
                 )

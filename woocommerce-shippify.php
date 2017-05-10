@@ -2,7 +2,7 @@
 /**
  * Plugin Name: WooCommerce Shippify
  * Plugin URI: https://github.com/shippify/woocommerce-shippify/
- * Description: Adds Shippify shipping methods to your WooCommerce store. 
+ * Description: Adds Shippify shipping method to your WooCommerce store. 
  * Version: 1.0.0
  * Author: Shippify
  * Author URI: http://www.shippify.co/
@@ -11,7 +11,6 @@
  * Text Domain: woocommerce-shippify
  * License: GNU General Public License v3.0
  * License URI: http://www.gnu.org/licenses/gpl-3.0.html
-
  *
  * WooCommerce Shippify is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

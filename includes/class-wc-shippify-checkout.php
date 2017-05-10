@@ -63,6 +63,9 @@ class WC_Shippify_Checkout {
 					$full_label = $full_label .  " FREE! ";
 				}
 			}	
+			if ( is_cart() && 'yes' == get_option( 'shippify_free_shipping' ) ) {
+				$full_label = "Shippify: Same Day Delivery - FREE!";
+			}
 		}
 	    return $full_label;
 	}
@@ -170,26 +173,20 @@ class WC_Shippify_Checkout {
 	 * Warning messages appear and the order does not place if the request fails or any fields are empty.
 	 */
 	public function shippify_validate_order() {
-
-		//wc_add_notice( __( 'Shippify: Please, write descriptive instructions.' ), 'error' );
 		if ( in_array( 'shippify', $_POST["shipping_method"] ) ) {
 
 			// No marker on Map
 			if ( "" == $_POST['shippify_latitude'] || "" == $_POST['shippify_longitude'] ) {
-				wc_add_notice( __( 'Shippify: Please, locate the marker of your address in the map.' ), 'error' );
+				wc_add_notice( __( 'Shippify: Please, locate the marker of your address in the map.', 'woocommerce-shippify' ), 'error' );
 			}
 			if ( "" == $_POST['shippify_instructions'] || 10 > strlen( $_POST['shippify_instructions'] ) ) {
-				wc_add_notice( __( 'Shippify: Please, write descriptive instructions.' ), 'error' );
+				wc_add_notice( __( 'Shippify: Please, write descriptive instructions.', 'woocommerce-shippify' ), 'error' );
 			}
 
 			// Getting pickup information based on shipping zone
 			$pickup_warehouse = $_COOKIE["warehouse_id"];
 			$pickup_latitude = $_COOKIE["warehouse_latitude"];
 			$pickup_longitude = $_COOKIE["warehouse_longitude"];
-
-
-
-			//wc_add_notice( __( 'Shippify: Please, write descriptive instructions.' . $pickup_latitude ), 'error' );
 
 			// Get Delivery information (marker position)
 			$delivery_latitude = $_POST["shippify_latitude"];
@@ -218,7 +215,7 @@ class WC_Shippify_Checkout {
 
             // Check if task could be created
 			if ( ! isset($price) || "" == $price ) {
-				wc_add_notice( __( 'Shippify: We are unable to make a route to your address. Verify the marker in the map is correctly positioned.' ), 'error' );
+				wc_add_notice( __( 'Shippify: We are unable to make a route to your address. Verify the marker in the map is correctly positioned.', 'woocommerce-shippify' ), 'error' );
 			}  
 		}
 	}

@@ -31,7 +31,7 @@ class WC_Shippify_Thankyou {
 	    </table>
 		<?php 
 
-		// Check for the automatic dispatching
+		// Check for automatic dispatch
 
 		if ( get_option( 'shippify_instant_dispatch' ) == 'yes' ) {
 			$status = $this->create_shippify_task( $order_id );
