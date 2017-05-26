@@ -106,8 +106,20 @@ class WC_Shippify_Admin_Back_Office {
                     }
                 }
 
+                $shippify_is_selected = false;
+                $shipping_methods = get_post_meta( $order_id, '_shipping_method', true );
+                if ( is_array( $shipping_methods ) ) {
+                    if ( in_array( "shippify", $shipping_methods ) ) {
+                        $shippify_is_selected = true;
+                    }
+                } else {
+                    if ( "shippify" == $shipping_methods ){
+                        $shippify_is_selected = true;
+                    }
+                }
+
                 //Search for every order status shipped via-Shippify on the response.
-                if ( in_array( "shippify", get_post_meta( $order_id, '_shipping_method', true ) ) && ( 'yes' == get_post_meta( $the_order->id, '_is_dispatched', true ) ) ){
+                if ( $shippify_is_selected && ( 'yes' == get_post_meta( $the_order->id, '_is_dispatched', true ) ) ){
                     $order_to_fetch = get_post_meta( $order_id, '_shippify_id', true );
                     if ( $this->retrieved_status == "Error Fetching. Try Again." ) {
                         $col_val = "Error Fetching. Try Again.";    
@@ -201,7 +213,20 @@ class WC_Shippify_Admin_Back_Office {
             return $redirect_to;
         }
         foreach ( $post_ids as $post_id ) {
-            if ( (get_post_meta( $post_id, '_is_dispatched', true ) == 'no' || get_post_meta( $post_id, '_is_dispatched', true ) == '' ) && in_array( "shippify", get_post_meta( $post_id, '_shipping_method', true ) ) ) {
+
+            $shippify_is_selected = false;
+            $shipping_methods = get_post_meta( $post_id, '_shipping_method', true );
+            if ( is_array( $shipping_methods ) ) {
+                if ( in_array( "shippify", $shipping_methods ) ) {
+                    $shippify_is_selected = true;
+                }
+            } else {
+                if ( "shippify" == $shipping_methods ){
+                    $shippify_is_selected = true;
+                }
+            } 
+
+            if ( (get_post_meta( $post_id, '_is_dispatched', true ) == 'no' || get_post_meta( $post_id, '_is_dispatched', true ) == '' ) && $shippify_is_selected ) {
 
                 $res = $this->create_shippify_task($post_id);
 
@@ -251,8 +276,18 @@ class WC_Shippify_Admin_Back_Office {
      */
     function add_shippify_order_action_button( $actions, $the_order ) {
 
-        // esto me dio error en algunas ordenes... 
-        if ( in_array( "shippify", get_post_meta( $the_order->id, '_shipping_method', true ) ) && ( get_post_meta( $the_order->id, '_is_dispatched', true ) != 'yes' ) && ! isset( $_GET['post_status'] ) ) { 
+        $shippify_is_selected = false;
+        $shipping_methods = get_post_meta( $the_order->id, '_shipping_method', true );
+        if ( is_array( $shipping_methods ) ) {
+            if ( in_array( "shippify", $shipping_methods ) ) {
+                $shippify_is_selected = true;
+            }
+        } else {
+            if ( "shippify" == $shipping_methods ){
+                $shippify_is_selected = true;
+            }
+        } 
+        if ( $shippify_is_selected && ( get_post_meta( $the_order->id, '_is_dispatched', true ) != 'yes' ) && ! isset( $_GET['post_status'] ) ) { 
             $actions['shippify_action'] = array(
                 'url'       => wp_nonce_url( admin_url( 'edit.php?post_type=shop_order&myaction=woocommerce_shippify_dispatch&stablishedorder=' . $the_order->id ), 'woocommerce-shippify-dispatch' ), 
                 'name'      => __( 'Dispatch', 'woocommerce-shippify' ),
@@ -320,7 +355,18 @@ class WC_Shippify_Admin_Back_Office {
      * @param WC_Order $order The order
      */
     public function display_order_data_in_admin( $order ) {
-        if ( in_array( "shippify", get_post_meta( $order->id, '_shipping_method', true ) ) ) {
+        $shippify_is_selected = false;
+        $shipping_methods = get_post_meta( $order->id, '_shipping_method', true );
+        if ( is_array( $shipping_methods ) ) {
+            if ( in_array( "shippify", $shipping_methods ) ) {
+                $shippify_is_selected = true;
+            }
+        } else {
+            if ( "shippify" == $shipping_methods ){
+                $shippify_is_selected = true;
+            }
+        } 
+        if ( $shippify_is_selected  ) {
             ?>
             <div class="order_data_column">
                 <h4><?php _e( 'Shippify', 'woocommerce' ); ?></h4>

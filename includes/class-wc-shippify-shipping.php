@@ -199,7 +199,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 				$items = "[";
 				foreach ( $package['contents'] as $item_id => $values ) { 
 			        $_product = $values['data']; 
-			        $items = $items . '{"id":"' . $_product->get_id() . '", 
+			        $items = $items . '{"id":"' . "test" . '", 
 			        					"name":"' . $_product->get_name() . '", 
 			        					"qty": "' . $values['quantity'] . '", 
 			        					"size": "' . $this->calculate_product_shippify_size( $_product ) . '", 
@@ -207,6 +207,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 			        					},';
 			    }
 			    $items = substr( $items, 0, -1 ) . ']}]';
+			    $items = preg_replace('/\s+/', '', $items);
 
 			    // Merging the request parameter
 				$data_value = '[{"pickup_location":{"lat":'. $pickup_latitude .',"lng":'. $pickup_longitude . '},"delivery_location":{"lat":' . $delivery_latitude . ',"lng":'. $delivery_longitude .'},"items":' . $items;

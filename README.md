@@ -11,6 +11,7 @@
 - **License:** GNU General Public License v3.0
 - **WC requires at least:** 3.0.5
 - **WC tested up to:** 3.0.5
+
 Deliver your WooCommerce shop products in less than 24h. Integration between WooCommerce and Shippify. 
 
 ## Description ##
