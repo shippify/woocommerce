@@ -2,23 +2,15 @@
 
 ![alt text](http://startupbrasil.org.br/wp-content/uploads/2014/12/shippify_logo_big.png "Shippify Logo")
 
-**Contributors:** [Leonardo Kuffo](https://github.com/lkuffo/), [Wander Bravo](https://github.com/bram70)
-
-**Tags:** Shipping, delivery, shippify
-
-**Version:** 1.0.0
-
-**Requires at least:** 4.7.3
-
-**Tested up to:** 4.7.4
-
-**Stable tag:** 4.7.4
-
-**License:** GNU General Public License v3.0
-
-**WC requires at least:** 3.0.5
-
-**WC tested up to:** 3.0.5
+- **Contributors:** [Leonardo Kuffo](https://github.com/lkuffo/), [Wander Bravo](https://github.com/bram70)
+- **Tags:** Shipping, delivery, shippify
+- **Version:** 1.0.0
+- **Requires at least:** 4.7.3
+- **Tested up to:** 4.7.4
+- **Stable tag:** 4.7.4
+- **License:** GNU General Public License v3.0
+- **WC requires at least:** 3.0.5
+- **WC tested up to:** 3.0.5
 
 Deliver your WooCommerce shop products in less than 24h. Integration between WooCommerce and Shippify. 
 
