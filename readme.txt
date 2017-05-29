@@ -4,7 +4,7 @@
 
 Contributors:  leonardokuffo
 Tags: Shipping, delivery, shippify
-Version: 1.0.0
+Version: 1.0.1
 Requires at least: 4.7.3
 Tested up to: 4.7.4
 Stable tag: 4.7.4
@@ -87,19 +87,11 @@ To use the plugin correctly, the shop owner should follow these instructions to 
 == Screenshots ==
 
 1. Checkout Order Review
-![alt text](https://cloud.githubusercontent.com/assets/550702/25629238/7d876504-2f2e-11e7-8183-6d0c92d8c867.png "Shipping option")
 
 2. Shippify Integration Setup
-![alt text](https://cloud.githubusercontent.com/assets/550702/25629251/8647e86c-2f2e-11e7-9e9f-2b750c6c6e9a.png "API Setup")
 
 3. Shipping Zone Warehouse Setup
-![alt text](https://cloud.githubusercontent.com/assets/550702/25629256/8a686340-2f2e-11e7-8d78-108d203a8855.png "Warehouse Setup")
 
 4. Shippify As a Shipping Method
-![alt text](https://cloud.githubusercontent.com/assets/550702/25629260/8d47e32e-2f2e-11e7-8d77-846cb8c3fef9.png "Shippify delivery")
 
 5. Dispatch Action at Orders 
-![alt text](http://i.imgur.com/dYlcw0O.png "Dispatch Action at Orders")
-
-6. Shippify Checkout Fields
-![alt text](http://i.imgur.com/jCFLX9n.png "Shippify Checkout Fields")

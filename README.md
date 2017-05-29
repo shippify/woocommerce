@@ -91,7 +91,6 @@ To use the plugin correctly, the shop owner should follow these instructions to 
 ## Comming Soon ##
 
 - Shippify Order Filters
-- Custom Setting: Store pays the shipping.
 - Custom Setting: Shippify Fares by quotas on Checkout.
 
 ## Screenshots ##
@@ -100,7 +99,7 @@ To use the plugin correctly, the shop owner should follow these instructions to 
 ![alt text](https://cloud.githubusercontent.com/assets/550702/25629238/7d876504-2f2e-11e7-8183-6d0c92d8c867.png "Shipping option")
 
 ### Shippify Integration Setup
-![alt text](https://cloud.githubusercontent.com/assets/550702/25629251/8647e86c-2f2e-11e7-9e9f-2b750c6c6e9a.png "API Setup")
+![alt text](https://cloud.githubusercontent.com/assets/550702/25857425/afc8f4ae-349e-11e7-8f9e-e469a764ffe0.png "API Setup")
 
 ### Shipping Zone Warehouse Setup
 ![alt text](https://cloud.githubusercontent.com/assets/550702/25629256/8a686340-2f2e-11e7-8d78-108d203a8855.png "Warehouse Setup")
