@@ -4,7 +4,7 @@
 
 Contributors:  leonardokuffo
 Tags: Shipping, delivery, shippify
-Version: 1.0.1
+Version: 1.0.2
 Requires at least: 4.7.3
 Tested up to: 4.7.4
 Stable tag: 4.7.4
