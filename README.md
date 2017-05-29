@@ -4,8 +4,8 @@
 
 - **Contributors:** [Leonardo Kuffo](https://github.com/lkuffo/), [Wander Bravo](https://github.com/bram70)
 - **Tags:** Shipping, delivery, shippify
-- **Version:** 1.0.0
-- **Requires at least:** 4.7.3
+- **Version:** 1.0.2
+- **Requires at least:** 4.5.7
 - **Tested up to:** 4.7.4
 - **Stable tag:** 4.7.4
 - **License:** GNU General Public License v3.0
@@ -70,6 +70,7 @@ To use the plugin correctly, the shop owner should follow these instructions to 
 
 #### Shippify does not appear as a shipping method in checkout. ####
   - Check the configuration of your shipping zones. Selected country and/or entered zip code must match with the ones configured on the shipping zone. 
+  - Check in WooCommerce General Settings if you have specified your desired shipping location(s).
 
 #### I'm not able to proceed in checkout, shippify warnings are appearing. ####
   - Keep in mind that if we are not able to make a Shippify route from pickup location (Warehouse configuration), to delivery location (Marker on the checkout map), you are not going to be able to proceed in checkout. Check your warehouse configuration of that shipping zone, check the delivery location marked on the integrated map, or make sure that Shippify service is available among those coordinates.  
@@ -78,6 +79,7 @@ To use the plugin correctly, the shop owner should follow these instructions to 
 
 #### Shipping fare is not appearing in checkout. ####
   - If the shipping cost of Shippify is not appearing on checkout, its because we are not able to make a Shippify route from pickup location (Warehouse configuration), to delivery location (Maker on the checkout map). Check your warehouse configuration of that shipping zone, check the delivery location marked on the integrated map, or make sure that Shippify service is available among those coordinates.
+  - Maybe you have checked the option: "Store Pays the Delivery".
   - Make sure you entered the APP ID and the APP SECRET correctly.
 
 #### Where I can find the shippify order ID of my woocommerce order? ####
