@@ -82,6 +82,33 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 					if ( 0 != $this->instance_id && ! is_cart()) {
 
 						setcookie( 'warehouse_id', $this->warehouse_id );
+
+						$api_id = get_option( 'shippify_id' );
+						$api_secret = get_option( 'shippify_secret' );
+			            $args = array(
+			                'headers' => array(
+			                    'Authorization' => 'Basic ' . base64_encode( $api_id . ':' . $api_secret )
+			                ),
+			                'method'  => 'GET'
+			            );    						
+
+						if ( "" != $this->warehouse_id || isset( $this->warehouse_id ) ) {
+							$warehouse_response = wp_remote_get( $this->warehouse_API, $args );
+							if ( ! is_wp_error( $warehouse_response ) ) {
+								$warehouse_response = json_decode( $warehouse_response['body'], true );
+								$warehouse_info = $warehouse_response["warehouses"];
+								if ( isset( $warehouse_info ) && '' !== $warehouse_info  ) {
+									foreach ( $warehouse_info as $warehouse ) {
+										if ( $warehouse["id"] == $this->warehouse_id ) {
+										
+											$this->warehouse_longitude = $warehouse["lng"];
+											$this->warehouse_latitude = $warehouse["lat"];
+											break;							
+										}
+									}
+								}
+							}
+						}
 						setcookie( 'warehouse_address', $this->warehouse_adress );
 						setcookie( 'warehouse_latitude', $this->warehouse_latitude );
 						setcookie( 'warehouse_longitude', $this->warehouse_longitude );
@@ -199,8 +226,8 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 				$items = "[";
 				foreach ( $package['contents'] as $item_id => $values ) { 
 			        $_product = $values['data']; 
-			        $items = $items . '{"id":"' . "test" . '", 
-			        					"name":"' . $_product->get_name() . '", 
+			        $items = $items . '{"id":"' . "productid" . '", 
+			        					"name":"' . "productname" . '", 
 			        					"qty": "' . $values['quantity'] . '", 
 			        					"size": "' . $this->calculate_product_shippify_size( $_product ) . '", 
 			        					"price": "' . $_product->get_price() . '"
