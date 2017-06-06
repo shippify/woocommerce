@@ -35,6 +35,7 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
             $this->shippify_api_secret = $this->get_option( 'api_secret' );
             $this->google_api_secret = $this->get_option( 'google_api_secret' );
             $this->shippify_sender_email = $this->get_option( 'sender_email' );
+            $this->shippify_sameday = $this->get_option( 'shippify_sameday' );
             $this->shippify_free_shipping = $this->get_option( 'shippify_free_shipping' );
             $this->shippify_instant_dispatch = $this->get_option( 'shippify_instant_dispatch' );
 
@@ -42,6 +43,7 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
             update_option( 'shippify_secret', $this->shippify_api_secret );
             update_option( 'google_secret', $this->google_api_secret );
             update_option( 'shippify_sender_email', $this->shippify_sender_email );
+            update_option( 'shippify_sameday', $this->shippify_sameday );
             update_option( 'shippify_free_shipping', $this->shippify_free_shipping );
             update_option( 'shippify_instant_dispatch', $this->shippify_instant_dispatch );
 
@@ -88,6 +90,13 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
                     'title'   => __( 'Shop Customizations', 'woocommerce-shippify' ),
                     'type'    => 'title',
                     'default' => '',
+                ),
+                'shippify_sameday' => array(
+                    'title'             => __( 'Shipping Same day', 'woocommerce-shippify' ),
+                    'type'              => 'checkbox',
+                    'description'       => __( 'Enter the e-mail you want to recieve notifications from Shippify. This email is going to be used to create tasks.', 'woocommerce-shippify' ),
+                    'desc_tip'          => true,
+                    'default'           => 'yes' 
                 ),
                 'shippify_free_shipping' => array(
                     'title'             => __( 'Store Pays the Delivery', 'woocommerce-shippify' ),

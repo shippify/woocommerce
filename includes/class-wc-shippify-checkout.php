@@ -54,17 +54,19 @@ class WC_Shippify_Checkout {
 	 */
 	public function change_shipping_label( $full_label, $method ) {
 		if ( "shippify" == $method->id ){
+      $sameday_label = ('yes' == get_option( 'shippify_sameday' )) ? " Same Day Delivery " : "";
+
 			if ( is_cart() ) {
-				$full_label = "Shippify: Same Day Delivery - Proceed to Checkout for fares";	
+				$full_label = "Shippify: ".$sameday_label."Proceed to Checkout for fares";	
 			} elseif ( is_checkout() ) {
-				$full_label = $full_label . " - Same Day Delivery ";
+				$full_label = $full_label ."".$sameday_label;
 
 				if ( 'yes' == get_option( 'shippify_free_shipping' ) ) {
-					$full_label = $full_label .  " FREE! ";
+					$full_label = $full_label .  "- FREE! ";
 				}
 			}	
 			if ( is_cart() && 'yes' == get_option( 'shippify_free_shipping' ) ) {
-				$full_label = "Shippify: Same Day Delivery - FREE!";
+				$full_label = "Shippify: ". $sameday_label. "FREE!";
 			}
 		}
 	    return $full_label;
