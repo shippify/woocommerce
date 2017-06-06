@@ -33,12 +33,14 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
             // Define user set variables.
             $this->shippify_api_key    = $this->get_option( 'api_key' );
             $this->shippify_api_secret = $this->get_option( 'api_secret' );
+            $this->google_api_secret = $this->get_option( 'google_api_secret' );
             $this->shippify_sender_email = $this->get_option( 'sender_email' );
             $this->shippify_free_shipping = $this->get_option( 'shippify_free_shipping' );
             $this->shippify_instant_dispatch = $this->get_option( 'shippify_instant_dispatch' );
 
             update_option( 'shippify_id', $this->shippify_api_key );
             update_option( 'shippify_secret', $this->shippify_api_secret );
+            update_option( 'google_secret', $this->google_api_secret );
             update_option( 'shippify_sender_email', $this->shippify_sender_email );
             update_option( 'shippify_free_shipping', $this->shippify_free_shipping );
             update_option( 'shippify_instant_dispatch', $this->shippify_instant_dispatch );
@@ -65,6 +67,13 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
                     'title'             => __( 'APP SECRET', 'woocommerce-shippify' ),
                     'type'              => 'text',
                     'description'       => __( 'Enter your APP ID. You can find it in your Shippify Dashboard configurations panel.', 'woocommerce-shippify' ),
+                    'desc_tip'          => true,
+                    'default'           => ''
+                ),
+                'google_api_secret' => array(
+                    'title'             => __( 'GOOGLE API KEY', 'woocommerce-shippify' ),
+                    'type'              => 'text',
+                    'description'       => __( 'Enter your GOOGLE API KEY. You can find it in your GOOGLE MAPS Dashboard configurations panel.', 'woocommerce-shippify' ),
                     'desc_tip'          => true,
                     'default'           => ''
                 ),
