@@ -112,5 +112,10 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
     }
     // Get the instance of the plugin
     add_action( 'plugins_loaded', array( 'WC_Shippify', 'get_instance' ) );
+    //Load the plugin Text Domain
+    add_action('plugins_loaded', 'wan_load_textdomain');
+	function wan_load_textdomain() {
+	load_plugin_textdomain( 'woocommerce-shippify', false, dirname( plugin_basename(__FILE__) ) . '/languages/' );
+	}
 }
 

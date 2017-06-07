@@ -55,16 +55,16 @@ class WC_Shippify_Checkout {
 	public function change_shipping_label( $full_label, $method ) {
 		if ( "shippify" == $method->id ){
 			if ( is_cart() ) {
-				$full_label = "Shippify: Same Day Delivery - Proceed to Checkout for fares";	
+				$full_label = __('Shippify: Same Day Delivery - Proceed to Checkout for fares', 'woocommerce-shippify');	
 			} elseif ( is_checkout() ) {
-				$full_label = $full_label . " - Same Day Delivery ";
+				$full_label = $full_label . __(' - Same Day Delivery ','woocommerce-shippify');
 
 				if ( 'yes' == get_option( 'shippify_free_shipping' ) ) {
-					$full_label = $full_label .  " FREE! ";
+					$full_label = $full_label .  __(' FREE! ', 'woocommerce-shippify');
 				}
 			}	
 			if ( is_cart() && 'yes' == get_option( 'shippify_free_shipping' ) ) {
-				$full_label = "Shippify: Same Day Delivery - FREE!";
+				$full_label = __('Shippify: Same Day Delivery - FREE!','woocommerce-shippify');
 			}
 		}
 	    return $full_label;
@@ -77,8 +77,8 @@ class WC_Shippify_Checkout {
 	 */
     public function add_map( $after ) {
     	echo '<div id="shippify_map">';
-    	echo '<h4>Delivery Position  </h4> <p> Click on the map to put a marker where you want your order to be delivered. </p>';
-    	echo '<input id="pac-input" class="controls" type="text" placeholder="Search Box">';
+    	echo '<h4>' . __('Delivery Position','woocommerce-shippify') . '</h4> <p>' . __('Click on the map to put a marker where you want your order to be delivered.','woocommerce-shippify') .' </p>';
+    	echo '<input id="pac-input" class="controls" type="text" placeholder="'.__('Search Box','woocommerce-shippify') .'">';
     	echo '<div id="map"></div>';
     	wp_enqueue_script( 'wc-shippify-google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDEXSakl9V0EJ_K3qHnnrVy8IEy3Mmo5Hw&libraries=places&callback=initMap', $in_footer = true );
     	echo '</div>';
@@ -143,20 +143,20 @@ class WC_Shippify_Checkout {
 				'type'          => 'text',
 				'class'         => array( 'form-row form-row-wide' ),
 				'label'         => __( 'Reference' , 'woocommerce-shippify' ),
-				'placeholder'   => __( 'Reference to get to the delivery place.' ),
+				'placeholder'   => __( 'Reference to get to the delivery place.', 'woocommerce-shippify' ),
 				'required'      => false
 			),
    			'shippify_latitude' => array(
 				'type'          => 'text',
 				'class'         => array( 'form-row form-row-wide' ),
-				'label'         => __( 'Latitude' ),
+				'label'         => __( 'Latitude','woocommerce-shippify' ),
 				'required'      => false,
 				'class' 	    => array ('address-field', 'update_totals_on_change' )
 			),
 			'shippify_longitude' => array(
 				'type'           => 'text',
 				'class'          => array( 'form-row form-row-wide' ),
-				'label'          => __( 'Longitude' ),
+				'label'          => __( 'Longitude', 'woocommerce-shippify' ),
 				'required'       => false,
 				'class' 	     => array ( 'address-field', 'update_totals_on_change' )
 			)
