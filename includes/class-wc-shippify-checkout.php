@@ -54,7 +54,10 @@ class WC_Shippify_Checkout {
 	 */
 	public function change_shipping_label( $full_label, $method ) {
 		if ( "shippify" == $method->id ){
+      $sameday_label = ('yes' == get_option( 'shippify_sameday' )) ? " Same Day Delivery " : "";
+
 			if ( is_cart() ) {
+
 				$full_label = __('Shippify: Same Day Delivery - Proceed to Checkout for fares', 'woocommerce-shippify');	
 			} elseif ( is_checkout() ) {
 				$full_label = $full_label . __(' - Same Day Delivery ','woocommerce-shippify');
@@ -65,6 +68,18 @@ class WC_Shippify_Checkout {
 			}	
 			if ( is_cart() && 'yes' == get_option( 'shippify_free_shipping' ) ) {
 				$full_label = __('Shippify: Same Day Delivery - FREE!','woocommerce-shippify');
+
+				$full_label = "Shippify: ".$sameday_label."Proceed to Checkout for fares";	
+			} elseif ( is_checkout() ) {
+				$full_label = $full_label ."".$sameday_label;
+
+				if ( 'yes' == get_option( 'shippify_free_shipping' ) ) {
+					$full_label = $full_label .  "- FREE! ";
+				}
+			}	
+			if ( is_cart() && 'yes' == get_option( 'shippify_free_shipping' ) ) {
+				$full_label = "Shippify: ". $sameday_label. "FREE!";
+
 			}
 		}
 	    return $full_label;
@@ -76,11 +91,12 @@ class WC_Shippify_Checkout {
 	 * @param array $after Every field after the checkout form.
 	 */
     public function add_map( $after ) {
+      $google_api_id = get_option( 'google_secret' ) != NULL ? get_option( 'google_secret' ) : '';
     	echo '<div id="shippify_map">';
     	echo '<h4>' . __('Delivery Position','woocommerce-shippify') . '</h4> <p>' . __('Click on the map to put a marker where you want your order to be delivered.','woocommerce-shippify') .' </p>';
     	echo '<input id="pac-input" class="controls" type="text" placeholder="'.__('Search Box','woocommerce-shippify') .'">';
     	echo '<div id="map"></div>';
-    	wp_enqueue_script( 'wc-shippify-google-maps', 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDEXSakl9V0EJ_K3qHnnrVy8IEy3Mmo5Hw&libraries=places&callback=initMap', $in_footer = true );
+    	wp_enqueue_script( 'wc-shippify-google-maps', 'https://maps.googleapis.com/maps/api/js?key='.$google_api_id.'&libraries=places&callback=initMap', $in_footer = true );
     	echo '</div>';
     }
 

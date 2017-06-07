@@ -4,7 +4,7 @@
 
 - **Contributors:** [Leonardo Kuffo](https://github.com/lkuffo/), [Wander Bravo](https://github.com/bram70)
 - **Tags:** Shipping, delivery, shippify
-- **Version:** 1.0.2
+- **Version:** 1.0.3
 - **Requires at least:** 4.5.7
 - **Tested up to:** 4.7.4
 - **Stable tag:** 4.7.4
@@ -58,7 +58,12 @@ To use the plugin correctly, the shop owner should follow these instructions to 
     5. In here you are going to enter the information of the **warehouse** from which you are going to dispatch your products among the shipping zone you configured. If you enter the Warehouse ID, there is no need for you to fill the other fields. **Make sure the warehouse provided match the shipping zone geographical location**, otherwise your clients aren't going to be able to place orders.
     6. Save Changes.
 
-3. You are ready to go! Please make sure that our shipping service is within the geographical limits of the configured shipping zones and warehouses.
+3. Configure google maps API key:
+    1. Go to the Google maps and get your map api id [Google maps Account](https://developers.google.com/maps/documentation/javascript/get-api-key)
+    2. Set the api key in the Google api key in Woocommerce / Settings / GOOGLE API KEY 
+    3. Save the changes.
+
+4. You are ready to go! Please make sure that our shipping service is within the geographical limits of the configured shipping zones and warehouses.
 
 ### Recomendations ###
 
