@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-07 18:38+0000\n"
+"POT-Creation-Date: 2017-06-08 06:21+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -14,79 +14,102 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco - https://localise.biz/"
 
-#: includes/class-wc-shippify-admin-back-office.php:184
+#: includes/class-wc-shippify-admin-back-office.php:164
+#: includes/class-wc-shippify-admin-back-office.php:172
+msgid "The order"
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:164
+msgid " was not dispatched correctly. Check your settings or try again later."
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:168
+msgid ""
+"One or more orders were not successfully dispatched. Try dispatching orders "
+"individually, check your settings or try again later."
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:172
+msgid " was dispatched successfully. "
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:176
+msgid "All the selected orders were dispatched successfully."
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:186
 #, php-format
 msgid ""
 "%sWooCommerce Shippify is almost ready.%s To get started, %sconnect your "
 "Shippify account%s."
 msgstr ""
 
-#: includes/class-wc-shippify-admin-back-office.php:265
+#: includes/class-wc-shippify-admin-back-office.php:267
 msgid "Dispatch (Shippify)"
 msgstr ""
 
-#: includes/class-wc-shippify-admin-back-office.php:293
+#: includes/class-wc-shippify-admin-back-office.php:295
 msgid "Dispatch"
 msgstr ""
 
-#: includes/class-wc-shippify-admin-back-office.php:345
+#: includes/class-wc-shippify-admin-back-office.php:347
 msgid "Shippify Order Status"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:58
+#: includes/class-wc-shippify-checkout.php:61
 msgid "Shippify: Same Day Delivery - Proceed to Checkout for fares"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:60
+#: includes/class-wc-shippify-checkout.php:63
 msgid " - Same Day Delivery "
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:63
+#: includes/class-wc-shippify-checkout.php:66
 msgid " FREE! "
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:67
+#: includes/class-wc-shippify-checkout.php:70
 msgid "Shippify: Same Day Delivery - FREE!"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:80
+#: includes/class-wc-shippify-checkout.php:96
 msgid "Delivery Position"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:80
+#: includes/class-wc-shippify-checkout.php:96
 msgid ""
 "Click on the map to put a marker where you want your order to be delivered."
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:81
+#: includes/class-wc-shippify-checkout.php:97
 msgid "Search Box"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:145
+#: includes/class-wc-shippify-checkout.php:161
 msgid "Reference"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:146
+#: includes/class-wc-shippify-checkout.php:162
 msgid "Reference to get to the delivery place."
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:152
+#: includes/class-wc-shippify-checkout.php:168
 msgid "Latitude"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:159
+#: includes/class-wc-shippify-checkout.php:175
 msgid "Longitude"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:180
+#: includes/class-wc-shippify-checkout.php:196
 msgid "Shippify: Please, locate the marker of your address in the map."
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:183
+#: includes/class-wc-shippify-checkout.php:199
 msgid "Shippify: Please, write descriptive instructions."
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:218
+#: includes/class-wc-shippify-checkout.php:234
 msgid ""
 "Shippify: We are unable to make a route to your address. Verify the marker "
 "in the map is correctly positioned."
@@ -102,50 +125,65 @@ msgstr ""
 msgid "The following options are used to configure the Shippify Integration."
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:58
+#: includes/class-wc-shippify-integration.php:62
 msgid "APP ID"
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:60
-#: includes/class-wc-shippify-integration.php:67
+#: includes/class-wc-shippify-integration.php:64
+#: includes/class-wc-shippify-integration.php:71
 msgid ""
 "Enter your APP ID. You can find it in your Shippify Dashboard configurations "
 "panel."
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:65
+#: includes/class-wc-shippify-integration.php:69
 msgid "APP SECRET"
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:72
+#: includes/class-wc-shippify-integration.php:76
+msgid "GOOGLE API KEY"
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:78
+msgid ""
+"Enter your GOOGLE API KEY. You can find it in your GOOGLE MAPS Dashboard "
+"configurations panel."
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:83
 msgid "Sender E-mail"
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:74
+#: includes/class-wc-shippify-integration.php:85
+#: includes/class-wc-shippify-integration.php:97
 msgid ""
 "Enter the e-mail you want to recieve notifications from Shippify. This email "
 "is going to be used to create tasks."
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:79
+#: includes/class-wc-shippify-integration.php:90
 msgid "Shop Customizations"
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:84
+#: includes/class-wc-shippify-integration.php:95
+msgid "Shipping Same day"
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:102
 msgid "Store Pays the Delivery"
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:86
+#: includes/class-wc-shippify-integration.php:104
 msgid ""
 "If marked, the shipping fare would be charged to the store insted of the "
 "final customer. "
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:91
+#: includes/class-wc-shippify-integration.php:109
 msgid "Instant Dispatch"
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:93
+#: includes/class-wc-shippify-integration.php:111
 msgid ""
 "If marked, the order is dispatched inmediatelly after the customer place the "
 "order. Please, make sure your store is capable of handling this option."
