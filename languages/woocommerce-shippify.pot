@@ -1,0 +1,244 @@
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-06-08 06:21+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: \n"
+"Language: \n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Loco - https://localise.biz/"
+
+#: includes/class-wc-shippify-admin-back-office.php:164
+#: includes/class-wc-shippify-admin-back-office.php:172
+msgid "The order"
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:164
+msgid " was not dispatched correctly. Check your settings or try again later."
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:168
+msgid ""
+"One or more orders were not successfully dispatched. Try dispatching orders "
+"individually, check your settings or try again later."
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:172
+msgid " was dispatched successfully. "
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:176
+msgid "All the selected orders were dispatched successfully."
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:186
+#, php-format
+msgid ""
+"%sWooCommerce Shippify is almost ready.%s To get started, %sconnect your "
+"Shippify account%s."
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:267
+msgid "Dispatch (Shippify)"
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:295
+msgid "Dispatch"
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:347
+msgid "Shippify Order Status"
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:61
+msgid "Shippify: Same Day Delivery - Proceed to Checkout for fares"
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:63
+msgid " - Same Day Delivery "
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:66
+msgid " FREE! "
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:70
+msgid "Shippify: Same Day Delivery - FREE!"
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:96
+msgid "Delivery Position"
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:96
+msgid ""
+"Click on the map to put a marker where you want your order to be delivered."
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:97
+msgid "Search Box"
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:161
+msgid "Reference"
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:162
+msgid "Reference to get to the delivery place."
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:168
+msgid "Latitude"
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:175
+msgid "Longitude"
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:196
+msgid "Shippify: Please, locate the marker of your address in the map."
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:199
+msgid "Shippify: Please, write descriptive instructions."
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:234
+msgid ""
+"Shippify: We are unable to make a route to your address. Verify the marker "
+"in the map is correctly positioned."
+msgstr ""
+
+#. Author of the plugin
+#: includes/class-wc-shippify-integration.php:26
+#: includes/class-wc-shippify-shipping.php:50
+msgid "Shippify"
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:27
+msgid "The following options are used to configure the Shippify Integration."
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:62
+msgid "APP ID"
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:64
+#: includes/class-wc-shippify-integration.php:71
+msgid ""
+"Enter your APP ID. You can find it in your Shippify Dashboard configurations "
+"panel."
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:69
+msgid "APP SECRET"
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:76
+msgid "GOOGLE API KEY"
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:78
+msgid ""
+"Enter your GOOGLE API KEY. You can find it in your GOOGLE MAPS Dashboard "
+"configurations panel."
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:83
+msgid "Sender E-mail"
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:85
+#: includes/class-wc-shippify-integration.php:97
+msgid ""
+"Enter the e-mail you want to recieve notifications from Shippify. This email "
+"is going to be used to create tasks."
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:90
+msgid "Shop Customizations"
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:95
+msgid "Shipping Same day"
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:102
+msgid "Store Pays the Delivery"
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:104
+msgid ""
+"If marked, the shipping fare would be charged to the store insted of the "
+"final customer. "
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:109
+msgid "Instant Dispatch"
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:111
+msgid ""
+"If marked, the order is dispatched inmediatelly after the customer place the "
+"order. Please, make sure your store is capable of handling this option."
+msgstr ""
+
+#: includes/class-wc-shippify-shipping.php:53
+#, php-format
+msgid "%s is a shipping method."
+msgstr ""
+
+#: includes/class-wc-shippify-shipping.php:128
+msgid "Warehouse Information"
+msgstr ""
+
+#: includes/class-wc-shippify-shipping.php:133
+msgid "Warehouse ID"
+msgstr ""
+
+#: includes/class-wc-shippify-shipping.php:140
+msgid "Warehouse Adress"
+msgstr ""
+
+#: includes/class-wc-shippify-shipping.php:147
+msgid "Warehouse Latitude"
+msgstr ""
+
+#: includes/class-wc-shippify-shipping.php:154
+msgid "Warehouse Longitude"
+msgstr ""
+
+#: includes/class-wc-shippify-thankyou.php:39
+#: includes/class-wc-shippify-thankyou.php:44
+msgid ""
+"Your order was not dispatched instantly. Please, wait for the store admin to "
+"dispatch it manually. Thanks you for choosing shippify!"
+msgstr ""
+
+#: includes/class-wc-shippify-thankyou.php:41
+msgid ""
+"Your order has been dispatched! It will soon arrive. Thanks you for choosing "
+"shippify!"
+msgstr ""
+
+#. Name of the plugin
+msgid "WooCommerce Shippify"
+msgstr ""
+
+#. Description of the plugin
+msgid "Adds Shippify shipping method to your WooCommerce store."
+msgstr ""
+
+#. URI of the plugin
+msgid "https://github.com/shippify/woocommerce-shippify/"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "http://www.shippify.co/"
+msgstr ""
