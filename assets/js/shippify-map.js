@@ -135,6 +135,13 @@ jQuery(function($) {
         var city = $("#billing_city").val();
         var state = $("#billing_state").val();
         codeAddress(dir+', '+city+', '+state);
+        $("#shippify_latitude").val(marker.getPosition().lat());
+        $("#shippify_latitude").trigger('change');
+
+        $("#shippify_longitude").val(marker.getPosition().lng());
+        $("#shippify_longitude").trigger('change'); 
+        document.cookie = "shippify_latitude=" + marker.getPosition().lat();
+        document.cookie = "shippify_longitude=" + marker.getPosition().lng();
     });
     $("#billing_city").focusout(function()
     {
@@ -142,6 +149,13 @@ jQuery(function($) {
         var city = $("#billing_city").val();
         var state = $("#select2-billing_country-container").val();
         codeAddress(dir+', '+city+', '+state);
+        $("#shippify_latitude").val(marker.getPosition().lat());
+        $("#shippify_latitude").trigger('change');
+
+        $("#shippify_longitude").val(marker.getPosition().lng());
+        $("#shippify_longitude").trigger('change'); 
+        document.cookie = "shippify_latitude=" + marker.getPosition().lat();
+        document.cookie = "shippify_longitude=" + marker.getPosition().lng();
     });
     $("#billing_state").focusout(function()
     {
@@ -149,6 +163,13 @@ jQuery(function($) {
         var city = $("#billing_city").val();
         var state = $("#billing_state").val();
         codeAddress(dir+', '+city+', '+state);
+        $("#shippify_latitude").val(marker.getPosition().lat());
+        $("#shippify_latitude").trigger('change');
+
+        $("#shippify_longitude").val(marker.getPosition().lng());
+        $("#shippify_longitude").trigger('change'); 
+        document.cookie = "shippify_latitude=" + marker.getPosition().lat();
+        document.cookie = "shippify_longitude=" + marker.getPosition().lng();
     });
 
 });

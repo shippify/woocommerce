@@ -54,7 +54,7 @@ class WC_Shippify_Checkout {
 	 */
 	public function change_shipping_label( $full_label, $method ) {
 		if ( "shippify" == $method->id ){
-      $sameday_label = ('yes' == get_option( 'shippify_sameday' )) ? " Same Day Delivery " : "";
+      $sameday_label = ('yes' == get_option( 'shippify_sameday' )) ? _("Same Day Delivery ",'woocommerce-shippify') : "";
 
 			if ( is_cart() ) {
 
