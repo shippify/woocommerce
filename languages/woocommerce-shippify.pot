@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-08 06:21+0000\n"
+"POT-Creation-Date: 2017-06-13 15:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -72,44 +72,45 @@ msgstr ""
 msgid "Shippify: Same Day Delivery - FREE!"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:96
+#: includes/class-wc-shippify-checkout.php:116
 msgid "Delivery Position"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:96
+#: includes/class-wc-shippify-checkout.php:116
 msgid ""
-"Click on the map to put a marker where you want your order to be delivered."
+"Confirm that the delivery address is correct on the map, if not, correct it "
+"by moving the marker."
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:97
+#: includes/class-wc-shippify-checkout.php:117
 msgid "Search Box"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:161
+#: includes/class-wc-shippify-checkout.php:184
 msgid "Reference"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:162
+#: includes/class-wc-shippify-checkout.php:185
 msgid "Reference to get to the delivery place."
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:168
+#: includes/class-wc-shippify-checkout.php:191
 msgid "Latitude"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:175
+#: includes/class-wc-shippify-checkout.php:198
 msgid "Longitude"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:196
+#: includes/class-wc-shippify-checkout.php:219
 msgid "Shippify: Please, locate the marker of your address in the map."
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:199
+#: includes/class-wc-shippify-checkout.php:222
 msgid "Shippify: Please, write descriptive instructions."
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:234
+#: includes/class-wc-shippify-checkout.php:257
 msgid ""
 "Shippify: We are unable to make a route to your address. Verify the marker "
 "in the map is correctly positioned."

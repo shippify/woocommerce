@@ -30,8 +30,8 @@ class WC_Shippify_Checkout {
         add_action( 'woocommerce_checkout_process', array ( $this,'shippify_validate_order' ) , 10 );
 		add_filter( 'woocommerce_cart_shipping_method_full_label', array( $this, 'change_shipping_label' ), 10, 2 );
 		add_action( 'woocommerce_checkout_update_order_review', array( $this, 'action_woocommerce_checkout_update_order_review' ), 10, 2 );
-		
-    }		      
+	}		    
+     
 
 	/**
 	 * Hooked to Action: woocommerce_checkout_update_order_review
@@ -84,7 +84,26 @@ class WC_Shippify_Checkout {
 		}
 	    return $full_label;
 	}
-
+	public function getLatLong($address){
+    	if(!empty($address)){
+    	    //Formatted address
+    	    $formattedAddr = str_replace(' ','+',$address);
+    	    //Send request and receive json data by address
+    	    $geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$formattedAddr.'&sensor=false'); 
+    	    $output = json_decode($geocodeFromAddr);
+    	    //Get latitude and longitute from json data
+    	    $data['latitude']  = $output->results[0]->geometry->location->lat; 
+    	    $data['longitude'] = $output->results[0]->geometry->location->lng;
+    	    //Return latitude and longitude of the given address
+    	    if(!empty($data)){
+    	        return $data;
+    	    }else{
+    	        return false;
+    	    }
+    	}else{
+    	    return false;   
+    	}
+	}
 	/**
 	 * Hooked to Action: woocommerce_after_checkout_form
 	 * Insert our interactive map in checkout.
@@ -92,12 +111,14 @@ class WC_Shippify_Checkout {
 	 */
     public function add_map( $after ) {
       $google_api_id = get_option( 'google_secret' ) != NULL ? get_option( 'google_secret' ) : '';
+      
     	echo '<div id="shippify_map">';
-    	echo '<h4>' . __('Delivery Position','woocommerce-shippify') . '</h4> <p>' . __('Click on the map to put a marker where you want your order to be delivered.','woocommerce-shippify') .' </p>';
+    	echo '<h4>' . __('Delivery Position','woocommerce-shippify') . '</h4> <p>' . __('Confirm that the delivery address is correct on the map, if not, correct it by moving the marker.','woocommerce-shippify') .' </p>';
     	echo '<input id="pac-input" class="controls" type="text" placeholder="'.__('Search Box','woocommerce-shippify') .'">';
     	echo '<div id="map"></div>';
     	wp_enqueue_script( 'wc-shippify-google-maps', 'https://maps.googleapis.com/maps/api/js?key='.$google_api_id.'&libraries=places&callback=initMap', $in_footer = true );
     	echo '</div>';
+
     }
 
 	/**
@@ -108,8 +129,10 @@ class WC_Shippify_Checkout {
     public function display_custom_checkout_fields( $checkout ) {
 		echo '<div id="shippify_checkout" class="col3-set"><h2>' . __('Shippify') . '</h2>';
 
+		echo '<script> console.log("' .$checkout->checkout_fields .'") </script>';
 	    foreach ( $checkout->checkout_fields['shippify'] as $key => $field ) : 
 	            woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
+	        	//echo '<script> console.log("' . $key . $field . $checkout->get_value( $key ) .'") </script>';
 	        endforeach;
 	    echo '</div>';
 
