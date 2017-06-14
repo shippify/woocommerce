@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-13 15:11+0000\n"
+"POT-Creation-Date: 2017-06-14 17:45+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -56,61 +56,49 @@ msgstr ""
 msgid "Shippify Order Status"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:61
-msgid "Shippify: Same Day Delivery - Proceed to Checkout for fares"
-msgstr ""
-
-#: includes/class-wc-shippify-checkout.php:63
-msgid " - Same Day Delivery "
-msgstr ""
-
 #: includes/class-wc-shippify-checkout.php:66
-msgid " FREE! "
+msgid "FREE!"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:70
-msgid "Shippify: Same Day Delivery - FREE!"
-msgstr ""
-
-#: includes/class-wc-shippify-checkout.php:116
+#: includes/class-wc-shippify-checkout.php:105
 msgid "Delivery Position"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:116
+#: includes/class-wc-shippify-checkout.php:105
 msgid ""
 "Confirm that the delivery address is correct on the map, if not, correct it "
 "by moving the marker."
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:117
+#: includes/class-wc-shippify-checkout.php:106
 msgid "Search Box"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:184
+#: includes/class-wc-shippify-checkout.php:173
 msgid "Reference"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:185
+#: includes/class-wc-shippify-checkout.php:174
 msgid "Reference to get to the delivery place."
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:191
+#: includes/class-wc-shippify-checkout.php:180
 msgid "Latitude"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:198
+#: includes/class-wc-shippify-checkout.php:187
 msgid "Longitude"
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:219
+#: includes/class-wc-shippify-checkout.php:208
 msgid "Shippify: Please, locate the marker of your address in the map."
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:222
+#: includes/class-wc-shippify-checkout.php:211
 msgid "Shippify: Please, write descriptive instructions."
 msgstr ""
 
-#: includes/class-wc-shippify-checkout.php:257
+#: includes/class-wc-shippify-checkout.php:246
 msgid ""
 "Shippify: We are unable to make a route to your address. Verify the marker "
 "in the map is correctly positioned."

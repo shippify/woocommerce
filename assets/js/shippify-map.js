@@ -115,7 +115,7 @@ jQuery(function($) {
         $("#shippify_longitude").trigger('change'); 
 
         // We change the address field value. Then trigger 'change' event. Which triggers calculate_shipping()
-        //$( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
+        $( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
 
         $( '#billing_address_1' ).trigger( 'change' );
 
