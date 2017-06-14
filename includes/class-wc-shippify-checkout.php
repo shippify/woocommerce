@@ -58,27 +58,16 @@ class WC_Shippify_Checkout {
 
 			if ( is_cart() ) {
 
-				$full_label = __('Shippify: Same Day Delivery - Proceed to Checkout for fares', 'woocommerce-shippify');	
+				$full_label = "Shippify: ".$sameday_label._('Proceed to Checkout for fares','woocommerce-shippify');	
 			} elseif ( is_checkout() ) {
-				$full_label = $full_label . __(' - Same Day Delivery ','woocommerce-shippify');
+				$full_label = $full_label .": ".$sameday_label;
 
 				if ( 'yes' == get_option( 'shippify_free_shipping' ) ) {
-					$full_label = $full_label .  __(' FREE! ', 'woocommerce-shippify');
+					$full_label = $full_label . '- ' .__('FREE!', 'woocommerce-shippify');
 				}
 			}	
 			if ( is_cart() && 'yes' == get_option( 'shippify_free_shipping' ) ) {
-				$full_label = __('Shippify: Same Day Delivery - FREE!','woocommerce-shippify');
-
-				$full_label = "Shippify: ".$sameday_label."Proceed to Checkout for fares";	
-			} elseif ( is_checkout() ) {
-				$full_label = $full_label ."".$sameday_label;
-
-				if ( 'yes' == get_option( 'shippify_free_shipping' ) ) {
-					$full_label = $full_label .  "- FREE! ";
-				}
-			}	
-			if ( is_cart() && 'yes' == get_option( 'shippify_free_shipping' ) ) {
-				$full_label = "Shippify: ". $sameday_label. "FREE!";
+				$full_label = "Shippify: ". $sameday_label. _('FREE!','woocommerce-shippify');
 
 			}
 		}
