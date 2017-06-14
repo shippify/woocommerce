@@ -115,13 +115,14 @@ jQuery(function($) {
         $("#shippify_longitude").trigger('change'); 
 
         // We change the address field value. Then trigger 'change' event. Which triggers calculate_shipping()
-        $( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
+        //$( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
 
         $( '#billing_address_1' ).trigger( 'change' );
 
         // We use cookies to store the marker coordinates
         document.cookie = "shippify_latitude=" + marker.getPosition().lat();
         document.cookie = "shippify_longitude=" + marker.getPosition().lng();
+         
 
 
     });
@@ -140,8 +141,16 @@ jQuery(function($) {
 
         $("#shippify_longitude").val(marker.getPosition().lng());
         $("#shippify_longitude").trigger('change'); 
+
+        
+
         document.cookie = "shippify_latitude=" + marker.getPosition().lat();
         document.cookie = "shippify_longitude=" + marker.getPosition().lng();
+
+        // We change the address field value. Then trigger 'change' event. Which triggers calculate_shipping()
+        $( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
+
+        $( '#billing_address_1' ).trigger( 'change' );
     });
     $("#billing_city").focusout(function()
     {
@@ -154,8 +163,16 @@ jQuery(function($) {
 
         $("#shippify_longitude").val(marker.getPosition().lng());
         $("#shippify_longitude").trigger('change'); 
+
+       
+
         document.cookie = "shippify_latitude=" + marker.getPosition().lat();
         document.cookie = "shippify_longitude=" + marker.getPosition().lng();
+
+         // We change the address field value. Then trigger 'change' event. Which triggers calculate_shipping()
+        $( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
+
+        $( '#billing_address_1' ).trigger( 'change' );
     });
     $("#billing_state").focusout(function()
     {
@@ -168,8 +185,16 @@ jQuery(function($) {
 
         $("#shippify_longitude").val(marker.getPosition().lng());
         $("#shippify_longitude").trigger('change'); 
+
+
+
         document.cookie = "shippify_latitude=" + marker.getPosition().lat();
         document.cookie = "shippify_longitude=" + marker.getPosition().lng();
+
+        // We change the address field value. Then trigger 'change' event. Which triggers calculate_shipping()
+        $( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
+
+        $( '#billing_address_1' ).trigger( 'change' );
     });
 
 });
