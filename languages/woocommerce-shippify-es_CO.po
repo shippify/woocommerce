@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Shippify\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-13 15:14+0000\n"
-"PO-Revision-Date: 2017-06-13 15:14+0000\n"
-"Last-Translator: Jorge Luis Arteaga <jlcedeno@espol.edu.ec>\n"
+"POT-Creation-Date: 2017-06-14 17:46+0000\n"
+"PO-Revision-Date: 2017-06-14 17:46+0000\n"
+"Last-Translator: jlcedeno <jorluis2695@hotmail.com>\n"
 "Language-Team: Spanish (Colombia)\n"
 "Language: es-CO\n"
 "Plural-Forms: nplurals=2; plural=n != 1\n"
@@ -13,13 +13,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco - https://localise.biz/"
 
-#: includes/class-wc-shippify-checkout.php:116
-msgid ""
-"Confirm that the delivery address is correct on the map, if not, correct it "
-"by moving the marker."
-msgstr ""
-"Confirma que la dirección de entrega es la correcta en el mapa, si no lo es, "
-"corrígela moviendo el marcador."
+#: includes/class-wc-shippify-checkout.php:66
+msgid "FREE!"
+msgstr "GRATIS!"
 
 #: includes/class-wc-shippify-admin-back-office.php:164
 #: includes/class-wc-shippify-admin-back-office.php:172
@@ -70,58 +66,49 @@ msgstr "Envío"
 msgid "Shippify Order Status"
 msgstr "Estado del pedido Shippify"
 
-#: includes/class-wc-shippify-checkout.php:61
-msgid "Shippify: Same Day Delivery - Proceed to Checkout for fares"
-msgstr ""
-"Shippify: Entrega en el mismo día - Proceda a la compra de las tarifas."
-
-#: includes/class-wc-shippify-checkout.php:63
-msgid " - Same Day Delivery "
-msgstr "- Envío el mismo día"
-
-#: includes/class-wc-shippify-checkout.php:66
-msgid " FREE! "
-msgstr "GRATIS!"
-
-#: includes/class-wc-shippify-checkout.php:70
-msgid "Shippify: Same Day Delivery - FREE!"
-msgstr "Shippify: Envío el mismo día - GRATIS!"
-
-#: includes/class-wc-shippify-checkout.php:116
+#: includes/class-wc-shippify-checkout.php:105
 msgid "Delivery Position"
 msgstr "Posición de entrega"
 
-#: includes/class-wc-shippify-checkout.php:117
+#: includes/class-wc-shippify-checkout.php:105
+msgid ""
+"Confirm that the delivery address is correct on the map, if not, correct it "
+"by moving the marker."
+msgstr ""
+"Confirma que la dirección de entrega es la correcta en el mapa, si no lo es, "
+"corrígela moviendo el marcador."
+
+#: includes/class-wc-shippify-checkout.php:106
 msgid "Search Box"
 msgstr "Buscar"
 
-#: includes/class-wc-shippify-checkout.php:184
+#: includes/class-wc-shippify-checkout.php:173
 msgid "Reference"
 msgstr "Instrucciones"
 
-#: includes/class-wc-shippify-checkout.php:185
+#: includes/class-wc-shippify-checkout.php:174
 msgid "Reference to get to the delivery place."
 msgstr "Instrucciones para llegar al sitio de entrega."
 
-#: includes/class-wc-shippify-checkout.php:191
+#: includes/class-wc-shippify-checkout.php:180
 msgid "Latitude"
 msgstr "Latitud"
 
-#: includes/class-wc-shippify-checkout.php:198
+#: includes/class-wc-shippify-checkout.php:187
 msgid "Longitude"
 msgstr "Longitud"
 
-#: includes/class-wc-shippify-checkout.php:219
+#: includes/class-wc-shippify-checkout.php:208
 msgid "Shippify: Please, locate the marker of your address in the map."
 msgstr ""
 "Shippify: Por favor, coloque el marcador en donde se ubica su dirección en "
 "el mapa."
 
-#: includes/class-wc-shippify-checkout.php:222
+#: includes/class-wc-shippify-checkout.php:211
 msgid "Shippify: Please, write descriptive instructions."
 msgstr "Shippify: Por favor, escriba instrucciones descriptivas"
 
-#: includes/class-wc-shippify-checkout.php:257
+#: includes/class-wc-shippify-checkout.php:246
 msgid ""
 "Shippify: We are unable to make a route to your address. Verify the marker "
 "in the map is correctly positioned."
