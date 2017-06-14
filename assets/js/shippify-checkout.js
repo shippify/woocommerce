@@ -23,5 +23,8 @@ jQuery( function($) {
 		    	$( '#shippify_map' ).show();    	
 		    }
 		});
+
+
 	});
+
 });
