@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-14 17:45+0000\n"
+"POT-Creation-Date: 2017-06-15 08:39+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -40,7 +40,7 @@ msgstr ""
 #: includes/class-wc-shippify-admin-back-office.php:186
 #, php-format
 msgid ""
-"%sWooCommerce Shippify is almost ready.%s To get started, %sconnect your "
+"%sWooCommerce Shippify is almost ready.%s To get started, %s connect your "
 "Shippify account%s."
 msgstr ""
 
@@ -56,7 +56,16 @@ msgstr ""
 msgid "Shippify Order Status"
 msgstr ""
 
+#: includes/class-wc-shippify-checkout.php:57
+msgid "Same Day Delivery "
+msgstr ""
+
+#: includes/class-wc-shippify-checkout.php:61
+msgid "Proceed to Checkout for fares"
+msgstr ""
+
 #: includes/class-wc-shippify-checkout.php:66
+#: includes/class-wc-shippify-checkout.php:70
 msgid "FREE!"
 msgstr ""
 
@@ -66,7 +75,7 @@ msgstr ""
 
 #: includes/class-wc-shippify-checkout.php:105
 msgid ""
-"Confirm that the delivery address is correct on the map, if not, correct it "
+"Confirm that the delivery address is correct on the map, if not, updated it "
 "by moving the marker."
 msgstr ""
 
@@ -119,14 +128,19 @@ msgid "APP ID"
 msgstr ""
 
 #: includes/class-wc-shippify-integration.php:64
-#: includes/class-wc-shippify-integration.php:71
 msgid ""
-"Enter your APP ID. You can find it in your Shippify Dashboard configurations "
-"panel."
+"Enter your Shippify ID API. You can find it in your Shippify Dashboard "
+"configurations panel."
 msgstr ""
 
 #: includes/class-wc-shippify-integration.php:69
 msgid "APP SECRET"
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:71
+msgid ""
+"Enter your APP ID. You can find it in your Shippify Dashboard configurations "
+"panel."
 msgstr ""
 
 #: includes/class-wc-shippify-integration.php:76
@@ -151,7 +165,7 @@ msgid ""
 msgstr ""
 
 #: includes/class-wc-shippify-integration.php:90
-msgid "Shop Customizations"
+msgid "Store Customizations"
 msgstr ""
 
 #: includes/class-wc-shippify-integration.php:95
@@ -180,7 +194,7 @@ msgstr ""
 
 #: includes/class-wc-shippify-shipping.php:53
 #, php-format
-msgid "%s is a shipping method."
+msgid "%s is a shipping option."
 msgstr ""
 
 #: includes/class-wc-shippify-shipping.php:128

@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WooCommerce Shippify\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-14 17:47+0000\n"
-"PO-Revision-Date: 2017-06-14 17:48+0000\n"
-"Last-Translator: jlcedeno <jorluis2695@hotmail.com>\n"
+"POT-Creation-Date: 2017-06-15 08:44+0000\n"
+"PO-Revision-Date: 2017-06-15 08:47+0000\n"
+"Last-Translator: Jorge Luis Arteaga <jorluis2695@hotmail.com>\n"
 "Language-Team: Portuguese (Brazil)\n"
 "Language: pt-BR\n"
 "Plural-Forms: nplurals=2; plural=n != 1\n"
@@ -13,13 +13,30 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco - https://localise.biz/"
 
-#: includes/class-wc-shippify-checkout.php:66
-msgid "FREE!"
-msgstr "GRÁTIS!"
+#: includes/class-wc-shippify-checkout.php:57
+msgid "Same Day Delivery "
+msgstr "Entregar no mesmo dia"
 
-#: includes/class-wc-shippify-integration.php:95
-msgid "Shipping Same day"
-msgstr "Envio no mesmo dia"
+#: includes/class-wc-shippify-checkout.php:61
+msgid "Proceed to Checkout for fares"
+msgstr "Finalize para conferir as tarifas"
+
+#: includes/class-wc-shippify-integration.php:64
+msgid ""
+"Enter your Shippify ID API. You can find it in your Shippify Dashboard "
+"configurations panel."
+msgstr ""
+"Entre com sua ID API. Você pode encontrá-la nas configurações do seu painel "
+"de controle Shippify."
+
+#: includes/class-wc-shippify-integration.php:90
+msgid "Store Customizations"
+msgstr "Customizações da loja"
+
+#: includes/class-wc-shippify-shipping.php:53
+#, php-format
+msgid "%s is a shipping option."
+msgstr "% é uma opção de entrega."
 
 #: includes/class-wc-shippify-admin-back-office.php:164
 #: includes/class-wc-shippify-admin-back-office.php:172
@@ -51,11 +68,13 @@ msgstr "Todas os pedidos selecionados foram despachados com sucesso."
 #: includes/class-wc-shippify-admin-back-office.php:186
 #, php-format
 msgid ""
-"%sWooCommerce Shippify is almost ready.%s To get started, %sconnect your "
+"%sWooCommerce Shippify is almost ready.%s To get started, %s connect your "
 "Shippify account%s."
 msgstr ""
-" %sWooCommerce Shippify está quase pronto.%s Para começar, %sconnect sua "
-"account%s. Shippify"
+"%sWooCommerce Shippify está quase pronto.%s Para começar, %s entre com sua "
+"conta Shippify%s.\n"
+"\n"
+"\n"
 
 #: includes/class-wc-shippify-admin-back-office.php:267
 msgid "Dispatch (Shippify)"
@@ -69,17 +88,22 @@ msgstr "Despachar"
 msgid "Shippify Order Status"
 msgstr "Status do pedido Shippify"
 
+#: includes/class-wc-shippify-checkout.php:66
+#: includes/class-wc-shippify-checkout.php:70
+msgid "FREE!"
+msgstr "GRÁTIS!"
+
 #: includes/class-wc-shippify-checkout.php:105
 msgid "Delivery Position"
 msgstr "Posição da entrega"
 
 #: includes/class-wc-shippify-checkout.php:105
 msgid ""
-"Confirm that the delivery address is correct on the map, if not, correct it "
+"Confirm that the delivery address is correct on the map, if not, updated it "
 "by moving the marker."
 msgstr ""
-"Confirme se o endereço de entrega está correto no mapa, caso contrário, "
-"corrija-o movendo o marcador."
+"Confirme que o endereço de entrega está correto no mapa. Se não estiver, "
+"corrija movendo o marcador."
 
 #: includes/class-wc-shippify-checkout.php:106
 msgid "Search Box"
@@ -108,7 +132,10 @@ msgstr ""
 
 #: includes/class-wc-shippify-checkout.php:211
 msgid "Shippify: Please, write descriptive instructions."
-msgstr "Por favor, escreva as instruções."
+msgstr ""
+"Shippify: Por favor, insira completos e referências\n"
+"\n"
+"\n"
 
 #: includes/class-wc-shippify-checkout.php:246
 msgid ""
@@ -133,7 +160,10 @@ msgstr ""
 msgid "APP ID"
 msgstr "APP ID"
 
-#: includes/class-wc-shippify-integration.php:64
+#: includes/class-wc-shippify-integration.php:69
+msgid "APP SECRET"
+msgstr "APP SECRET "
+
 #: includes/class-wc-shippify-integration.php:71
 msgid ""
 "Enter your APP ID. You can find it in your Shippify Dashboard configurations "
@@ -141,10 +171,6 @@ msgid ""
 msgstr ""
 "Entre com sua ID APP. Você pode encontrá-la nas configurações do seu painel "
 "de controle Shippify."
-
-#: includes/class-wc-shippify-integration.php:69
-msgid "APP SECRET"
-msgstr "APP SECRET "
 
 #: includes/class-wc-shippify-integration.php:76
 msgid "GOOGLE API KEY"
@@ -171,9 +197,9 @@ msgstr ""
 "Insira o e-mail por onde deseja receber notificações da Shippify. Esse e-"
 "mail será utilizado para criar tarefas."
 
-#: includes/class-wc-shippify-integration.php:90
-msgid "Shop Customizations"
-msgstr "Customizações de compra"
+#: includes/class-wc-shippify-integration.php:95
+msgid "Shipping Same day"
+msgstr "Envio no mesmo dia"
 
 #: includes/class-wc-shippify-integration.php:102
 msgid "Store Pays the Delivery"
@@ -199,11 +225,6 @@ msgstr ""
 "Se selecionada, o pedido é despachado imediatamente após o consumidor "
 "finalizar o pedido. Por favor, se certifique que sua loja é capaz de "
 "possibilitar essa opção."
-
-#: includes/class-wc-shippify-shipping.php:53
-#, php-format
-msgid "%s is a shipping method."
-msgstr "%s é um método de entrega."
 
 #: includes/class-wc-shippify-shipping.php:128
 msgid "Warehouse Information"
@@ -240,7 +261,7 @@ msgid ""
 "shippify!"
 msgstr ""
 "Seu pedido foi despachado! Ele vai chegar em breve. Valeu por escolher a "
-"Shippify!"
+"Shippify!\n"
 
 #. Name of the plugin
 msgid "WooCommerce Shippify"

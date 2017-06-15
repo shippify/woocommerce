@@ -61,7 +61,7 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
                 'api_key' => array(
                     'title'             => __( 'APP ID', 'woocommerce-shippify' ),
                     'type'              => 'text',
-                    'description'       => __( 'Enter your APP ID. You can find it in your Shippify Dashboard configurations panel.', 'woocommerce-shippify' ),
+                    'description'       => __( 'Enter your Shippify ID API. You can find it in your Shippify Dashboard configurations panel.', 'woocommerce-shippify' ),
                     'desc_tip'          => true,
                     'default'           => ''
                 ),
@@ -87,7 +87,7 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
                     'default'           => ''
                 ),
                 'shippify_customizations' => array(
-                    'title'   => __( 'Shop Customizations', 'woocommerce-shippify' ),
+                    'title'   => __( 'Store Customizations', 'woocommerce-shippify' ),
                     'type'    => 'title',
                     'default' => '',
                 ),

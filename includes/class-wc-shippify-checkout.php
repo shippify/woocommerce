@@ -54,20 +54,20 @@ class WC_Shippify_Checkout {
 	 */
 	public function change_shipping_label( $full_label, $method ) {
 		if ( "shippify" == $method->id ){
-      		$sameday_label = ('yes' == get_option( 'shippify_sameday' )) ? _("Same Day Delivery ",'woocommerce-shippify') : "";
+      		$sameday_label = ('yes' == get_option( 'shippify_sameday' )) ? __("Same Day Delivery ",'woocommerce-shippify') : "";
 
 			if ( is_cart() ) {
 
-				$full_label = "Shippify: ".$sameday_label._('Proceed to Checkout for fares','woocommerce-shippify');	
+				$full_label = "Shippify: ".$sameday_label. __('Proceed to Checkout for fares','woocommerce-shippify');	
 			} elseif ( is_checkout() ) {
-				$full_label = $full_label .": ".$sameday_label;
+				$full_label = $full_label ." ".$sameday_label;
 
 				if ( 'yes' == get_option( 'shippify_free_shipping' ) ) {
 					$full_label = $full_label . '- ' .__('FREE!', 'woocommerce-shippify');
 				}
 			}	
 			if ( is_cart() && 'yes' == get_option( 'shippify_free_shipping' ) ) {
-				$full_label = "Shippify: ". $sameday_label. _('FREE!','woocommerce-shippify');
+				$full_label = "Shippify: ". $sameday_label. __('FREE!','woocommerce-shippify');
 
 			}
 		}
@@ -102,7 +102,7 @@ class WC_Shippify_Checkout {
       $google_api_id = get_option( 'google_secret' ) != NULL ? get_option( 'google_secret' ) : '';
       
     	echo '<div id="shippify_map">';
-    	echo '<h4>' . __('Delivery Position','woocommerce-shippify') . '</h4> <p>' . __('Confirm that the delivery address is correct on the map, if not, correct it by moving the marker.','woocommerce-shippify') .' </p>';
+    	echo '<h4>' . __('Delivery Position','woocommerce-shippify') . '</h4> <p>' . __('Confirm that the delivery address is correct on the map, if not, updated it by moving the marker.','woocommerce-shippify') .' </p>';
     	echo '<input id="pac-input" class="controls" type="text" placeholder="'.__('Search Box','woocommerce-shippify') .'">';
     	echo '<div id="map"></div>';
     	wp_enqueue_script( 'wc-shippify-google-maps', 'https://maps.googleapis.com/maps/api/js?key='.$google_api_id.'&libraries=places&callback=initMap', $in_footer = true );

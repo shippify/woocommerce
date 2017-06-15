@@ -183,7 +183,7 @@ class WC_Shippify_Admin_Back_Office {
 
         if ( '' == $api_key || '' == $api_secret ) {
             $url = $this->get_settings_url();
-            echo '<div class="updated fade"><p>' . sprintf( __( '%sWooCommerce Shippify is almost ready.%s To get started, %sconnect your Shippify account%s.', 'woocommerce-shippify' ), '<strong>', '</strong>', '<a href="' . esc_url( $url ) . '">', '</a>' ) . '</p></div>' . "\n";
+            echo '<div class="updated fade"><p>' . sprintf( __( '%sWooCommerce Shippify is almost ready.%s To get started, %s connect your Shippify account%s.', 'woocommerce-shippify' ), '<strong>', '</strong>', '<a href="' . esc_url( $url ) . '">', '</a>' ) . '</p></div>' . "\n";
         }
     }
 
