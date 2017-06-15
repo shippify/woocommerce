@@ -50,7 +50,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 					$this->method_title = __( 'Shippify', 'woocommerce-shippify' );
 					$this->more_link    = 'http://shippify.co/';		
 					$this->instance_id        = absint( $instance_id );
-					$this->method_description = sprintf( __( '%s is a shipping method.', 'woocommerce-shippify' ), $this->method_title );
+					$this->method_description = sprintf( __( '%s is a shipping option.', 'woocommerce-shippify' ), $this->method_title );
 					$this->supports           = array(
 						'shipping-zones',
 						'instance-settings',

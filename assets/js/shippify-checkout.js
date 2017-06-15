@@ -5,9 +5,11 @@
 jQuery( function($) {
 	$( document ).ready(function(){
 
-		$( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
 
-		$( '#billing_address_1' ).trigger( 'change' );
+
+        // We change the address field value. Then trigger 'change' event. Which triggers calculate_shipping()
+
+        $( '#billing_address_1' ).trigger( 'focusout' );
 
 		$( '#order_review' ).click(function(){
 		    if( ! $( '#shipping_method_0_shippify' ).is( ':checked' ) ) {
