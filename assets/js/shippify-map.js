@@ -71,37 +71,13 @@ function initMap() {
 function placeMarker(location) {
     marker.setMap(null);
     map.setCenter({lat:location.lat(), lng:location.lng()});
+    map.setZoom(16);
     marker = new google.maps.Marker({
         position: location, 
         map: map
     });
 
 }
-
-/*
-* Using this function, I get a marker on the map, giving the address in natural Language
-* This function use placeMarker function
-*/
-function codeAddress(address) {
-
-    //In this case it gets the address from an element on the page, but obviously you  could just pass it to the method instea
-
-    var geocoder = new google.maps.Geocoder();
-    
-    geocoder.geocode( { 'address': address}, function(results, status) {
-    
-      if (status == google.maps.GeocoderStatus.OK) {
-        console.log(results[0].geometry.location.lng());
-        console.log(results[0].geometry.location.lat());
-        placeMarker(results[0].geometry.location);
-        // We use cookies to store the marker coordinates
-        document.cookie = "shippify_latitude=" + marker.getPosition().lat();
-        document.cookie = "shippify_longitude=" + marker.getPosition().lng();
-        console.log(document.cookie);
-      } 
-    });
-}
-
 
 
 
@@ -110,91 +86,168 @@ jQuery(function($) {
     * Everytime the user clicks on the map, we need to trigger a 'change' in the latitude and longitud fields in order to update automatically the total
     * costs of the order. Which triggers the shipping calculation. 
     */
+    
+
+
     $("#map").click(function() {
 
-        $("#shippify_latitude").val(marker.getPosition().lat());
-        $("#shippify_latitude").trigger('change');
-
-        $("#shippify_longitude").val(marker.getPosition().lng());
-        $("#shippify_longitude").trigger('change'); 
-   
-
-        // We use cookies to store the marker coordinates
-        document.cookie = "shippify_latitude=" + marker.getPosition().lat();
-        document.cookie = "shippify_longitude=" + marker.getPosition().lng();
-
-        // We change the address field value. Then trigger 'change' event. Which triggers calculate_shipping()
-        $( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
-
-        $( '#billing_address_1' ).trigger( 'change' );
-         
+        updateShippingInfo();
+    });
 
 
+    /** 
+    * Everytime the user click on Shipping to another address checkbox have to change the marker and the price.
+    */
+    $("#ship-to-different-address-checkbox").click( function(){
+        if ( $( '#ship-to-different-address' ).find( 'input' ).is( ':checked' ) )
+        {
+
+            $("#shipping_address_1").trigger('focusout');
+            
+        }
+        else
+        {
+
+            $("#billing_address_1").trigger('focusout');
+            
+        }
     });
     /*  
     *   Every time the user focus out one of the billing address fields, the map is updated
     *
     */
-    $("#billing_address_1").focusout(async function()
+    $("#billing_address_1").focusout( function()
     {
-        var dir = $("#billing_address_1").val();
-        var city = $("#billing_city").val();
-        var state = $("#billing_state").val();
-        await codeAddress(dir+', '+city+', '+state);
-        
+        if (! $( '#ship-to-different-address' ).find( 'input' ).is( ':checked' ) )
+        {
+            var dir = $("#billing_address_1").val();
+            var city = $("#billing_city").val();
+            var state = $("#billing_state").val();
+            codeAddress(dir+', '+city+', '+state);
+        }  
+        console.log('hola');
 
-        $("#shippify_latitude").val(marker.getPosition().lat());
-        $("#shippify_latitude").trigger('change');
-
-        $("#shippify_longitude").val(marker.getPosition().lng());
-        $("#shippify_longitude").trigger('change'); 
-
-                // We change the address field value. Then trigger 'change' event. Which triggers calculate_shipping()
-        $( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
-
-        $( '#billing_address_1' ).trigger( 'change' )
-
-    
-        
 
         
     });
-    $("#billing_city").focusout(async function()
+    $("#billing_city").focusout(function()
     {
-        var dir = $("#billing_address_1").val();
-        var city = $("#billing_city").val();
-        var state = $("#select2-billing_country-container").val();
-        await codeAddress(dir+', '+city+', '+state);
-        $("#shippify_latitude").val(marker.getPosition().lat());
-        $("#shippify_latitude").trigger('change');
-
-        $("#shippify_longitude").val(marker.getPosition().lng());
-        $("#shippify_longitude").trigger('change'); 
-
-        // We change the address field value. Then trigger 'change' event. Which triggers calculate_shipping()
-        $( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
-
-        $( '#billing_address_1' ).trigger( 'change' )
+        if (! $( '#ship-to-different-address' ).find( 'input' ).is( ':checked' ) )
+        {
+            var dir = $("#billing_address_1").val();
+            var city = $("#billing_city").val();
+            var state = $("#shipping_state").val();
+            codeAddress(dir+', '+city+', '+state);
+        }
         
     });
-    $("#billing_state").focusout(async function()
+    $("#billing_state").focusout(function()
     {
-        var dir = $("#billing_address_1").val();
-        var city = $("#billing_city").val();
-        var state = $("#billing_state").val();
-        await codeAddress(dir+', '+city+', '+state);
-        $("#shippify_latitude").val(marker.getPosition().lat());
-        $("#shippify_latitude").trigger('change');
+        if (! $( '#ship-to-different-address' ).find( 'input' ).is( ':checked' ) )
+        {
+            var dir = $("#billing_address_1").val();
+            var city = $("#billing_city").val();
+            var state = $("#billing_state").val();
+            codeAddress(dir+', '+city+', '+state);
+        }    
+ 
+    });
+        /*  
+    *   Every time the user focus out one of the shipping address fields, the map is updated
+    *
+    */
+    $("#shipping_address_1").focusout(function()
+    {
+        if ($( '#ship-to-different-address' ).find( 'input' ).is( ':checked' ) )
+        {
+            var dir = $("#shipping_address_1").val();
+            var city = $("#shipping_city").val();
+            var state = $("#shipping_state").val();
+            codeAddress(dir+', '+city+', '+state);
+        }  
+        
+    });
+    $("#shipping_city").focusout(function()
+    {
+        if ($( '#ship-to-different-address' ).find( 'input' ).is( ':checked' ) )
+        {
+            var dir = $("#shipping_address_1").val();
+            var city = $("#shipping_city").val();
+            var state = $("#shipping_state").val();
+            codeAddress(dir+', '+city+', '+state);
+        }
+        
+    });
+    $("#shipping_state").focusout(function()
+    {
+        if ($( '#ship-to-different-address' ).find( 'input' ).is( ':checked' ) )
+        {
 
-        $("#shippify_longitude").val(marker.getPosition().lng());
-        $("#shippify_longitude").trigger('change'); 
+            var dir = $("#shipping_address_1").val();
+            var city = $("#shipping_city").val();
+            var state = $("#shipping_state").val();
+            codeAddress(dir+', '+city+', '+state);
 
-        // We change the address field value. Then trigger 'change' event. Which triggers calculate_shipping()
-        $( '#billing_address_1' ).val($( '#billing_address_1' ).val() + ' ' );
-
-        $( '#billing_address_1' ).trigger( 'change' )
+        }
 
  
     });
 
+    /*
+    * Using this function, I get a marker on the map, giving the address in natural Language
+    * This function use placeMarker function
+    */
+
+    function codeAddress(address) {
+
+    //In this case it gets the address from an element on the page, but obviously you  could just pass it to the method instea
+
+        return new Promise(function(resolve)
+        {
+            var geocoder = new google.maps.Geocoder();
+            
+            geocoder.geocode( { 'address': address}, function(results, status) {
+            
+              if (status == google.maps.GeocoderStatus.OK) {
+                console.log(results[0].geometry.location.lng());
+                console.log(results[0].geometry.location.lat());
+                placeMarker(results[0].geometry.location);
+                updateShippingInfo();
+                resolve();
+              } 
+            });
+    
+        });
+            
+    }
+
+    //This function updates the shippify Info
+    function updateShippingInfo()
+    {
+
+        // We use cookies to store the marker coordinates
+        document.cookie = "shippify_latitude=" + marker.getPosition().lat();
+        document.cookie = "shippify_longitude=" + marker.getPosition().lng();
+        console.log(document.cookie);
+        console.log('ya');
+        $("#shippify_latitude").val(marker.getPosition().lat());
+        $("#shippify_latitude").trigger('change');
+    
+        $("#shippify_longitude").val(marker.getPosition().lng());
+        $("#shippify_longitude").trigger('change'); 
+        if (! $( '#ship-to-different-address' ).find( 'input' ).is( ':checked' ) )
+        {
+            //need to trigger this event to recalculate the shipping price
+            $( '#billing_address_1' ).val($( '#billing_address_1' ).val()+ ' ');
+    
+            $( '#billing_address_1' ).trigger( 'change' );
+        }
+        else
+        {
+            //need to trigger this event to recalculate the shipping price
+            $( '#shipping_address_1' ).val($( '#shipping_address_1' ).val() + ' ' );
+            $( '#shipping_address_1' ).trigger( 'change' );
+        }
+
+    }
 });

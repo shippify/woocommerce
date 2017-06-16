@@ -58,7 +58,7 @@ class WC_Shippify_Checkout {
 
 			if ( is_cart() ) {
 
-				$full_label = "Shippify: ".$sameday_label. __('Proceed to Checkout for fares','woocommerce-shippify');	
+				$full_label = "Shippify: ".$sameday_label. ' '.__('Proceed to Checkout for fares','woocommerce-shippify');	
 			} elseif ( is_checkout() ) {
 				$full_label = $full_label ." ".$sameday_label;
 
