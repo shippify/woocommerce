@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-15 08:39+0000\n"
+"POT-Creation-Date: 2017-06-15 21:24+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -128,19 +128,14 @@ msgid "APP ID"
 msgstr ""
 
 #: includes/class-wc-shippify-integration.php:64
+#: includes/class-wc-shippify-integration.php:71
 msgid ""
-"Enter your Shippify ID API. You can find it in your Shippify Dashboard "
+"Enter your Shippify APP ID. You can find it in your Shippify Dashboard "
 "configurations panel."
 msgstr ""
 
 #: includes/class-wc-shippify-integration.php:69
 msgid "APP SECRET"
-msgstr ""
-
-#: includes/class-wc-shippify-integration.php:71
-msgid ""
-"Enter your APP ID. You can find it in your Shippify Dashboard configurations "
-"panel."
 msgstr ""
 
 #: includes/class-wc-shippify-integration.php:76

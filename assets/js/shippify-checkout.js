@@ -7,8 +7,8 @@ jQuery( function($) {
 
 
 
-        // We change the address field value. Then trigger 'change' event. Which triggers calculate_shipping()
-
+        // We focusout the address field value. to get the marker, and then inside focusout function 
+        //the address field is changed, which triggers the calculate shipping function.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
         $( '#billing_address_1' ).trigger( 'focusout' );
 
 		$( '#order_review' ).click(function(){
