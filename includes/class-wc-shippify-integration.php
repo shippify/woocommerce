@@ -92,15 +92,17 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
                     'default' => '',
                 ),
                 'shippify_sameday' => array(
-                    'title'             => __( 'Shipping Same day', 'woocommerce-shippify' ),
+                    'title'             => __( 'Show "Same Day Delivery" label', 'woocommerce-shippify' ),
                     'type'              => 'checkbox',
-                    'description'       => __( 'Enter the e-mail you want to recieve notifications from Shippify. This email is going to be used to create tasks.', 'woocommerce-shippify' ),
+                    'label'             => ' ',
+                    'description'       => __( 'If marked, it will show "Same Day Delivery" label.', 'woocommerce-shippify' ),
                     'desc_tip'          => true,
                     'default'           => 'yes' 
                 ),
                 'shippify_free_shipping' => array(
                     'title'             => __( 'Store Pays the Delivery', 'woocommerce-shippify' ),
                     'type'              => 'checkbox',
+                    'label'             => ' ',
                     'description'       => __( 'If marked, the shipping fare would be charged to the store insted of the final customer. ', 'woocommerce-shippify' ),
                     'desc_tip'          => true,
                     'default'           => ''
@@ -108,6 +110,7 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
                 'shippify_instant_dispatch' => array(
                     'title'             => __( 'Instant Dispatch', 'woocommerce-shippify' ),
                     'type'              => 'checkbox',
+                    'label'             => ' ',
                     'description'       => __( 'If marked, the order is dispatched inmediatelly after the customer place the order. Please, make sure your store is capable of handling this option.', 'woocommerce-shippify' ),
                     'desc_tip'          => true,
                     'default'           => ''

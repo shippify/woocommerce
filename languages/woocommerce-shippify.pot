@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-15 21:24+0000\n"
+"POT-Creation-Date: 2017-06-20 21:49+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: \n"
@@ -14,46 +14,70 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Loco - https://localise.biz/"
 
-#: includes/class-wc-shippify-admin-back-office.php:164
-#: includes/class-wc-shippify-admin-back-office.php:172
+#: includes/class-wc-shippify-admin-back-office.php:179
+#: includes/class-wc-shippify-admin-back-office.php:187
 msgid "The order"
 msgstr ""
 
-#: includes/class-wc-shippify-admin-back-office.php:164
+#: includes/class-wc-shippify-admin-back-office.php:179
 msgid " was not dispatched correctly. Check your settings or try again later."
 msgstr ""
 
-#: includes/class-wc-shippify-admin-back-office.php:168
+#: includes/class-wc-shippify-admin-back-office.php:183
 msgid ""
 "One or more orders were not successfully dispatched. Try dispatching orders "
 "individually, check your settings or try again later."
 msgstr ""
 
-#: includes/class-wc-shippify-admin-back-office.php:172
+#: includes/class-wc-shippify-admin-back-office.php:187
 msgid " was dispatched successfully. "
 msgstr ""
 
-#: includes/class-wc-shippify-admin-back-office.php:176
+#: includes/class-wc-shippify-admin-back-office.php:191
 msgid "All the selected orders were dispatched successfully."
 msgstr ""
 
-#: includes/class-wc-shippify-admin-back-office.php:186
+#: includes/class-wc-shippify-admin-back-office.php:201
 #, php-format
 msgid ""
 "%sWooCommerce Shippify is almost ready.%s To get started, %s connect your "
 "Shippify account%s."
 msgstr ""
 
-#: includes/class-wc-shippify-admin-back-office.php:267
+#: includes/class-wc-shippify-admin-back-office.php:282
 msgid "Dispatch (Shippify)"
 msgstr ""
 
-#: includes/class-wc-shippify-admin-back-office.php:295
+#: includes/class-wc-shippify-admin-back-office.php:310
 msgid "Dispatch"
 msgstr ""
 
-#: includes/class-wc-shippify-admin-back-office.php:347
+#: includes/class-wc-shippify-admin-back-office.php:362
 msgid "Shippify Order Status"
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:391
+msgid "Instructions"
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:392
+msgid "Shippify ID"
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:393
+msgid "Deliver Latitude"
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:394
+msgid "Deliver Longitude"
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:395
+msgid "Pickup Latitude"
+msgstr ""
+
+#: includes/class-wc-shippify-admin-back-office.php:396
+msgid "Pickup Longitude"
 msgstr ""
 
 #: includes/class-wc-shippify-checkout.php:57
@@ -153,7 +177,6 @@ msgid "Sender E-mail"
 msgstr ""
 
 #: includes/class-wc-shippify-integration.php:85
-#: includes/class-wc-shippify-integration.php:97
 msgid ""
 "Enter the e-mail you want to recieve notifications from Shippify. This email "
 "is going to be used to create tasks."
@@ -164,24 +187,28 @@ msgid "Store Customizations"
 msgstr ""
 
 #: includes/class-wc-shippify-integration.php:95
-msgid "Shipping Same day"
+msgid "Show \"Same Day Delivery\" label"
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:102
+#: includes/class-wc-shippify-integration.php:98
+msgid "If marked, it will show \"Same Day Delivery\" label."
+msgstr ""
+
+#: includes/class-wc-shippify-integration.php:103
 msgid "Store Pays the Delivery"
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:104
+#: includes/class-wc-shippify-integration.php:106
 msgid ""
 "If marked, the shipping fare would be charged to the store insted of the "
 "final customer. "
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:109
+#: includes/class-wc-shippify-integration.php:111
 msgid "Instant Dispatch"
 msgstr ""
 
-#: includes/class-wc-shippify-integration.php:111
+#: includes/class-wc-shippify-integration.php:114
 msgid ""
 "If marked, the order is dispatched inmediatelly after the customer place the "
 "order. Please, make sure your store is capable of handling this option."
@@ -239,4 +266,31 @@ msgstr ""
 
 #. Author URI of the plugin
 msgid "http://www.shippify.co/"
+msgstr ""
+
+msgid "Getting Ready"
+msgstr ""
+
+msgid "Pending to assign"
+msgstr ""
+
+msgid "Picked up / In transit"
+msgstr ""
+
+msgid "Getting Shipper Response"
+msgstr ""
+
+msgid "Shipper Confirmed"
+msgstr ""
+
+msgid "Delivered"
+msgstr ""
+
+msgid "Completed Successfully"
+msgstr ""
+
+msgid "Not Delivered"
+msgstr ""
+
+msgid "Cancelled"
 msgstr ""
