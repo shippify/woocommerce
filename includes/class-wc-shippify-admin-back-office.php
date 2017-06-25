@@ -22,14 +22,14 @@ class WC_Shippify_Admin_Back_Office {
      */
     protected $shippify_task_status = array(
         1  =>  'Getting Ready',
-        2  =>  'Available',
-        3  =>  'Driver Assigned / Waiting for Response',
-        4  =>  'Driver Applied',
-        5  =>  'Picked Up',
+        2  =>  'Pending to assign',
+        3  =>  'Getting Shipper Response', 
+        4  =>  'Shipper Confirmed', 
+        5  =>  'Picked up / In transit',
         6  =>  'Delivered',
-        7  =>  'Confirmed',
+        7  =>  'Completed Successfully',
         0  =>  'Not Delivered',
-       -1  =>  'Canceled'
+       -1  =>  'Cancelled'
     );
 
     /**
@@ -61,7 +61,8 @@ class WC_Shippify_Admin_Back_Office {
 
         $api_id = get_option( 'shippify_id' );
         $api_secret = get_option( 'shippify_secret' );
-        $order_id = $the_order->id;  
+        $order_id = $the_order->id;
+
         switch ( $column ) {
 
             case 'order-status' :
@@ -79,20 +80,34 @@ class WC_Shippify_Admin_Back_Office {
 
                     //Get all the orders shippify ID
                     foreach ( $all as $post ) {
-                        $fetched_orders .= get_post_meta( $post->ID, '_shippify_id', true ) . ',';
+                        $tmp = '';
+                        $tmp = get_post_meta( $post->ID, '_shippify_id', true );
+                        if ($tmp != '')
+                        {
+                            if ($fetched_orders == '')
+                            {
+                                $fetched_orders .= $tmp;
+                            }
+                            else
+                            {
+                                $fetched_orders .= ','.$tmp;
+                            }
+                        }
+                        
                     }
 
                     //Prepare the request and store the response in an instance variable
                     $args = array(
                         'headers' => array(
                             'Authorization' => 'Basic ' . base64_encode( $api_id . ':' . $api_secret )
-                        ),
-                        'method'  => 'GET'
+                        )
+                        //'method'  => 'GET'
                     );
 
-                    $fetch_endpoint = 'https://api.shippify.co/v1/deliveries/' . $fetched_orders;
+                    $fetch_endpoint = 'http://testing.shippify.co:8021/v1/deliveries/' . $fetched_orders;
 
                     $response = wp_remote_get( $fetch_endpoint, $args );
+
                     if ( is_wp_error( $response ) ) {
                         $this->retrieved_status = "Error Fetching. Try Again.";
                     }else {
@@ -100,7 +115,7 @@ class WC_Shippify_Admin_Back_Office {
                         if ( ! isset($decoded["deliveries"])){
                             $this->retrieved_status = "Error Fetching. Try Again.";
                         }else{
-                            $this->retrieved_status = $decoded["deliveries"];   
+                            $this->retrieved_status = $decoded["deliveries"]; 
                         }
                          
                     }
@@ -120,15 +135,16 @@ class WC_Shippify_Admin_Back_Office {
 
                 //Search for every order status shipped via-Shippify on the response.
                 if ( $shippify_is_selected && ( 'yes' == get_post_meta( $the_order->id, '_is_dispatched', true ) ) ){
-                    $order_to_fetch = get_post_meta( $order_id, '_shippify_id', true );
-                    
+                    //creo que esto no se usa
+                    //$order_to_fetch = get_post_meta( $order_id, '_shippify_id', true );
+
                     if ( $this->retrieved_status == "Error Fetching. Try Again." ) {
                         $col_val = "Error Fetching. Try Again.";    
                     }else {
                         $found = false;
                         foreach ( $this->retrieved_status as $response_order ) {
-                            if ( $response_order["id"] == $order_to_fetch ) {
-                                $col_val = $this->shippify_task_status[$response_order["state"]]; 
+                            if ( $response_order['order'] == $order_id) {
+                                $col_val = __($this->shippify_task_status[$response_order["state"]],'woocommerce-shippify'); 
                                 $found = true;
                                 break;
                             }
@@ -142,7 +158,6 @@ class WC_Shippify_Admin_Back_Office {
                 }
                 //Show the result on the table
                 echo $col_val;
-                echo '<script> console.log("' . $fetched_orders . '") </script>';
                 
             break;
         }
@@ -373,12 +388,12 @@ class WC_Shippify_Admin_Back_Office {
             <div class="order_data_column">
                 <h4><?php _e( 'Shippify', 'woocommerce' ); ?></h4>
                 <?php 
-                    echo '<p><strong>' . __( 'Instructions' ) . ':</strong>' . " \n" . get_post_meta( $order->id, 'Instructions', true ) . '</p>';
-                    echo '<p><strong>' . __( 'Shippify ID' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, '_shippify_id', true ) . '</p>'; 
-                    echo '<p><strong>' . __( 'Deliver Latitude' ) . ':</strong>' .  " \n"  .  get_post_meta( $order->id, 'Latitude', true ) . '</p>'; 
-                    echo '<p><strong>' . __( 'Deliver Longitude' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, 'Longitude', true ) . '</p>';
-                    echo '<p><strong>' . __( 'Pickup Latitude' ) . ':</strong>' .  " \n"  .  get_post_meta( $order->id, 'pickup_latitude', true ) . '</p>'; 
-                    echo '<p><strong>' . __( 'Pickup Longitude' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, 'pickup_longitude', true ) . '</p>'; ?>
+                    echo '<p><strong>' . __( 'Instructions', 'woocommerce-shippify' ) . ':</strong>' . " \n" . get_post_meta( $order->id, 'Instructions', true ) . '</p>';
+                    echo '<p><strong>' . __( 'Shippify ID', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, '_shippify_id', true ) . '</p>'; 
+                    echo '<p><strong>' . __( 'Deliver Latitude', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  .  get_post_meta( $order->id, 'Latitude', true ) . '</p>'; 
+                    echo '<p><strong>' . __( 'Deliver Longitude', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, 'Longitude', true ) . '</p>';
+                    echo '<p><strong>' . __( 'Pickup Latitude', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  .  get_post_meta( $order->id, 'pickup_latitude', true ) . '</p>'; 
+                    echo '<p><strong>' . __( 'Pickup Longitude', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, 'pickup_longitude', true ) . '</p>'; ?>
             </div>
             <?php           
         }
