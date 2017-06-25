@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * review orders that deliver with Shippify.
  *
  * @since   1.0.0
- * @version 1.0.0
+ * @version 1.2.1
  */
 class WC_Shippify_Admin_Back_Office {
 

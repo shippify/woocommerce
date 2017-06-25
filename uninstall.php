@@ -3,7 +3,7 @@
  * WooCommerce Shippify Uninstall
  *
  * @since   1.0.0
- * @version 1.0.0
+ * @version 1.2.1
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
