@@ -4,7 +4,7 @@
 
 - **Contributors:** [Leonardo Kuffo](https://github.com/lkuffo/), [Wander Bravo](https://github.com/bram70)
 - **Tags:** Shipping, delivery, shippify
-- **Version:** 1.2.1
+- **Version:** 1.2.2
 - **Requires at least:** 4.5.7
 - **Tested up to:** 4.7.4
 - **Stable tag:** 4.7.4

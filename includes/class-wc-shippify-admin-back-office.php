@@ -104,7 +104,7 @@ class WC_Shippify_Admin_Back_Office {
                         //'method'  => 'GET'
                     );
 
-                    $fetch_endpoint = 'http://testing.shippify.co:8021/v1/deliveries/' . $fetched_orders;
+                    $fetch_endpoint = 'https://api.shippify.co/v1/deliveries/' . $fetched_orders;
 
                     $response = wp_remote_get( $fetch_endpoint, $args );
 
