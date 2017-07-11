@@ -125,7 +125,6 @@ jQuery(function($) {
             var state = $("#billing_state").val();
             codeAddress(dir+', '+city+', '+state);
         }  
-        console.log('hola');
 
 
         
@@ -229,7 +228,6 @@ jQuery(function($) {
         document.cookie = "shippify_latitude=" + marker.getPosition().lat();
         document.cookie = "shippify_longitude=" + marker.getPosition().lng();
         console.log(document.cookie);
-        console.log('ya');
         $("#shippify_latitude").val(marker.getPosition().lat());
         $("#shippify_latitude").trigger('change');
     
