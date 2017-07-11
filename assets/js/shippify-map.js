@@ -208,8 +208,6 @@ jQuery(function($) {
             geocoder.geocode( { 'address': address}, function(results, status) {
             
               if (status == google.maps.GeocoderStatus.OK) {
-                console.log(results[0].geometry.location.lng());
-                console.log(results[0].geometry.location.lat());
                 placeMarker(results[0].geometry.location);
                 updateShippingInfo();
                 resolve();
@@ -227,7 +225,7 @@ jQuery(function($) {
         // We use cookies to store the marker coordinates
         document.cookie = "shippify_latitude=" + marker.getPosition().lat();
         document.cookie = "shippify_longitude=" + marker.getPosition().lng();
-        console.log(document.cookie);
+        
         $("#shippify_latitude").val(marker.getPosition().lat());
         $("#shippify_latitude").trigger('change');
     
