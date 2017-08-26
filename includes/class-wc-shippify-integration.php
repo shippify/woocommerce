@@ -5,12 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Shippify general integration settings class. 
+ * Shippify general integration settings class.
  * This class provides a settings section in which the admin will be able
  * to provide the APP ID and APP SECRET to access the Shippify API.
  *
  * @since   1.0.0
- * @version 1.0.0
+ * @version 1.2.3
  */
 
 if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
@@ -28,7 +28,7 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
 
             // Load the settings.
             $this->init_form_fields();
-            $this->init_settings();    
+            $this->init_settings();
 
             // Define user set variables.
             $this->shippify_api_key    = $this->get_option( 'api_key' );
@@ -97,7 +97,7 @@ if ( ! class_exists( 'WC_Integration_Demo_Integration' ) ) {
                     'label'             => ' ',
                     'description'       => __( 'If marked, it will show "Same Day Delivery" label.', 'woocommerce-shippify' ),
                     'desc_tip'          => true,
-                    'default'           => 'yes' 
+                    'default'           => 'yes'
                 ),
                 'shippify_free_shipping' => array(
                     'title'             => __( 'Store Pays the Delivery', 'woocommerce-shippify' ),

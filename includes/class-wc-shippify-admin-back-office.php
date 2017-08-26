@@ -5,12 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Shippify Admin Back-Office class. 
+ * Shippify Admin Back-Office class.
  * This class provides back-office functionality for the Admin to dispatch and
  * review orders that deliver with Shippify.
  *
  * @since   1.0.0
- * @version 1.2.1
+ * @version 1.2.3
  */
 class WC_Shippify_Admin_Back_Office {
 
@@ -23,8 +23,8 @@ class WC_Shippify_Admin_Back_Office {
     protected $shippify_task_status = array(
         1  =>  'Getting Ready',
         2  =>  'Pending to assign',
-        3  =>  'Getting Shipper Response', 
-        4  =>  'Shipper Confirmed', 
+        3  =>  'Getting Shipper Response',
+        4  =>  'Shipper Confirmed',
         5  =>  'Picked up / In transit',
         6  =>  'Delivered',
         7  =>  'Completed Successfully',
@@ -54,7 +54,7 @@ class WC_Shippify_Admin_Back_Office {
     /**
      * Hooked to filter: manage_shop_order_posts_custom_column,
      * Fetch onto the Shippify dispatched order status and shows it in the order table.
-     * @param string $column Shop order table column identifier. 
+     * @param string $column Shop order table column identifier.
      */
     public function fetch_shippify_orders_status( $column ) {
         global $post, $woocommerce, $the_order;
@@ -68,7 +68,7 @@ class WC_Shippify_Admin_Back_Office {
             case 'order-status' :
                 if ( false == $this->fetched_flag ) {
 
-                    //Get all the orders 
+                    //Get all the orders
                     $this->fetched_flag = true;
                     $all = get_posts( array(
                         'numberposts' => -1,
@@ -93,7 +93,7 @@ class WC_Shippify_Admin_Back_Office {
                                 $fetched_orders .= ','.$tmp;
                             }
                         }
-                        
+
                     }
 
                     //Prepare the request and store the response in an instance variable
@@ -115,9 +115,9 @@ class WC_Shippify_Admin_Back_Office {
                         if ( ! isset($decoded["deliveries"])){
                             $this->retrieved_status = "Error Fetching. Try Again.";
                         }else{
-                            $this->retrieved_status = $decoded["deliveries"]; 
+                            $this->retrieved_status = $decoded["deliveries"];
                         }
-                         
+
                     }
                 }
 
@@ -139,12 +139,12 @@ class WC_Shippify_Admin_Back_Office {
                     //$order_to_fetch = get_post_meta( $order_id, '_shippify_id', true );
 
                     if ( $this->retrieved_status == "Error Fetching. Try Again." ) {
-                        $col_val = "Error Fetching. Try Again.";    
+                        $col_val = "Error Fetching. Try Again.";
                     }else {
                         $found = false;
                         foreach ( $this->retrieved_status as $response_order ) {
                             if ( $response_order['order'] == $order_id) {
-                                $col_val = __($this->shippify_task_status[$response_order["state"]],'woocommerce-shippify'); 
+                                $col_val = __($this->shippify_task_status[$response_order["state"]],'woocommerce-shippify');
                                 $found = true;
                                 break;
                             }
@@ -158,7 +158,7 @@ class WC_Shippify_Admin_Back_Office {
                 }
                 //Show the result on the table
                 echo $col_val;
-                
+
             break;
         }
     }
@@ -172,23 +172,23 @@ class WC_Shippify_Admin_Back_Office {
     * @param string $doaction Bulk action applied.
     * @param string $redirect_to URL to redirect.
     * @return array $post_ids Contains all the selected orders ids.
-    */   
+    */
     public function shippify_admin_notices() {
         // Single Dispatch Error
         if ( 'singleError' == $_GET['error']  && 'shop_order' == $_GET['post_type'] ) {
-            echo '<div class="error notice is-dismissible"><p>' . __('The order','woocommerce-shippify'). '#'. $_GET['order_dispatched'] . __(' was not dispatched correctly. Check your settings or try again later.','woocommerce-shippify') . '</p></div>';    
+            echo '<div class="error notice is-dismissible"><p>' . __('The order','woocommerce-shippify'). '#'. $_GET['order_dispatched'] . __(' was not dispatched correctly. Check your settings or try again later.','woocommerce-shippify') . '</p></div>';
         }
         // Bulk Dispatch Error
         if ( 'multipleError' == $_GET['error']  && 'shop_order' == $_GET['post_type'] ) {
-            echo '<div class="notice notice-warning is-dismissible"><p>' . __('One or more orders were not successfully dispatched. Try dispatching orders individually, check your settings or try again later.','woocommerce-shippify') . '</p></div>';    
+            echo '<div class="notice notice-warning is-dismissible"><p>' . __('One or more orders were not successfully dispatched. Try dispatching orders individually, check your settings or try again later.','woocommerce-shippify') . '</p></div>';
         }
         // Single Dispatch Success
         if (  'none' == $_GET['error'] &&  'shop_order' == $_GET['post_type'] && ! isset( $_GET['bulk_dispatched_orders'] ) ) {
-            echo '<div class="notice notice-success is-dismissible"><p>' . __('The order','woocommerce-shippify'). '#'. $_GET['order_dispatched'] . __(' was dispatched successfully. ','woocommerce-shippify') . '</p></div>'; 
+            echo '<div class="notice notice-success is-dismissible"><p>' . __('The order','woocommerce-shippify'). '#'. $_GET['order_dispatched'] . __(' was dispatched successfully. ','woocommerce-shippify') . '</p></div>';
         }
         // Bulk Dispatch Success
         if ( 'none' == $_GET['error']  && isset( $_GET['bulk_dispatched_orders'] ) ) {
-            echo '<div class="notice notice-success is-dismissible"><p>' . __('All the selected orders were dispatched successfully.','woocommerce-shippify') . '</p></div>'; 
+            echo '<div class="notice notice-success is-dismissible"><p>' . __('All the selected orders were dispatched successfully.','woocommerce-shippify') . '</p></div>';
         }
         // Empty Credentials
         if ( isset( $_GET['page'] ) && 'wc-settings' == $_GET['page'] && isset( $_GET['section'] ) && 'shippify-integration' == $_GET['section'] ) return; // Don't show these notices in the same settings screen.
@@ -213,7 +213,7 @@ class WC_Shippify_Admin_Back_Office {
         $url = add_query_arg( 'tab', 'integration', $url );
         $url = add_query_arg( 'section', 'shippify-integration', $url );
 
-        return $url;       
+        return $url;
     }
 
 
@@ -223,7 +223,7 @@ class WC_Shippify_Admin_Back_Office {
     * @param string $doaction Bulk action applied.
     * @param string $redirect_to URL to redirect.
     * @return array $post_ids Contains all the selected orders ids.
-    */   
+    */
     function dispatch_bulk_action_handler( $redirect_to, $doaction, $post_ids ) {
 
         if ( $doaction !== 'shippify_dispatch' ) {
@@ -241,7 +241,7 @@ class WC_Shippify_Admin_Back_Office {
                 if ( "shippify" == $shipping_methods ){
                     $shippify_is_selected = true;
                 }
-            } 
+            }
 
             if ( (get_post_meta( $post_id, '_is_dispatched', true ) == 'no' || get_post_meta( $post_id, '_is_dispatched', true ) == '' ) && $shippify_is_selected ) {
 
@@ -254,19 +254,19 @@ class WC_Shippify_Admin_Back_Office {
                         update_post_meta( $post_id, '_shippify_id', $response['id'] );
                         $error = 'none';
                     }else {
-                        $error = 'multipleError';    
-                    } 
+                        $error = 'multipleError';
+                    }
                 }else {
                     $error = 'multipleError';
                 }
-            
+
             }
 
         }
         $redirect_to = add_query_arg( array(
             'bulk_dispatched_orders' => count( $post_ids ),
             'error' => $error
-            ), 
+            ),
             $redirect_to );
 
         return $redirect_to;
@@ -283,7 +283,7 @@ class WC_Shippify_Admin_Back_Office {
 
         return $bulk_actions;
     }
-   
+
 
     /**
      * Hooked to action: woocommerce_admin_order_actions.
@@ -303,10 +303,10 @@ class WC_Shippify_Admin_Back_Office {
             if ( "shippify" == $shipping_methods ){
                 $shippify_is_selected = true;
             }
-        } 
-        if ( $shippify_is_selected && ( get_post_meta( $the_order->id, '_is_dispatched', true ) != 'yes' ) && ! isset( $_GET['post_status'] ) ) { 
+        }
+        if ( $shippify_is_selected && ( get_post_meta( $the_order->id, '_is_dispatched', true ) != 'yes' ) && ! isset( $_GET['post_status'] ) ) {
             $actions['shippify_action'] = array(
-                'url'       => wp_nonce_url( admin_url( 'edit.php?post_type=shop_order&myaction=woocommerce_shippify_dispatch&stablishedorder=' . $the_order->id ), 'woocommerce-shippify-dispatch' ), 
+                'url'       => wp_nonce_url( admin_url( 'edit.php?post_type=shop_order&myaction=woocommerce_shippify_dispatch&stablishedorder=' . $the_order->id ), 'woocommerce-shippify-dispatch' ),
                 'name'      => __( 'Dispatch', 'woocommerce-shippify' ),
                 'action'    => "view shippify",     // setting "view" for proper button CSS.
             );
@@ -347,7 +347,7 @@ class WC_Shippify_Admin_Back_Office {
      * Adds css to the Shippify dispatch action button.
      */
     function add_shippify_order_actions_button_css() {
-        
+
         //echo '<style>.view.cancel::after { content: "\f174" !important; }</style>';
         echo '<style>.view.shippify::after { content: "" ;background: url(https://admin.shippify.co/panel_img/logo_big_login.png); background-size: 16px 17.5px; background-repeat: no-repeat;  background-position: center; }</style>';
     }
@@ -359,7 +359,7 @@ class WC_Shippify_Admin_Back_Office {
      */
     public function custom_shippify_order_column( $columns ) {
         if ($_GET['post_status'] != 'trash'){
-            $columns['order-status'] = __( 'Shippify Order Status','woocommerce-shippify');            
+            $columns['order-status'] = __( 'Shippify Order Status','woocommerce-shippify');
         }
 
         return $columns;
@@ -382,26 +382,26 @@ class WC_Shippify_Admin_Back_Office {
             if ( "shippify" == $shipping_methods ){
                 $shippify_is_selected = true;
             }
-        } 
+        }
         if ( $shippify_is_selected  ) {
             ?>
             <div class="order_data_column">
                 <h4><?php _e( 'Shippify', 'woocommerce' ); ?></h4>
-                <?php 
+                <?php
                     echo '<p><strong>' . __( 'Instructions', 'woocommerce-shippify' ) . ':</strong>' . " \n" . get_post_meta( $order->id, 'Instructions', true ) . '</p>';
-                    echo '<p><strong>' . __( 'Shippify ID', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, '_shippify_id', true ) . '</p>'; 
-                    echo '<p><strong>' . __( 'Deliver Latitude', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  .  get_post_meta( $order->id, 'Latitude', true ) . '</p>'; 
+                    echo '<p><strong>' . __( 'Shippify ID', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, '_shippify_id', true ) . '</p>';
+                    echo '<p><strong>' . __( 'Deliver Latitude', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  .  get_post_meta( $order->id, 'Latitude', true ) . '</p>';
                     echo '<p><strong>' . __( 'Deliver Longitude', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, 'Longitude', true ) . '</p>';
-                    echo '<p><strong>' . __( 'Pickup Latitude', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  .  get_post_meta( $order->id, 'pickup_latitude', true ) . '</p>'; 
+                    echo '<p><strong>' . __( 'Pickup Latitude', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  .  get_post_meta( $order->id, 'pickup_latitude', true ) . '</p>';
                     echo '<p><strong>' . __( 'Pickup Longitude', 'woocommerce-shippify' ) . ':</strong>' .  " \n"  . get_post_meta( $order->id, 'pickup_longitude', true ) . '</p>'; ?>
             </div>
-            <?php           
+            <?php
         }
     }
 
     /**
      * Creates the Shippify Task of a shop order.
-     * @param string $order_ir Shop order identifier. 
+     * @param string $order_ir Shop order identifier.
      */
     public function create_shippify_task( $order_id ) {
 
@@ -439,11 +439,11 @@ class WC_Shippify_Admin_Back_Office {
 
         // Constructing the items array
         $items = "[";
-        foreach ( $order->get_items() as $item_id => $_preproduct ) { 
+        foreach ( $order->get_items() as $item_id => $_preproduct ) {
             $_product = $_preproduct->get_product();
-            $items = $items . '{"id":"' . $_product->get_id() . '", 
-                                "name":"' . $_product->get_name() . '", 
-                                "qty": "' . $_preproduct['quantity'] . '", 
+            $items = $items . '{"id":"' . $_product->get_id() . '",
+                                "name":"' . $_product->get_name() . '",
+                                "qty": "' . $_preproduct['quantity'] . '",
                                 "size": "' . $this->calculate_product_shippify_size($_product) . '"
                                 },';
         }
@@ -467,11 +467,11 @@ class WC_Shippify_Admin_Back_Office {
                 foreach ( $warehouse_info as $warehouse ) {
                     if ( $warehouse["id"] == $pickup_warehouse ) {
                         $pickup_id = $pickup_warehouse;
-                        break;                          
+                        break;
                     }
                 }
             }
-        }    
+        }
 
         if ( '' == $pickup_id ) {
             $warehouse_to_request = '';
@@ -484,8 +484,8 @@ class WC_Shippify_Admin_Back_Office {
         $total_amount = '';
         $payment_method = get_post_meta( $order_id, '_payment_method', true );
         if ( 'cod' == $payment_method ) {
-            $order_total = $order->get_total();     
-            $total_amount = '"total_amount": "' . $order_total . '",';    
+            $order_total = $order->get_total();
+            $total_amount = '"total_amount": "' . $order_total . '",';
         }
 
         // Constructing the POST request
@@ -505,7 +505,7 @@ class WC_Shippify_Admin_Back_Office {
                     "lat": ' . $pickup_latitude . ',
                     "lng": ' . $pickup_longitude . ',
                     "address": "' . $pickup_address . '"'. $warehouse_to_request . '
-                }, 
+                },
                 '. $total_amount . '
                 "deliver": {
                     "lat": ' . $deliver_lat . ',
@@ -514,7 +514,7 @@ class WC_Shippify_Admin_Back_Office {
                 },
                 "ref_id": "' . $ref_id . '",
                 "extra": {
-                    "note":  "' . $note . '" 
+                    "note":  "' . $note . '"
                 }
             }
         }';
@@ -541,8 +541,8 @@ class WC_Shippify_Admin_Back_Office {
     }
 
     /**
-    * Diffuse Logic Algorithm used to calculate Shippify product size based on the product dimensions. 
-    * @param WC_Product The product to calculate the size. 
+    * Diffuse Logic Algorithm used to calculate Shippify product size based on the product dimensions.
+    * @param WC_Product The product to calculate the size.
     */
     public function calculate_product_shippify_size( $product ) {
 
@@ -564,7 +564,7 @@ class WC_Shippify_Admin_Back_Office {
         $height = floatval( $height );
         $length = floatval( $length );
 
-        $array_size = array( 1, 2, 3, 4, 5 ); 
+        $array_size = array( 1, 2, 3, 4, 5 );
         $array_dimensions = array( 50, 80, 120, 150, 150 );
         $radio_membership = 10;
         $dimensions_array = array( 10, 10, 10 );

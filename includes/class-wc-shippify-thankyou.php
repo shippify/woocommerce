@@ -6,9 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Shippify thankyou class. Handles the Thankyou page action and filters. 
+ * Shippify thankyou class. Handles the Thankyou page action and filters.
  * @since   1.0.0
- * @version 1.2.1
+ * @version 1.2.3
  */
 
 class WC_Shippify_Thankyou {
@@ -29,7 +29,7 @@ class WC_Shippify_Thankyou {
 	            </tr>
 	        </tbody>
 	    </table>
-		<?php 
+		<?php
 
 		// Check for automatic dispatch
 
@@ -47,7 +47,7 @@ class WC_Shippify_Thankyou {
 
     /**
      * Creates the Shippify Task of a shop order.
-     * @param string $order_ir Shop order identifier. 
+     * @param string $order_ir Shop order identifier.
      */
     public function create_shippify_task( $order_id ) {
 
@@ -56,7 +56,7 @@ class WC_Shippify_Thankyou {
         $order = new WC_Order( $order_id );
 
         // Sender Email
-        $sender_mail = get_option( 'shippify_sender_email' ); 
+        $sender_mail = get_option( 'shippify_sender_email' );
 
         // Recipient Information
         $recipient_name = get_post_meta( $order_id, '_billing_first_name', true ) . get_post_meta( $order_id, '_billing_last_name', true ) ;
@@ -85,11 +85,11 @@ class WC_Shippify_Thankyou {
 
         // Constructing the items array
         $items = "[";
-        foreach ( $order->get_items() as $item_id => $_preproduct ) { 
+        foreach ( $order->get_items() as $item_id => $_preproduct ) {
             $_product = $_preproduct->get_product();
-            $items = $items . '{"id":"' . $_product->get_id() . '", 
-                                "name":"' . $_product->get_name() . '", 
-                                "qty": "' . $_preproduct['quantity'] . '", 
+            $items = $items . '{"id":"' . $_product->get_id() . '",
+                                "name":"' . $_product->get_name() . '",
+                                "qty": "' . $_preproduct['quantity'] . '",
                                 "size": "' . $this->calculate_product_shippify_size($_product) . '"
                                 },';
         }
@@ -113,11 +113,11 @@ class WC_Shippify_Thankyou {
                 foreach ( $warehouse_info as $warehouse ) {
                     if ( $warehouse["id"] == $pickup_warehouse ) {
                         $pickup_id = $pickup_warehouse;
-                        break;                          
+                        break;
                     }
                 }
             }
-        }    
+        }
 
         if ( '' == $pickup_id ) {
             $warehouse_to_request = '';
@@ -130,8 +130,8 @@ class WC_Shippify_Thankyou {
         $total_amount = '';
         $payment_method = get_post_meta( $order_id, '_payment_method', true );
         if ( 'cod' == $payment_method ) {
-            $order_total = $order->get_total();     
-            $total_amount = '"total_amount": "' . $order_total . '",';    
+            $order_total = $order->get_total();
+            $total_amount = '"total_amount": "' . $order_total . '",';
         }
 
         // Constructing the POST request
@@ -151,7 +151,7 @@ class WC_Shippify_Thankyou {
                     "lat": ' . $pickup_latitude . ',
                     "lng": ' . $pickup_longitude . ',
                     "address": "' . $pickup_address . '"'. $warehouse_to_request . '
-                }, 
+                },
                 '. $total_amount . '
                 "deliver": {
                     "lat": ' . $deliver_lat . ',
@@ -160,7 +160,7 @@ class WC_Shippify_Thankyou {
                 },
                 "ref_id": "' . $ref_id . '",
                 "extra": {
-                    "note":  "' . $note . '" 
+                    "note":  "' . $note . '"
                 }
             }
         }';
@@ -178,7 +178,7 @@ class WC_Shippify_Thankyou {
 
         $response = wp_remote_post( $task_endpoint, $args );
 
-        if ( ! is_wp_error( $response ) ) { 
+        if ( ! is_wp_error( $response ) ) {
         	$response = json_decode( $response['body'], true );
 
         	if ( isset( $response['id'] ) ) {
@@ -188,15 +188,15 @@ class WC_Shippify_Thankyou {
         	} else {
         		return false;
         	}
-        	
+
         } else {
         	return false;
         }
     }
 
     /**
-    * Diffuse Logic Algorithm used to calculate Shippify product size based on the product dimensions. 
-    * @param WC_Product The product to calculate the size. 
+    * Diffuse Logic Algorithm used to calculate Shippify product size based on the product dimensions.
+    * @param WC_Product The product to calculate the size.
     */
     public function calculate_product_shippify_size( $product ) {
 
@@ -218,7 +218,7 @@ class WC_Shippify_Thankyou {
         $height = floatval( $height );
         $length = floatval( $length );
 
-        $array_size = array( 1, 2, 3, 4, 5 ); 
+        $array_size = array( 1, 2, 3, 4, 5 );
         $array_dimensions = array( 50, 80, 120, 150, 150 );
         $radio_membership = 10;
         $dimensions_array = array( 10, 10, 10 );

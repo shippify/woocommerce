@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 /**
  * Shippify shipping method.
  *
  * @since   1.0.0
- * @version 1.2.1
+ * @version 1.2.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -48,7 +48,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 					$this->method_id    = '';
 					$this->enabled 		= 'yes';
 					$this->method_title = __( 'Shippify', 'woocommerce-shippify' );
-					$this->more_link    = 'http://shippify.co/';		
+					$this->more_link    = 'http://shippify.co/';
 					$this->instance_id        = absint( $instance_id );
 					$this->method_description = sprintf( __( '%s is a shipping option.', 'woocommerce-shippify' ), $this->method_title );
 					$this->supports           = array(
@@ -65,8 +65,8 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 					);
 
 					// Load the form fields.
-					$this->init_form_fields(); 
-					//$this->init_settings();    
+					$this->init_form_fields();
+					//$this->init_settings();
 
 					// Set instance options values if they are defined.
 					$this->warehouse_id     	= $this->get_instance_option( 'warehouse_id' );
@@ -81,7 +81,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 					 */
 					if ( 0 != $this->instance_id && ! is_cart()) {
 
-						setcookie( 'warehouse_id', $this->warehouse_id );
+						// setcookie( 'warehouse_id', $this->warehouse_id );
 
 						$api_id = get_option( 'shippify_id' );
 						$api_secret = get_option( 'shippify_secret' );
@@ -90,7 +90,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 			                    'Authorization' => 'Basic ' . base64_encode( $api_id . ':' . $api_secret )
 			                ),
 			                'method'  => 'GET'
-			            );    						
+			            );
 
 						if ( "" != $this->warehouse_id || isset( $this->warehouse_id ) ) {
 							$warehouse_response = wp_remote_get( $this->warehouse_API, $args );
@@ -100,18 +100,18 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 								if ( isset( $warehouse_info ) && '' !== $warehouse_info  ) {
 									foreach ( $warehouse_info as $warehouse ) {
 										if ( $warehouse["id"] == $this->warehouse_id ) {
-										
+
 											$this->warehouse_longitude = $warehouse["lng"];
 											$this->warehouse_latitude = $warehouse["lat"];
-											break;							
+											break;
 										}
 									}
 								}
 							}
 						}
-						setcookie( 'warehouse_address', $this->warehouse_adress );
-						setcookie( 'warehouse_latitude', $this->warehouse_latitude );
-						setcookie( 'warehouse_longitude', $this->warehouse_longitude );
+						// setcookie( 'warehouse_address', $this->warehouse_adress );
+						// setcookie( 'warehouse_latitude', $this->warehouse_latitude );
+						// setcookie( 'warehouse_longitude', $this->warehouse_longitude );
 					}
 
 					add_action( 'woocommerce_update_options_shipping_shippify', array( $this, 'process_admin_options' ), 3 );
@@ -166,7 +166,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 			* @param array $package Order package.
 			*/
 			public function calculate_shipping( $package = array() ) {
-				
+
 				// Check if valid to be calculeted.
 				if ( ! in_array( $package['destination']['country'], $this->countries ) ) {
 					return;
@@ -187,7 +187,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 	                    'Authorization' => 'Basic ' . base64_encode( $api_id . ':' . $api_secret )
 	                ),
 	                'method'  => 'GET'
-	            );                  
+	            );
 
 
 				$pickup_latitude = $_COOKIE["warehouse_latitude"];
@@ -203,7 +203,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 				$delivery_latitude = $_COOKIE["shippify_latitude"];
 				$delivery_longitude = $_COOKIE["shippify_longitude"];
 
-				
+
 				// If there is defined a warehouse id. Check if valid. Then use the coordinates of that warehouse.
 				if ( "" != $pickup_id || isset( $pickup_id ) ) {
 					$warehouse_response = wp_remote_get( $this->warehouse_API, $args );
@@ -214,8 +214,8 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 							foreach ( $warehouse_info as $warehouse ) {
 								if ( $warehouse["id"] == $pickup_id ) {
 									$pickup_longitude = $warehouse["lng"];
-									$pickup_latitude = $warehouse["lat"];	
-									break;							
+									$pickup_latitude = $warehouse["lat"];
+									break;
 								}
 							}
 						}
@@ -224,12 +224,12 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 
 				// Constructing the items array
 				$items = "[";
-				foreach ( $package['contents'] as $item_id => $values ) { 
-			        $_product = $values['data']; 
-			        $items = $items . '{"id":"' . "productid" . '", 
-			        					"name":"' . "productname" . '", 
-			        					"qty": "' . $values['quantity'] . '", 
-			        					"size": "' . $this->calculate_product_shippify_size( $_product ) . '", 
+				foreach ( $package['contents'] as $item_id => $values ) {
+			        $_product = $values['data'];
+			        $items = $items . '{"id":"' . "productid" . '",
+			        					"name":"' . "productname" . '",
+			        					"qty": "' . $values['quantity'] . '",
+			        					"size": "' . $this->calculate_product_shippify_size( $_product ) . '",
 			        					"price": "' . $_product->get_price() . '"
 			        					},';
 			    }
@@ -249,26 +249,26 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 					return;
 				}else{
 	            	$decoded = json_decode( $response['body'], true );
-	            	$cost = $decoded['price'];					
+	            	$cost = $decoded['price'];
 				}
 
-				
+
 				if ( is_cart() || 'yes' == get_option( 'shippify_free_shipping' ) ) {
 					$cost = 0;
 				}
-				
+
 				$rate = array(
 					'id' 	=> $this->id,
 					'label' => $this->title,
 					'cost'  => $cost
 				);
-				
+
 				$this->add_rate( $rate );
 			}
 
 		    /**
-		    * Diffuse Logic Algorithm used to calculate Shippify product size based on the product dimensions. 
-		    * @param WC_Product The product to calculate the size. 
+		    * Diffuse Logic Algorithm used to calculate Shippify product size based on the product dimensions.
+		    * @param WC_Product The product to calculate the size.
 		    */
 			public function calculate_product_shippify_size( $product ) {
 
@@ -290,7 +290,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 		        $height = floatval( $height );
 		        $length = floatval( $length );
 
-		        $array_size = array( 1, 2, 3, 4, 5 ); 
+		        $array_size = array( 1, 2, 3, 4, 5 );
 		        $array_dimensions = array( 50, 80, 120, 150, 150 );
 		        $radio_membership = 10;
 		        $dimensions_array = array( 10, 10, 10 );

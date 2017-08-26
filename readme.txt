@@ -4,7 +4,7 @@
 
 Contributors:  leonardokuffo
 Tags: Shipping, delivery, shippify
-Version: 1.2.2
+Version: 1.2.3
 Requires at least: 4.7.3
 Tested up to: 4.7.4
 Stable tag: 4.7.4
@@ -12,16 +12,16 @@ License: GNU General Public License v3.0
 WC requires at least: 3.0.5
 WC tested up to: 3.0.5
 
-Deliver your WooCommerce shop products in less than 24h. Integration between WooCommerce and Shippify. 
+Deliver your WooCommerce shop products in less than 24h. Integration between WooCommerce and Shippify.
 
 == Description ==
 
-[Shippify](http://www.shippify.co/) is a technology company that offers their clients **Same-Day Delivery** shipping for their products. This plugin allows WooCommerce shop owners to use Shippify as a delivery method in their shop. 
+[Shippify](http://www.shippify.co/) is a technology company that offers their clients **Same-Day Delivery** shipping for their products. This plugin allows WooCommerce shop owners to use Shippify as a delivery method in their shop.
 
 The plugin currently offers the following functionalities:
 
 - Shippify as a shipping method in Checkout.
-- WooCommerce Shipping Zones support. 
+- WooCommerce Shipping Zones support.
 - Shippify fares showed dinamically to the customers in checkout.
 - Dispatch orders at the WooCommerce Admin orders page.
 - Bulk orders dispatch.
@@ -36,19 +36,19 @@ The plugin currently offers the following functionalities:
 
 = Settings =
 
-** Requirements ** 
+** Requirements **
  - [Shippify Account](http://shippify.co/companies#empresas-form)
-     Before you can provide shippify as a shipping method in your shop, you need an APP ID and an APP SECRET. 
+     Before you can provide shippify as a shipping method in your shop, you need an APP ID and an APP SECRET.
 
 To use the plugin correctly, the shop owner should follow these instructions to configure the settings:
 
-1. Configure Shippify API Settings: 
+1. Configure Shippify API Settings:
     1. In the admin panel, go to WooCommerce -> Settings -> Integration -> Shippify.
     2. Enter the APP ID and the APP SECRET provided to you, as they are in the Shippify Dashboard Settings.
     3. Save Changes.
 
 2. Configure Shippify on Shipping Zones:
-    1. In the admin panel, go to WooCommerce -> Settings -> Shipping Zones. 
+    1. In the admin panel, go to WooCommerce -> Settings -> Shipping Zones.
     2. Add a shipping zone. If you are new to shipping zones, [here](https://docs.woocommerce.com/document/setting-up-shipping-zones/) you can find a well detailed tutorial on how to set up shipping zones.
     3. Once you have created a shipping zone, click on Add Shipping Method and select Shippify. Enable the method if it isn't.
     4. Access to the Shippify settings by clicking on the method name in the *Shipping method title* column.
@@ -56,7 +56,7 @@ To use the plugin correctly, the shop owner should follow these instructions to 
     6. Save Changes.
 3. Configure google maps API key:
     1. Go to the Google maps and get your map api id [Google maps Account](https://developers.google.com/maps/documentation/javascript/get-api-key)
-    2. Set the api key in the Google api key in Woocommerce / Settings / GOOGLE API KEY 
+    2. Set the api key in the Google api key in Woocommerce / Settings / GOOGLE API KEY
     3. Save the changes.
 
 4. You are ready to go! Please make sure that our shipping service is within the geographical limits of the configured shipping zones and warehouses.
@@ -70,11 +70,11 @@ To use the plugin correctly, the shop owner should follow these instructions to 
 == Frequently Asked Questions ==
 
 = Shippify does not appear as a shipping method in checkout. =
-  - Check the configuration of your shipping zones. Selected country and/or entered zip code must match with the ones configured on the shipping zone. 
+  - Check the configuration of your shipping zones. Selected country and/or entered zip code must match with the ones configured on the shipping zone.
 
 = I'm not able to proceed in checkout, shippify warnings are appearing. =
-  - Keep in mind that if we are not able to make a Shippify route from pickup location (Warehouse configuration), to delivery location (Marker on the checkout map), you are not going to be able to proceed in checkout. Check your warehouse configuration of that shipping zone, check the delivery location marked on the integrated map, or make sure that Shippify service is available among those coordinates.  
-  - Make sure you are filling the instruction fields, it is an obligatory field. 
+  - Keep in mind that if we are not able to make a Shippify route from pickup location (Warehouse configuration), to delivery location (Marker on the checkout map), you are not going to be able to proceed in checkout. Check your warehouse configuration of that shipping zone, check the delivery location marked on the integrated map, or make sure that Shippify service is available among those coordinates.
+  - Make sure you are filling the instruction fields, it is an obligatory field.
   - Make sure you entered the APP ID and the APP SECRET correctly.
 
 = Shipping fare is not appearing in checkout. =
@@ -98,4 +98,4 @@ To use the plugin correctly, the shop owner should follow these instructions to 
 
 4. Shippify As a Shipping Method
 
-5. Dispatch Action at Orders 
+5. Dispatch Action at Orders

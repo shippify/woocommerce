@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Shippify Checkout class handles the Checkout page action and filter hooks.
  * @since   1.0.0
- * @version 1.0.0
+ * @version 1.2.3
  */
 
 class WC_Shippify_Checkout {
@@ -19,19 +19,19 @@ class WC_Shippify_Checkout {
 
         add_filter( 'woocommerce_checkout_fields' , array( $this, 'customize_checkout_fields' ) );
         add_action( 'woocommerce_after_order_notes', array( $this, 'display_custom_checkout_fields' ) );
-        add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_custom_checkout_fields' ) );  
+        add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_custom_checkout_fields' ) );
 
         //Enqueueing CSS and JS files
-        wp_enqueue_script( 'wc-shippify-checkout', plugins_url( '../assets/js/shippify-checkout.js', __FILE__ ), array( 'jquery' ) ); 
-        wp_enqueue_style( 'wc-shippify-map-css', plugins_url( '../assets/css/shippify-checkout.css', __FILE__ ) ); 
+        wp_enqueue_script( 'wc-shippify-checkout', plugins_url( '../assets/js/shippify-checkout.js', __FILE__ ), array( 'jquery' ) );
+        wp_enqueue_style( 'wc-shippify-map-css', plugins_url( '../assets/css/shippify-checkout.css', __FILE__ ) );
         wp_enqueue_script( 'wc-shippify-map-js', plugins_url( '../assets/js/shippify-map.js' , __FILE__ ) );
 
         add_action( 'woocommerce_after_checkout_form', array ( $this,'add_map' ) );
         add_action( 'woocommerce_checkout_process', array ( $this,'shippify_validate_order' ) , 10 );
 		add_filter( 'woocommerce_cart_shipping_method_full_label', array( $this, 'change_shipping_label' ), 10, 2 );
 		add_action( 'woocommerce_checkout_update_order_review', array( $this, 'action_woocommerce_checkout_update_order_review' ), 10, 2 );
-	}		    
-     
+	}
+
 
 	/**
 	 * Hooked to Action: woocommerce_checkout_update_order_review
@@ -58,14 +58,14 @@ class WC_Shippify_Checkout {
 
 			if ( is_cart() ) {
 
-				$full_label = "Shippify: ".$sameday_label. ' '.__('Proceed to Checkout for fares','woocommerce-shippify');	
+				$full_label = "Shippify: ".$sameday_label. ' '.__('Proceed to Checkout for fares','woocommerce-shippify');
 			} elseif ( is_checkout() ) {
 				$full_label = $full_label ." ".$sameday_label;
 
 				if ( 'yes' == get_option( 'shippify_free_shipping' ) ) {
 					$full_label = $full_label . '- ' .__('FREE!', 'woocommerce-shippify');
 				}
-			}	
+			}
 			if ( is_cart() && 'yes' == get_option( 'shippify_free_shipping' ) ) {
 				$full_label = "Shippify: ". $sameday_label. __('FREE!','woocommerce-shippify');
 
@@ -78,10 +78,10 @@ class WC_Shippify_Checkout {
     	    //Formatted address
     	    $formattedAddr = str_replace(' ','+',$address);
     	    //Send request and receive json data by address
-    	    $geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$formattedAddr.'&sensor=false'); 
+    	    $geocodeFromAddr = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.$formattedAddr.'&sensor=false');
     	    $output = json_decode($geocodeFromAddr);
     	    //Get latitude and longitute from json data
-    	    $data['latitude']  = $output->results[0]->geometry->location->lat; 
+    	    $data['latitude']  = $output->results[0]->geometry->location->lat;
     	    $data['longitude'] = $output->results[0]->geometry->location->lng;
     	    //Return latitude and longitude of the given address
     	    if(!empty($data)){
@@ -90,7 +90,7 @@ class WC_Shippify_Checkout {
     	        return false;
     	    }
     	}else{
-    	    return false;   
+    	    return false;
     	}
 	}
 	/**
@@ -100,7 +100,7 @@ class WC_Shippify_Checkout {
 	 */
     public function add_map( $after ) {
       $google_api_id = get_option( 'google_secret' ) != NULL ? get_option( 'google_secret' ) : '';
-      
+
     	echo '<div id="shippify_map">';
     	echo '<h4>' . __('Delivery Position','woocommerce-shippify') . '</h4> <p>' . __('Confirm that the delivery address is correct on the map, if not, updated it by moving the marker.','woocommerce-shippify') .' </p>';
     	echo '<input id="pac-input" class="controls" type="text" placeholder="'.__('Search Box','woocommerce-shippify') .'">';
@@ -116,18 +116,17 @@ class WC_Shippify_Checkout {
 	 * @param array $checkout The checkout fields array
 	 */
     public function display_custom_checkout_fields( $checkout ) {
+// Set shipping price to $0 to not confuse the user.
+   		// setcookie( 'shippify_longitude', '', time() - 3600 );
+   		// setcookie( 'shippify_latitude', '', time() - 3600 );
 		echo '<div id="shippify_checkout" class="col3-set"><h2>' . __('Shippify') . '</h2>';
 
-		echo '<script> console.log("' .$checkout->checkout_fields .'") </script>';
-	    foreach ( $checkout->checkout_fields['shippify'] as $key => $field ) : 
+	    foreach ( $checkout->checkout_fields['shippify'] as $key => $field ) :
 	            woocommerce_form_field( $key, $field, $checkout->get_value( $key ) );
 	        	//echo '<script> console.log("' . $key . $field . $checkout->get_value( $key ) .'") </script>';
 	        endforeach;
 	    echo '</div>';
 
-	    // Set shipping price to $0 to not confuse the user.
-   		setcookie( 'shippify_longitude', '', time() - 3600 );
-   		setcookie( 'shippify_latitude', '', time() - 3600 );
 
 	    WC()->cart->calculate_shipping();
     }
@@ -148,14 +147,14 @@ class WC_Shippify_Checkout {
 	   	if( ! empty( $_POST['shippify_longitude'] ) ) {
 	        update_post_meta( $order_id, 'Longitude', sanitize_text_field( $_POST['shippify_longitude'] ) );
 	    }
-		
+
 	    update_post_meta( $order_id, 'pickup_latitude', sanitize_text_field( $_COOKIE["warehouse_latitude"] ) );
 	    update_post_meta( $order_id, 'pickup_longitude', sanitize_text_field( $_COOKIE["warehouse_longitude"] ) );
 	    update_post_meta( $order_id, 'pickup_address', sanitize_text_field( $_COOKIE["warehouse_address"] ) );
 	    update_post_meta( $order_id, 'pickup_id', sanitize_text_field( $_COOKIE["warehouse_id"] ) );
 	}
 
-  
+
   	/**
 	 * Hooked to Filter: woocommerce_checkout_fields.
 	 * Add Shippify custom checkout fields to the checkout form.
@@ -163,7 +162,7 @@ class WC_Shippify_Checkout {
 	 * @return array The checkout form fields
 	 */
    	public function customize_checkout_fields( $fields ) {
-   		
+
    		global $woocommerce;
 
    		$fields["shippify"] = array(
@@ -188,7 +187,7 @@ class WC_Shippify_Checkout {
 				'required'       => false,
 				'class' 	     => array ( 'address-field', 'update_totals_on_change' )
 			)
-		);   
+		);
 
    		return $fields;
 
@@ -220,7 +219,7 @@ class WC_Shippify_Checkout {
 			$delivery_latitude = $_POST["shippify_latitude"];
 			$delivery_longitude = $_POST["shippify_longitude"];
 
-			// Construct the request. 
+			// Construct the request.
 			// Items array is just hardcoded. We just want to know if the task can be created.
             $data_value = '[{"pickup_location":{"lat":'. $pickup_latitude .',"lng":'. $pickup_longitude . '},"delivery_location":{"lat":' . $delivery_latitude . ',"lng":'. $delivery_longitude .'},"items":[{"id":"10234","name":"TV","qty":"2","size":"3","price":"0"}]}]';
 
@@ -235,7 +234,7 @@ class WC_Shippify_Checkout {
                     'Authorization' => 'Basic ' . base64_encode( $api_id . ':' . $api_secret )
                 ),
                 'method'  => 'GET'
-            );                    
+            );
 
             $response = wp_remote_get( $task_endpoint, $args );
             $decoded = json_decode( $response['body'], true );
@@ -244,7 +243,7 @@ class WC_Shippify_Checkout {
             // Check if task could be created
 			if ( ! isset($price) || "" == $price ) {
 				wc_add_notice( __( 'Shippify: We are unable to make a route to your address. Verify the marker in the map is correctly positioned.', 'woocommerce-shippify' ), 'error' );
-			}  
+			}
 		}
 	}
 }
