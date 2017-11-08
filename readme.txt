@@ -4,13 +4,13 @@
 
 Contributors:  leonardokuffo
 Tags: Shipping, delivery, shippify
-Version: 1.2.3
+Version: 1.2.4
 Requires at least: 4.7.3
 Tested up to: 4.7.4
 Stable tag: 4.7.4
 License: GNU General Public License v3.0
 WC requires at least: 3.0.5
-WC tested up to: 3.0.5
+WC tested up to: 3.1.5
 
 Deliver your WooCommerce shop products in less than 24h. Integration between WooCommerce and Shippify.
 
