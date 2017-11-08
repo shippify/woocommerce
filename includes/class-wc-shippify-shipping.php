@@ -190,9 +190,9 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 	            );
 
 
-				$pickup_latitude = $_COOKIE["warehouse_latitude"];
-				$pickup_longitude = $_COOKIE["warehouse_longitude"];
-				$pickup_id = $_COOKIE["warehouse_id"];
+				$pickup_latitude = isset($_COOKIE["warehouse_latitude"])?$_COOKIE["warehouse_latitude"]:'';
+				$pickup_longitude = isset($_COOKIE["warehouse_longitude"])?$_COOKIE["warehouse_longitude"]:'';
+				$pickup_id = isset($_COOKIE["warehouse_id"])?$_COOKIE["warehouse_id"]:'';
 
 				// If shipping zone is not configured, method doesnt show.
 				if ('' == $pickup_id && '' == $pickup_longitude && '' == $pickup_latitude){
