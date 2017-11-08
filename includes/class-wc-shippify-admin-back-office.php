@@ -175,19 +175,19 @@ class WC_Shippify_Admin_Back_Office {
     */
     public function shippify_admin_notices() {
         // Single Dispatch Error
-        if ( 'singleError' == $_GET['error']  && 'shop_order' == $_GET['post_type'] ) {
+        if ( isset($_GET['error']) && 'singleError' == $_GET['error']  && isset($_GET['post_type']) && 'shop_order' == $_GET['post_type'] ) {
             echo '<div class="error notice is-dismissible"><p>' . __('The order','woocommerce-shippify'). '#'. $_GET['order_dispatched'] . __(' was not dispatched correctly. Check your settings or try again later.','woocommerce-shippify') . '</p></div>';
         }
         // Bulk Dispatch Error
-        if ( 'multipleError' == $_GET['error']  && 'shop_order' == $_GET['post_type'] ) {
+        if ( isset($_GET['error']) && 'multipleError' == $_GET['error']  && isset($_GET['post_type']) && 'shop_order' == $_GET['post_type'] ) {
             echo '<div class="notice notice-warning is-dismissible"><p>' . __('One or more orders were not successfully dispatched. Try dispatching orders individually, check your settings or try again later.','woocommerce-shippify') . '</p></div>';
         }
         // Single Dispatch Success
-        if (  'none' == $_GET['error'] &&  'shop_order' == $_GET['post_type'] && ! isset( $_GET['bulk_dispatched_orders'] ) ) {
+        if ( isset($_GET['error']) &&  'none' == $_GET['error'] && isset($_GET['post_type']) && 'shop_order' == $_GET['post_type'] && ! isset( $_GET['bulk_dispatched_orders'] ) ) {
             echo '<div class="notice notice-success is-dismissible"><p>' . __('The order','woocommerce-shippify'). '#'. $_GET['order_dispatched'] . __(' was dispatched successfully. ','woocommerce-shippify') . '</p></div>';
         }
         // Bulk Dispatch Success
-        if ( 'none' == $_GET['error']  && isset( $_GET['bulk_dispatched_orders'] ) ) {
+        if ( isset($_GET['error']) && 'none' == $_GET['error']  && isset( $_GET['bulk_dispatched_orders'] ) ) {
             echo '<div class="notice notice-success is-dismissible"><p>' . __('All the selected orders were dispatched successfully.','woocommerce-shippify') . '</p></div>';
         }
         // Empty Credentials
