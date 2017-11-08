@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Shippify
  * Plugin URI: https://github.com/shippify/woocommerce-shippify/
  * Description: Adds Shippify shipping method to your WooCommerce store.
- * Version: 1.2.4
+ * Version: 1.2.5
  * Author: Shippify
  * Author URI: http://www.shippify.co/
  * Developer: Leonardo Kuffo
