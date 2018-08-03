@@ -2,7 +2,7 @@
 
 ![alt text](http://startupbrasil.org.br/wp-content/uploads/2014/12/shippify_logo_big.png "Shippify Logo")
 
-- **Contributors:** [Leonardo Kuffo](https://github.com/lkuffo/), [Wander Bravo](https://github.com/bram70)
+- **Contributors:** [Leonardo Kuffo](https://github.com/lkuffo/), [Wander Bravo](https://github.com/bram70), [Jorge Cedeño](https://github.com/jorluis2695)
 - **Tags:** Shipping, delivery, shippify
 - **Version:** 1.2.5
 - **Requires at least:** 4.5.7
