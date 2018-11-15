@@ -45,7 +45,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 			public function __construct( $instance_id = 0 ) {
 
 					$this->id           = 'shippify';
-					$this->method_id    = '';
+					// $this->method_id    = '';
 					$this->enabled 		= 'yes';
 					$this->method_title = __( 'Shippify', 'woocommerce-shippify' );
 					$this->more_link    = 'http://shippify.co/';
@@ -56,7 +56,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 						'instance-settings',
 					);
 					$this->title        = 'Shippify';
-					$this->availability = 'including';
+					// $this->availability = 'including';
 					$this->countries    = array(
 						'EC',
 						'BR',
@@ -81,7 +81,7 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 					 */
 					if ( 0 != $this->instance_id && ! is_cart()) {
 
-						// setcookie( 'warehouse_id', $this->warehouse_id );
+						setcookie( 'warehouse_id', $this->warehouse_id );
 
 						$api_id = get_option( 'shippify_id' );
 						$api_secret = get_option( 'shippify_secret' );
@@ -109,9 +109,9 @@ if ( in_array( 'woocommerce/woocommerce.php', $active_plugins) )  {
 								}
 							}
 						}
-						// setcookie( 'warehouse_address', $this->warehouse_adress );
-						// setcookie( 'warehouse_latitude', $this->warehouse_latitude );
-						// setcookie( 'warehouse_longitude', $this->warehouse_longitude );
+						setcookie( 'warehouse_address', $this->warehouse_adress );
+						setcookie( 'warehouse_latitude', $this->warehouse_latitude );
+						setcookie( 'warehouse_longitude', $this->warehouse_longitude );
 					}
 
 					add_action( 'woocommerce_update_options_shipping_shippify', array( $this, 'process_admin_options' ), 3 );
